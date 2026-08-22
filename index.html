@@ -104,7 +104,7 @@ small{font-size:12px}
 .tabbar-in{max-width:1520px;margin:0 auto;padding:0 22px;display:flex;gap:2px;overflow-x:auto;scrollbar-width:thin}
 .tabbar button{
   flex:none;background:none;border:0;border-bottom:2px solid transparent;color:var(--ink-3);
-  font:inherit;font-size:13.5px;font-weight:600;padding:14px 15px 12px;cursor:pointer;
+  font:inherit;font-size:13px;font-weight:600;padding:14px 12px 12px;cursor:pointer;
   display:flex;align-items:center;gap:9px;white-space:nowrap;transition:color .14s;
 }
 .tabbar button .n{
@@ -417,13 +417,14 @@ ul.none{list-style:none;padding:0;margin:0}
 <nav class="tabbar" aria-label="Sections">
   <div class="tabbar-in" role="tablist">
     <button role="tab" aria-selected="true" aria-controls="tab-general" data-tab="general" class="on"><span class="n">01</span>General</button>
-    <button role="tab" aria-selected="false" aria-controls="tab-courses" data-tab="courses"><span class="n">02</span>Courses &amp; Study Plan</button>
-    <button role="tab" aria-selected="false" aria-controls="tab-dining" data-tab="dining"><span class="n">03</span>Dining &amp; Map</button>
-    <button role="tab" aria-selected="false" aria-controls="tab-life" data-tab="life"><span class="n">04</span>Life &amp; Balance</button>
-    <button role="tab" aria-selected="false" aria-controls="tab-work" data-tab="work"><span class="n">05</span>Work</button>
-    <button role="tab" aria-selected="false" aria-controls="tab-deals" data-tab="deals"><span class="n">06</span>Deals &amp; Savings</button>
-    <button role="tab" aria-selected="false" aria-controls="tab-tracker" data-tab="tracker"><span class="n">07</span>Academic Tracker</button>
-    <button role="tab" aria-selected="false" aria-controls="tab-data" data-tab="data"><span class="n">08</span>Data &amp; Sources</button>
+    <button role="tab" aria-selected="false" aria-controls="tab-schedule" data-tab="schedule"><span class="n">02</span>Schedule</button>
+    <button role="tab" aria-selected="false" aria-controls="tab-courses" data-tab="courses"><span class="n">03</span>Courses &amp; Study</button>
+    <button role="tab" aria-selected="false" aria-controls="tab-dining" data-tab="dining"><span class="n">04</span>Dining</button>
+    <button role="tab" aria-selected="false" aria-controls="tab-life" data-tab="life"><span class="n">05</span>Life &amp; Balance</button>
+    <button role="tab" aria-selected="false" aria-controls="tab-work" data-tab="work"><span class="n">06</span>Work</button>
+    <button role="tab" aria-selected="false" aria-controls="tab-deals" data-tab="deals"><span class="n">07</span>Deals</button>
+    <button role="tab" aria-selected="false" aria-controls="tab-tracker" data-tab="tracker"><span class="n">08</span>Academics</button>
+    <button role="tab" aria-selected="false" aria-controls="tab-data" data-tab="data"><span class="n">09</span>Data</button>
   </div>
 </nav>
 
@@ -442,7 +443,7 @@ ul.none{list-style:none;padding:0;margin:0}
       <div class="row">
         <button class="btn sm" id="btnExport">Export data</button>
         <button class="btn sm" id="btnImport">Import</button>
-        <button class="btn sm danger" id="btnReset">Reset all</button>
+        <button class="btn sm danger" id="btnReset">Reset screen</button>
       </div>
     </div>
     <div class="grid g4" id="gTiles"></div>
@@ -501,7 +502,51 @@ ul.none{list-style:none;padding:0;margin:0}
   </div>
 </section>
 
-<!-- ═══════════════ 02 COURSES ═══════════════ -->
+<!-- ═══════════════ 02 SCHEDULE ═══════════════ -->
+<section class="tab" id="tab-schedule" role="tabpanel">
+  <div class="feedstrip" id="kFeed"></div>
+
+  <div class="callout">
+    <b>This is the schedule. There is not another one.</b> Every block below is owned by another tab — classes by Courses, study by the plan, shifts by Work, gym and clubs by Life, games by the sports list, meals by Dining. This page renders that one model and nothing else keeps a second copy, which is why nothing here can disagree with anything there. The controls are display-only except where a button says otherwise, and every block tells you which tab to edit it on.
+  </div>
+
+  <div class="panel">
+    <div class="panel-hd">
+      <div class="t"><h2>Layers</h2><div class="d">Turn a layer off and it disappears from this view only. Nothing is deleted and no other tab changes.</div></div>
+      <div class="row">
+        <button class="btn sm" id="btnSchedAll">Show all</button>
+        <button class="btn sm" id="btnSchedPrint">Print</button>
+      </div>
+    </div>
+    <div class="row" id="schedLayers"></div>
+  </div>
+
+  <div id="conflictPanel"></div>
+
+  <div class="panel">
+    <div class="panel-hd">
+      <div class="t"><h2 id="schedTitle">Your week</h2><div class="d" id="schedSub"></div></div>
+      <div class="row" id="schedViews"></div>
+    </div>
+    <div class="scroll"><div id="schedGrid"></div></div>
+    <div class="legend" id="schedLegend"></div>
+  </div>
+
+  <div class="split">
+    <div class="panel">
+      <div class="panel-hd"><div class="t"><h2>Today, hour by hour</h2><div class="d" id="schedTodayDate"></div></div></div>
+      <div id="schedToday"></div>
+    </div>
+    <div class="panel">
+      <div class="panel-hd"><div class="t"><h2>Where the week goes</h2><div class="d">Same numbers as the General tab, because it is the same model.</div></div></div>
+      <div class="grid g2" id="schedStats"></div>
+      <div class="divider"></div>
+      <div id="schedNotes"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 03 COURSES ═══════════════ -->
 <section class="tab" id="tab-courses" role="tabpanel">
   <div class="feedstrip" id="cFeed"></div>
 
@@ -533,13 +578,11 @@ ul.none{list-style:none;padding:0;margin:0}
         <div class="d">Generated from your real meeting times, your sleep window, and your meal windows from the Dining tab — so no study block ever lands on a class, a meal, or your sleep.</div>
       </div>
       <div class="row">
-        <label class="pill" style="cursor:pointer"><input type="checkbox" id="showMeals"> Show meal windows</label>
         <button class="btn sm primary" id="btnRegen">Rebuild plan</button>
       </div>
     </div>
-    <div class="scroll"><div id="weekGrid"></div></div>
-    <div class="legend" id="lWeek"></div>
-    <div class="divider"></div>
+    <div class="note acc" style="margin-bottom:14px"><b>The week itself lives on the Schedule tab.</b> This page owns the study plan — how many hours, how long each block, where they are allowed to go — and writes the result into the one shared schedule rather than drawing a second copy of your week here.
+      <div class="row" style="margin-top:10px"><button class="btn sm primary" data-gotab="schedule">Open the Schedule</button></div></div>
     <div class="grid g3" id="planStats"></div>
   </div>
 
@@ -667,12 +710,33 @@ ul.none{list-style:none;padding:0;margin:0}
   </div>
 
   <div class="panel">
+    <div class="panel-hd"><div class="t">
+      <h2>Which hall, and what it runs</h2>
+      <div class="d">Pick where you are eating. Everything below is then built from that one hall's stations, so a tray never means walking to a second building. Untick a station a hall does not actually have and it stops offering you food from it.</div>
+    </div></div>
+    <div class="row" id="hallPicker"></div>
+    <div class="divider"></div>
+    <div class="grid g2" id="hallCompare"></div>
+    <div class="divider"></div>
+    <div id="hallStations"></div>
+  </div>
+
+  <div class="panel">
     <div class="panel-hd">
-      <div class="t"><h2>Three ways to hit the target</h2>
-      <div class="d">Generated from what is left after your diet and allergy filters — not a prescription, three different shapes of the same meal. Load one onto the tray and edit it from there.</div></div>
+      <div class="t"><h2 id="optTitle">Three ways to hit the target</h2>
+      <div class="d" id="optSub"></div></div>
       <div class="row"><button class="btn sm primary" id="btnGenMeals">Regenerate</button></div>
     </div>
     <div class="grid g3" id="mealOptions"></div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-hd">
+      <div class="t"><h2>Never show me these again</h2>
+      <div class="d">A permanent block list. Anything here is gone from the food list and can never appear in a generated option, at any hall, on any day.</div></div>
+      <div class="row"><button class="btn sm" id="btnClearNever">Clear the list</button></div>
+    </div>
+    <div id="neverList"></div>
   </div>
 </section>
 
@@ -991,7 +1055,7 @@ ul.none{list-style:none;padding:0;margin:0}
     <div class="row" style="margin-top:13px">
       <button class="btn" id="btnExport2">Export JSON</button>
       <button class="btn" id="btnImport2">Import JSON</button>
-      <button class="btn danger" id="btnReset2">Erase everything</button>
+      <button class="btn danger" id="btnReset2">Reset screen — hand it to someone else</button>
     </div>
   </div>
 
@@ -1024,6 +1088,9 @@ ul.none{list-style:none;padding:0;margin:0}
    ====================================================================== */
 
 const KEY = 'iu.crimsonCommand.v1';
+/* 'owner' boots with the pre-loaded Fall 2026 schedule. 'blank' boots empty,
+   for the copy you hand to someone else. build-artifact.py flips this. */
+const BOOT_PROFILE = 'owner';
 const DAYS  = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 const DAYSL = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
 
@@ -1381,6 +1448,17 @@ const FOODS = [
   {id:'f39', n:'Stir-fry vegetables',    st:'bowls',    portion:'1 cup',        kcal:90,  p:3,  c:12, f:4,  has:['soy'], diet:['omni','vegetarian','pescatarian','vegan']},
   {id:'f40', n:'Protein shake (whey)',   st:'cstore',   portion:'1 scoop + water',kcal:120,p:24, c:3,  f:1,  has:['dairy'], diet:['omni','vegetarian','pescatarian']}
 ];
+/* The five all-you-care-to-eat halls. Which stations each one runs is NOT
+   something IU publishes anywhere I could reach, so every hall starts with
+   every station switched on and you untick what is not there once you have
+   been. That way the grouping works from day one and gets sharper with use. */
+const HALLS = [
+  {id:'mcnuttdh', n:'McNutt',   sub:'In your building', home:true},
+  {id:'wright',   n:'Wright',   sub:'Central neighborhood'},
+  {id:'forest',   n:'Forest',   sub:'Also an ASC tutoring site'},
+  {id:'collins',  n:'Collins',  sub:'Central neighborhood'},
+  {id:'goodbody', n:'Goodbody', sub:'Goodbody Hall'}
+];
 const ALLERGENS = [
   {id:'dairy',    n:'Dairy'},      {id:'egg',       n:'Egg'},
   {id:'gluten',   n:'Gluten'},     {id:'peanut',    n:'Peanuts'},
@@ -1607,8 +1685,8 @@ const DEAL_GROUPS = [
    measured off a pixel grid and are flagged `tEst` until confirmed —
    every hour total on this site depends on them.
    ====================================================================== */
-function defaults(){
-  return {
+function defaults(raw){
+  const base = {
     v:3,
     meta:{term:TERM.name, dorm:'McNutt Quad', dormAddr:'1101 N. Fee Lane, Bloomington, IN 47406'},
     courses:[
@@ -1648,7 +1726,8 @@ function defaults(){
       planId:'expanded', priceSem:2000, comboPerWeek:5,
       dollarsStart:250, dollarsLeft:250, scansLeft:null, log:[],
       weight:null, weightUnit:'lb', kcal:2400,
-      diet:'omni', avoid:[], hidden:[], favs:[], custom:[], edits:{}, checked:{},
+      diet:'omni', avoid:[], hidden:[], never:[], favs:[], custom:[], edits:{}, checked:{},
+      halls:{}, hall:'mcnuttdh',
       tray:{breakfast:[], lunch:[], dinner:[], snack:[]}, meal:'lunch', proteinTarget:null
     },
     deals:{checked:{}, qty:{}, val:{}, custom:[]},
@@ -1666,8 +1745,21 @@ function defaults(){
     sports:{interest:{}, games:{}, custom:[]},
     track:{assignments:[], announcements:[], checkins:[]},
     sources:[],
-    ui:{tab:'general', dealFilter:'all', showMeals:false}
+    ui:{tab:'general', dealFilter:'all',
+        layers:{class:true, study:true, meal:true, commit:true, work:true, game:true},
+        schedView:'week'}
   };
+  return (BOOT_PROFILE==='blank' && !raw) ? blankDefaults() : base;
+}
+/* Same shape, nothing personal in it. */
+function blankDefaults(){
+  const b = defaults(true);
+  b.courses = [];
+  b.meta = {term:TERM.name, dorm:'', dormAddr:'Indiana University, Bloomington, IN 47405'};
+  b.dining = {...b.dining, planId:'expanded', priceSem:null, comboPerWeek:null,
+              dollarsStart:250, dollarsLeft:250, log:[], weight:null};
+  b.plan = {...b.plan, mealAt:{breakfast:'08:00', lunch:'12:30', dinner:'18:00'}};
+  return b;
 }
 let S = defaults();
 
@@ -1803,13 +1895,18 @@ function derive(){
   });
   d.commitByDay.forEach(arr=>arr.sort((x,y)=>x.a-y.a));
   d.commitWeek = d.commitByDay.reduce((s2,arr)=> s2 + arr.reduce((t,x)=>t+(x.b-x.a)/60, 0), 0);
+  d.workWeek = (S.jobs||[]).filter(j=>j.have).reduce((s2,j)=>{
+    const a=toMin(j.start), b=toMin(j.end);
+    return s2 + (b>a ? (b-a)/60*((j.days||[]).length) : 0);
+  }, 0);
   d.commitByKind = {};
   Object.keys(CKIND).forEach(k=>{
     d.commitByKind[k] = d.commitByDay.reduce((s2,arr)=>
       s2 + arr.filter(x=>x.cm.kind===k).reduce((t,x)=>t+(x.b-x.a)/60,0), 0);
   });
   /* how much of that already counts as time with other people */
-  d.socialCredit = Object.keys(CKIND).reduce((s2,k)=> s2 + d.commitByKind[k]*CKIND[k].social, 0);
+  d.socialCredit = Object.keys(CKIND).reduce((s2,k)=> s2 + d.commitByKind[k]*CKIND[k].social, 0)
+                 + d.workWeek * CKIND.job.social;
 
   /* --- transitions: every walk the week actually requires -------------- */
   d.transitions = [];
@@ -1862,7 +1959,7 @@ function derive(){
   const mealHrs = (p.mealMin.breakfast + p.mealMin.lunch + p.mealMin.dinner)/60 * 7;
   d.sleepWeek = p.sleepTarget * 7;
   d.mealWeek  = mealHrs;
-  d.fixedWeek = d.contactWeek + d.commuteWeek + d.commitWeek;
+  d.fixedWeek = d.contactWeek + d.commuteWeek + d.commitWeek + d.workWeek;
   d.awake     = 168 - d.sleepWeek - d.mealWeek;
   d.discretionary = Math.max(0, d.awake - d.fixedWeek);
 
@@ -1874,7 +1971,7 @@ function derive(){
   d.studyShort   = Math.max(0, d.studyDemand - d.studyCap);
   d.studyPlanned = Math.min(d.studyDemand, d.studyCap);
 
-  d.committed = d.contactWeek + d.studyPlanned + d.commuteWeek + d.commitWeek;
+  d.committed = d.contactWeek + d.studyPlanned + d.commuteWeek + d.commitWeek + d.workWeek;
   d.freeWeek  = Math.max(0, d.awake - d.fixedWeek - d.studyPlanned);
   d.socialTotal = d.freeWeek + d.socialCredit;
   d.socialOK  = d.socialTotal >= d.socialFloor - 0.01;
@@ -1885,21 +1982,72 @@ function derive(){
     {k:'Sleep',         h:d.sleepWeek,    c:'--s3', from:'Plan controls'},
     {k:'Meals',         h:d.mealWeek,     c:'--s4', from:'Dining'},
     {k:'Commitments',   h:d.commitWeek,   c:'--s5', from:'Life & Balance'},
+    {k:'Work shifts',   h:d.workWeek,     c:'--s8', from:'Work'},
     {k:'Open / social', h:d.freeWeek,     c:'--s6', from:'Protected floor '+rnd(d.socialFloor,0)+'h'}
   ];
+
+  /* --- ONE block model ------------------------------------------------
+     Every tab writes into this and every tab reads from it. The Schedule
+     tab renders it; the study planner routes around it; the conflict
+     checker scans it. There is no second copy of the week anywhere. */
+  d.fixedBlocks = [[],[],[],[],[],[],[]];
+  const addBlock = (dow, b) => { if(b.b>b.a) d.fixedBlocks[dow].push(b); };
+
+  d.byDay.forEach((arr,dow)=> arr.forEach(m=> addBlock(dow, {
+    a:m.a, b:m.b, kind:'class', label:m.course.code, sub:m.m.type+(m.m.loc?' · '+m.m.loc:''),
+    color:m.course.color, tab:'courses', bldg:m.m.bldg||'', est:m.m.tEst||m.m.disputed
+  })));
+  d.commitByDay.forEach((arr,dow)=> arr.forEach(x=> addBlock(dow, {
+    a:x.a, b:x.b, kind:'commit', label:x.cm.label||CKIND[x.cm.kind].label,
+    sub:CKIND[x.cm.kind].label+(x.cm.loc?' · '+x.cm.loc:''),
+    color:CKIND[x.cm.kind].c, tab:'life', once:x.once
+  })));
+  /* a job you actually hold is a shift on the calendar, not a hypothetical */
+  (S.jobs||[]).filter(j=>j.have).forEach(j=>{
+    const a=toMin(j.start), b=toMin(j.end);
+    (j.days||[]).forEach(dow=> addBlock(dow, {
+      a, b, kind:'work', label:j.title||'Shift', sub:(j.employer||'')+' · '+money(+j.pay||0)+'/hr',
+      color:'--s2', tab:'work'
+    }));
+  });
+  /* a game you said you are going to is a commitment like any other.
+     Read straight from state so this does not depend on deriveGames, which
+     needs the block model to do its own clash analysis. */
+  HOME_GAMES.concat(S.sports.custom||[])
+    .filter(g=>(S.sports.games[g.id]||{}).going && g.date && g.start)
+    .forEach(g=>{
+      const a=toMin(g.start), b=Math.min(1439, a+(g.mins||210));
+      addBlock(dowOf(g.date), {a, b, kind:'game',
+        label:((SPORTS.find(x=>x.id===g.sport)||{}).name||'Game')+' v '+g.opp,
+        sub:niceDate(g.date), color:'--s8', tab:'life', dateOnly:g.date});
+    });
+  d.fixedBlocks.forEach(arr=>arr.sort((x,y)=>x.a-y.a));
 
   /* --- study plan ----------------------------------------------------- */
   d.plan = buildStudyPlan(d);
   d.dayLoad = [0,1,2,3,4,5,6].map(dow=>{
-    const contact = d.byDay[dow].reduce((s,m)=> s+(m.b-m.a)/60, 0);
+    const hrs = (k)=> (d.fixedBlocks[dow]||[]).filter(x=>x.kind===k).reduce((s,x)=>s+(x.b-x.a)/60,0);
+    const contact = hrs('class');
     const study   = (d.plan.byDay[dow]||[]).reduce((s,b)=> s+(b.b-b.a)/60, 0);
-    const commit  = (d.commitByDay[dow]||[]).reduce((s,x)=> s+(x.b-x.a)/60, 0);
+    const commit  = hrs('commit') + hrs('work') + hrs('game');
     const commute = d.byDay[dow].length ? 2*(p.commuteMinPerTrip/60) : 0;
     const total = contact+study+commute+commit;
     return {dow, contact, study, commute, commit, total, over: total > p.maxDayHours};
   });
   d.peakDay = d.dayLoad.reduce((a,b)=> b.total>a.total?b:a, d.dayLoad[0]);
   d.overDays = d.dayLoad.filter(x=>x.over).length;
+
+  /* --- conflicts: anything double-booked, from any tab ------------------ */
+  d.conflicts = [];
+  d.fixedBlocks.forEach((arr,dow)=>{
+    for(let i=0;i<arr.length;i++) for(let j=i+1;j<arr.length;j++){
+      const x=arr[i], y=arr[j];
+      if(y.a < x.b && y.b > x.a){
+        d.conflicts.push({dow, a:Math.max(x.a,y.a), b:Math.min(x.b,y.b), x, y,
+          mins: Math.min(x.b,y.b) - Math.max(x.a,y.a)});
+      }
+    }
+  });
 
   /* --- term progress --------------------------------------------------- */
   const today = todayISO();
@@ -1972,8 +2120,8 @@ function buildStudyPlan(d){
   const protectedEve = new Set(S.social.protectEvenings||[]);
   const EVE = toMin('18:00');
   function freeWindows(dow){
-    const busy = d.byDay[dow].map(m=>({a:m.a, b:m.b}))
-      .concat((d.commitByDay[dow]||[]).map(x=>({a:x.a, b:x.b})))
+    /* one source of truth: everything already on the calendar, plus meals */
+    const busy = (d.fixedBlocks[dow]||[]).map(x=>({a:x.a, b:x.b}))
       .concat(meals.map(m=>({a:m.a, b:m.b})))
       .sort((x,y)=>x.a-y.a);
     const merged=[];
@@ -2169,12 +2317,41 @@ function deriveDining(d){
   o.diet = dg2.diet || 'omni';
   o.avoid = dg2.avoid || [];
   o.lib = lib;
+  o.never = dg2.never || [];
   o.allowed = lib.filter(f=>{
     if((dg2.hidden||[]).indexOf(f.id)>=0) return false;
+    if(o.never.indexOf(f.id)>=0) return false;
     if(o.diet!=='omni' && (f.diet||[]).indexOf(o.diet)<0) return false;
     return !(f.has||[]).some(h=> o.avoid.indexOf(h)>=0);
   });
   o.excludedCount = lib.length - o.allowed.length;
+
+  /* --- which stations each hall runs, and therefore what is reachable
+     without walking to a second building --- */
+  o.hallStations = {};
+  HALLS.forEach(h=>{
+    const saved = (dg2.halls||{})[h.id];
+    o.hallStations[h.id] = {};
+    Object.keys(STATIONS).forEach(st=>{
+      o.hallStations[h.id][st] = saved && saved[st]!==undefined ? !!saved[st] : true;
+    });
+  });
+  o.hallId = dg2.hall || 'mcnuttdh';
+  o.hallFoods = {};
+  HALLS.forEach(h=>{
+    o.hallFoods[h.id] = o.allowed.filter(f=> o.hallStations[h.id][f.st] !== false);
+  });
+  o.atHall = o.hallFoods[o.hallId] || [];
+  /* the ceiling for one hall: everything it could give you in one visit */
+  o.hallCeiling = {};
+  HALLS.forEach(h=>{
+    const fs=o.hallFoods[h.id];
+    o.hallCeiling[h.id] = {
+      count: fs.length,
+      bestP: fs.length ? Math.max(...fs.map(f=>f.p)) : 0,
+      densest: fs.slice().sort((a,b)=>(b.p/Math.max(1,b.kcal))-(a.p/Math.max(1,a.kcal)))[0] || null
+    };
+  });
 
   /* per-meal protein and energy targets, split from the daily figures */
   const split = {breakfast:0.25, lunch:0.35, dinner:0.35, snack:0.05};
@@ -2209,21 +2386,23 @@ function deriveDining(d){
 /* --- three different ways to hit the target from what you will eat ------
    Not an optimiser: three deliberately different shapes, so the answer is a
    choice rather than a single prescription. */
-function buildMealOptions(o, n){
-  const pool = o.allowed.filter(f=>f.kcal>0);
-  if(pool.length < 4) return [];
+/* Build trays from ONE hall's stations, so a meal never means walking to
+   three buildings. `best fit` is deliberately honest: it returns the best
+   achievable tray at that hall and says what it could not reach, because
+   dining-hall food will not hit every target every day. */
+function buildMealOptions(o, hallId, n){
+  const pool = (o.hallFoods[hallId] || []).filter(f=>f.kcal>0);
   const kcalCap = o.mealKcalTarget * 1.18;
   const pTarget = o.mealProtTarget;
   const dens = f => f.p / Math.max(1, f.kcal);
+  if(pool.length < 2) return [];
 
-  /* Pools are defined by what the food actually IS, not by which counter it
-     sits at — otherwise bacon gets picked as the grain. */
   const anchors = pool.filter(f=>f.p>=10).sort((x,y)=>dens(y)-dens(x));
   const carbs   = pool.filter(f=>f.c>=18 && f.p<15).sort((x,y)=>dens(y)-dens(x));
   const veg     = pool.filter(f=>(f.st==='fruit'||f.st==='salad') && f.kcal<=140).sort((x,y)=>y.p-x.p);
   const sides   = pool.filter(f=>f.p>=4 && f.p<12 && f.kcal<=200).sort((x,y)=>dens(y)-dens(x));
-
   const take=(arr,i,k)=> arr.length ? arr.slice(i % arr.length).concat(arr).slice(0,k) : [];
+
   const styles = [
     {name:'Leanest', why:'Most protein for the fewest calories.',
      pick:()=> take(anchors,0,2).concat(take(veg,0,2))},
@@ -2238,7 +2417,6 @@ function buildMealOptions(o, n){
     const seen=new Set();
     let items = st.pick().filter(Boolean).filter(f=> seen.has(f.id)?false:(seen.add(f.id),true));
     let tot = items.reduce((t,f)=>({kcal:t.kcal+f.kcal, p:t.p+f.p}),{kcal:0,p:0});
-    /* top up with the densest protein still allowed, inside the calorie cap */
     for(const f of anchors){
       if(tot.p >= pTarget) break;
       if(seen.has(f.id)) continue;
@@ -2246,10 +2424,23 @@ function buildMealOptions(o, n){
       items.push(f); seen.add(f.id); tot.kcal+=f.kcal; tot.p+=f.p;
     }
     const T = items.reduce((t,f)=>({kcal:t.kcal+f.kcal,p:t.p+f.p,c:t.c+f.c,f:t.f+f.f}),{kcal:0,p:0,c:0,f:0});
-    out.push({...st, items, tot:T, hits: T.p >= pTarget*0.95, over: T.kcal > kcalCap,
-              hasCarb: items.some(f=>f.c>=18), hasVeg: items.some(f=>f.st==='fruit'||f.st==='salad')});
+    const gaps=[];
+    if(T.p < pTarget*0.95) gaps.push(rnd(pTarget-T.p,0)+'g short on protein');
+    if(!items.some(f=>f.st==='fruit'||f.st==='salad')) gaps.push('nothing green');
+    if(!items.some(f=>f.c>=18)) gaps.push('no real grain');
+    if(T.kcal > kcalCap) gaps.push(rnd(T.kcal-o.mealKcalTarget,0)+' kcal over target');
+    out.push({...st, hallId, items, tot:T,
+      hits: T.p >= pTarget*0.95, over: T.kcal > kcalCap, gaps,
+      hasCarb: items.some(f=>f.c>=18), hasVeg: items.some(f=>f.st==='fruit'||f.st==='salad')});
   });
   return out;
+}
+
+/* The single best tray each hall can produce, for comparing halls. */
+function bestAtHall(o, hallId){
+  const opts = buildMealOptions(o, hallId, 3);
+  if(!opts.length) return null;
+  return opts.slice().sort((a,b)=> (b.hits-a.hits) || (a.gaps.length-b.gaps.length) || (b.tot.p-a.tot.p))[0];
 }
 
 /* -------------------------------------------------------- deals derive */
@@ -2904,8 +3095,9 @@ function renderGeneral(){
     {foot: d.creditsUnset? 'One course has no credit value set' : ''});
   chartDayBars('cDayBars','ttDayBars','lDayBars',
     [1,2,3,4,5,6,0].map(dow=>({label:DAYS[dow], full:DAYSL[dow], dow,
-      'Class':d.dayLoad[dow].contact, 'Study':d.dayLoad[dow].study, 'Commute':d.dayLoad[dow].commute})),
-    [{k:'Class',c:'--s1'},{k:'Study',c:'--s2'},{k:'Commute',c:'--s5'}],
+      'Class':d.dayLoad[dow].contact, 'Study':d.dayLoad[dow].study,
+      'Commitments':d.dayLoad[dow].commit, 'Commute':d.dayLoad[dow].commute})),
+    [{k:'Class',c:'--s1'},{k:'Study',c:'--s2'},{k:'Commitments',c:'--s5'},{k:'Commute',c:'--s8'}],
     {ceiling:S.plan.maxDayHours});
 
   renderToday();
@@ -2913,39 +3105,38 @@ function renderGeneral(){
   renderTimeline();
 }
 
+/* The next thing on the calendar, whatever kind of thing it is. */
 function nextClass(){
   const now = new Date();
   const dow = now.getDay(), mins = now.getHours()*60+now.getMinutes();
   for(let k=0;k<7;k++){
     const dd=(dow+k)%7;
-    const list=(D.byDay[dd]||[]).filter(m=> k>0 || m.a>mins).sort((a,b)=>a.a-b.a);
+    const list=(D.fixedBlocks[dd]||[]).filter(b=> b.kind!=='meal' && (k>0 || b.a>mins)).sort((a,b)=>a.a-b.a);
     if(list.length){
-      const m=list[0];
-      return {label:(k===0?'':DAYS[dd]+' ')+m.course.code+' '+fmt12(m.a), m};
+      const b=list[0];
+      return {label:(k===0?'':DAYS[dd]+' ')+b.label+' '+fmt12(b.a), b};
     }
   }
   return null;
 }
 
 function renderToday(){
-  const d=D, dow=new Date().getDay();
-  const dt=new Date();
+  const dow=new Date().getDay(), dt=new Date();
   $('todayDate').textContent = DAYSL[dow]+', '+dt.toLocaleDateString('en-US',{month:'long',day:'numeric'})
-    + (d.started ? ' · week '+d.weekNo : ' · term has not started');
-  const classes=(d.byDay[dow]||[]).map(m=>({a:m.a,b:m.b,t:'class',label:m.course.code+' '+m.m.type, sub:m.m.loc||''}));
-  const study=(d.plan.byDay[dow]||[]).map(b=>({a:b.a,b:b.b,t:'study',label:b.code+' study', sub:''}));
-  const meals=(d.plan.meals||[]).map(m=>({a:m.a,b:m.b,t:'meal',label:m.k.charAt(0).toUpperCase()+m.k.slice(1), sub:''}));
-  const all=[...classes,...study,...meals].sort((a,b)=>a.a-b.a);
+    + (D.started ? ' · week '+D.weekNo : ' · term has not started');
+  /* same dayBlocks() the Schedule tab uses — one model, two renderings */
+  const all = dayBlocks(dow);
   if(!all.length){ $('gToday').innerHTML='<div class="empty">Nothing scheduled today.</div>'; return; }
-  const nowM=new Date().getHours()*60+new Date().getMinutes();
+  const nowM = dt.getHours()*60 + dt.getMinutes();
   $('gToday').innerHTML='<ul class="none" style="display:flex;flex-direction:column;gap:7px">'+all.map(x=>{
     const past=x.b<nowM, live=x.a<=nowM&&x.b>nowM;
-    const c = x.t==='class'?'--s1':x.t==='study'?'--s2':'--s3';
-    return '<li style="display:grid;grid-template-columns:88px 1fr;gap:11px;align-items:baseline;'
+    return '<li style="display:grid;grid-template-columns:92px 1fr;gap:11px;align-items:baseline;'
       +(past?'opacity:.42;':'')+(live?'background:var(--crimson-wash);border-radius:6px;padding:4px 7px;margin:-4px -7px;':'')+'">'
-      +'<span style="font-family:var(--mono);font-size:11.5px;color:var(--ink-3)">'+fmtRange(x.a,x.b)+'</span>'
-      +'<span style="display:flex;gap:8px;align-items:baseline"><i style="width:7px;height:7px;border-radius:2px;background:var('+c+');flex:none;transform:translateY(-1px)"></i>'
-      +'<span><b style="font-weight:600">'+esc(x.label)+'</b>'+(x.sub?' <span style="color:var(--ink-3);font-size:12px">'+esc(x.sub)+'</span>':'')
+      +'<span style="font-family:var(--mono);font-size:11.5px;color:var(--ink-3)">'+esc(fmtRange(x.a,x.b))+'</span>'
+      +'<span style="display:flex;gap:8px;align-items:baseline">'
+      +'<i style="width:7px;height:7px;border-radius:2px;background:var('+x.color+');flex:none;transform:translateY(-1px)"></i>'
+      +'<span><b style="font-weight:600">'+esc(x.label)+'</b>'
+      +(x.sub?' <span style="color:var(--ink-3);font-size:12px">'+esc(x.sub)+'</span>':'')
       +(live?' <span class="pill" style="border-color:var(--crimson)">now</span>':'')+'</span></span></li>';
   }).join('')+'</ul>';
 }
@@ -3018,7 +3209,216 @@ function renderTimeline(){
 }
 
 /* ======================================================================
-   RENDER — 02 COURSES & STUDY PLAN
+   RENDER — 02 SCHEDULE
+   The single rendering of the single block model. Study blocks come from
+   d.plan, everything else from d.fixedBlocks, meals from d.plan.meals.
+   ====================================================================== */
+const LAYERS = [
+  {k:'class',  n:'Classes',     c:'--s1', tab:'courses'},
+  {k:'study',  n:'Study',       c:'--s2', tab:'courses'},
+  {k:'commit', n:'Commitments', c:'--s5', tab:'life'},
+  {k:'work',   n:'Work shifts', c:'--s8', tab:'work'},
+  {k:'game',   n:'Games',       c:'--s6', tab:'life'},
+  {k:'meal',   n:'Meals',       c:'--s3', tab:'dining'}
+];
+
+/* every block for one day, from every source, in one array */
+function dayBlocks(dow){
+  const L = S.ui.layers || {};
+  const out = [];
+  (D.fixedBlocks[dow]||[]).forEach(b=>{ if(L[b.kind]!==false) out.push(b); });
+  if(L.study!==false) (D.plan.byDay[dow]||[]).forEach(b=> out.push({
+    a:b.a, b:b.b, kind:'study', label:b.code, sub:'study', color:b.color, tab:'courses'}));
+  if(L.meal!==false) (D.plan.meals||[]).forEach(m=> out.push({
+    a:m.a, b:m.b, kind:'meal', label:m.k.charAt(0).toUpperCase()+m.k.slice(1), sub:'meal', color:'--s3', tab:'dining'}));
+  return out.sort((x,y)=> x.a-y.a || x.b-y.b);
+}
+
+function renderSchedule(){
+  const d=D;
+  feed('kFeed',[
+    {k:'Owned by Courses',  v:'<b>'+rnd(d.contactWeek,1)+'h</b> class · <b>'+rnd(d.studyPlanned,1)+'h</b> study'},
+    {k:'Owned by Life',     v:'<b>'+rnd(d.commitWeek,1)+'h</b> commitments'+(d.games&&d.games.going?' · <b>'+d.games.going+'</b> game'+(d.games.going===1?'':'s'):'')},
+    {k:'Owned by Work',     v: d.workWeek>0 ? '<b>'+rnd(d.workWeek,1)+'h</b> of shifts' : 'No job marked as held'},
+    {k:'Conflicts',         v: d.conflicts.length ? '<b style="color:#e2645f">'+d.conflicts.length+' double-booking'+(d.conflicts.length===1?'':'s')+'</b>' : 'Nothing double-booked'}
+  ]);
+
+  const L=S.ui.layers||{};
+  $('schedLayers').innerHTML = LAYERS.map(l=>{
+    const on = L[l.k]!==false;
+    const hrs = l.k==='study' ? d.plan.placed/60
+      : l.k==='meal' ? d.mealWeek
+      : d.fixedBlocks.reduce((s2,arr)=>s2+arr.filter(b=>b.kind===l.k).reduce((t,b)=>t+(b.b-b.a)/60,0),0);
+    return '<button class="btn sm'+(on?'':' ghost')+'" data-layer="'+l.k+'" style="'+(on?'border-color:var('+l.c+')':'opacity:.5')+'">'
+      +'<i style="width:9px;height:9px;border-radius:2px;background:var('+l.c+');display:inline-block'+(on?'':';opacity:.4')+'"></i> '
+      + esc(l.n)+' <span style="font-family:var(--mono);color:var(--ink-3)">'+rnd(hrs,1)+'h</span></button>';
+  }).join('');
+
+  $('schedViews').innerHTML = [['week','Week'],['day','Today'],['list','List']]
+    .map(v=>'<button class="btn sm'+(S.ui.schedView===v[0]?' primary':'')+'" data-schedview="'+v[0]+'">'+v[1]+'</button>').join('');
+
+  renderConflicts();
+  if(S.ui.schedView==='week') renderSchedWeek();
+  else if(S.ui.schedView==='day') renderSchedDayView();
+  else renderSchedList();
+  renderSchedToday();
+  renderSchedStats();
+}
+
+function renderConflicts(){
+  const c=D.conflicts;
+  $('conflictPanel').innerHTML = c.length
+    ? '<div class="panel" style="border-color:rgba(208,59,59,.4)">'
+      +'<div class="panel-hd"><div class="t"><h2 style="color:#e2645f">'+c.length+' double-booking'+(c.length===1?'':'s')+'</h2>'
+      +'<div class="d">Two things claiming the same minutes. Only this page can see these, because only this page holds every layer at once.</div></div></div>'
+      +'<div class="stack">'+c.map(x=>
+        '<div class="note crit"><b>'+esc(DAYSL[x.dow])+' '+esc(fmtRange(x.a,x.b))+'</b> — '+x.mins+' minutes'
+        +'<div style="margin-top:5px;font-size:12.5px">'
+          +'<span class="pill" style="border-color:var('+x.x.color+')">'+esc(x.x.label)+' <span style="color:var(--ink-3)">'+esc(x.x.sub||'')+'</span></span>'
+          +' <span style="color:var(--ink-3)">vs</span> '
+          +'<span class="pill" style="border-color:var('+x.y.color+')">'+esc(x.y.label)+' <span style="color:var(--ink-3)">'+esc(x.y.sub||'')+'</span></span>'
+        +'</div>'
+        +'<div class="row" style="margin-top:8px">'
+          +'<button class="btn sm" data-gotab="'+esc(x.x.tab)+'">Fix on '+esc(tabName(x.x.tab))+'</button>'
+          +(x.y.tab!==x.x.tab?'<button class="btn sm" data-gotab="'+esc(x.y.tab)+'">Fix on '+esc(tabName(x.y.tab))+'</button>':'')
+        +'</div></div>').join('')+'</div></div>'
+    : '';
+}
+function tabName(t){
+  return {general:'General', schedule:'Schedule', courses:'Courses', dining:'Dining',
+          life:'Life & Balance', work:'Work', deals:'Deals', tracker:'Tracker', data:'Data'}[t] || t;
+}
+
+function renderSchedWeek(){
+  const p=S.plan;
+  const all=[]; for(let dw=0;dw<7;dw++) dayBlocks(dw).forEach(b=>all.push(b));
+  const minA = all.length ? Math.min(...all.map(b=>b.a)) : toMin(p.wake);
+  const maxB = all.length ? Math.max(...all.map(b=>b.b)) : toMin(p.bed);
+  const startH = Math.max(0, Math.floor(Math.min(minA, toMin(p.wake))/60) - 1);
+  const endH   = Math.min(24, Math.ceil(Math.max(maxB, toMin(p.bed))/60) + 1);
+  const rows=(endH-startH)*4, cellH=17;
+
+  $('schedTitle').textContent='Your week';
+  $('schedSub').textContent='All seven days, every layer that is switched on. Click any block to jump to the tab that owns it.';
+
+  let html='<div class="wk" style="grid-template-columns:46px repeat(7,minmax(112px,1fr));grid-template-rows:auto repeat('+rows+','+cellH+'px);min-width:900px">';
+  html+='<div></div>'+[1,2,3,4,5,6,0].map(dw=>'<div class="hd">'+DAYS[dw]+'</div>').join('');
+  for(let r=0;r<rows;r++){
+    const mins=startH*60+r*15;
+    html+='<div class="hr">'+(mins%60===0?fmt12(mins):'')+'</div>';
+    for(const dw of [1,2,3,4,5,6,0]) html+='<div class="cell" data-r="'+r+'" data-d="'+dw+'"></div>';
+  }
+  html+='</div>';
+  $('schedGrid').innerHTML=html;
+
+  const grid=qs('.wk', $('schedGrid'));
+  [1,2,3,4,5,6,0].forEach(dw=>{
+    const blocks=dayBlocks(dw);
+    /* lay out overlaps side by side instead of hiding one behind the other */
+    const cols=[];
+    blocks.forEach(b=>{
+      let ci=cols.findIndex(col=> col.every(x=> b.a>=x.b || b.b<=x.a));
+      if(ci<0){ cols.push([b]); ci=cols.length-1; } else cols[ci].push(b);
+      b._col=ci;
+    });
+    const nCols=Math.max(1, cols.length);
+    const anchor=qs('.cell[data-d="'+dw+'"][data-r="0"]', grid);
+    if(!anchor) return;
+    anchor.style.overflow='visible';
+    blocks.forEach(b=>{
+      const top=((b.a-startH*60)/15)*cellH;
+      const h=Math.max(cellH-1, ((b.b-b.a)/15)*cellH - 2);
+      if(top<0) return;
+      const w=100/nCols, left=b._col*w;
+      const isStudy=b.kind==='study', isMeal=b.kind==='meal';
+      const el2=el('div',{class:'wkblk '+b.kind,
+        style:'position:absolute;top:'+top+'px;height:'+h+'px;left:calc('+left+'% + 2px);width:calc('+w+'% - 4px);'
+          +'border-left-color:var('+b.color+');'
+          +'background:'+(isStudy?'rgba(255,255,255,.05)':isMeal?'rgba(25,158,112,.13)':'var('+b.color+')26')+';'
+          +'cursor:pointer;'+(isStudy?'border-left-style:dashed;':''),
+        title:b.label+' · '+fmtRange(b.a,b.b)+(b.sub?' · '+b.sub:''),
+        'data-gotab':b.tab},
+        '<b>'+esc(b.label)+'</b>'+(h>=34?'<span style="color:var(--ink-3);display:block">'+esc(b.sub||'')+'</span>':'')
+        +(h>=52?'<span style="color:var(--ink-3);font-family:var(--mono);font-size:9px">'+esc(fmtRange(b.a,b.b))+'</span>':''));
+      anchor.appendChild(el2);
+    });
+  });
+  legend('schedLegend', LAYERS.filter(l=>(S.ui.layers||{})[l.k]!==false).map(l=>({k:l.n, c:CV(l.c)})));
+}
+
+function renderSchedDayView(){
+  const dow=new Date().getDay();
+  $('schedTitle').textContent=DAYSL[dow];
+  $('schedSub').textContent='Today only, at a larger scale.';
+  const blocks=dayBlocks(dow);
+  $('schedGrid').innerHTML = blocks.length
+    ? '<div class="stack" style="gap:6px;min-width:0">'+blocks.map(b=>
+      '<div class="row" data-gotab="'+esc(b.tab)+'" style="cursor:pointer;gap:12px;padding:10px 13px;border:1px solid var(--line);'
+      +'border-left:3px solid var('+b.color+');border-radius:8px;background:var(--surface-2)">'
+      +'<span style="font-family:var(--mono);font-size:12px;color:var(--ink-3);min-width:118px">'+esc(fmtRange(b.a,b.b))+'</span>'
+      +'<span style="flex:1;min-width:0"><b>'+esc(b.label)+'</b>'
+        +(b.sub?' <span style="color:var(--ink-3);font-size:12.5px">'+esc(b.sub)+'</span>':'')+'</span>'
+      +'<span class="pill">'+esc(tabName(b.tab))+'</span></div>').join('')+'</div>'
+    : '<div class="empty">Nothing on today with the layers you have switched on.</div>';
+  legend('schedLegend', LAYERS.filter(l=>(S.ui.layers||{})[l.k]!==false).map(l=>({k:l.n, c:CV(l.c)})));
+}
+
+function renderSchedList(){
+  $('schedTitle').textContent='Everything, as a list';
+  $('schedSub').textContent='Printable. Every block, every day, with the tab that owns it.';
+  let html='<table><thead><tr><th>Day</th><th>Time</th><th>What</th><th>Detail</th><th>Owned by</th></tr></thead><tbody>';
+  [1,2,3,4,5,6,0].forEach(dw=>{
+    const blocks=dayBlocks(dw);
+    if(!blocks.length) return;
+    blocks.forEach((b,i)=>{
+      html+='<tr><td>'+(i===0?'<b>'+DAYS[dw]+'</b>':'')+'</td>'
+        +'<td style="font-family:var(--mono);font-size:12px">'+esc(fmtRange(b.a,b.b))+'</td>'
+        +'<td><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:var('+b.color+');margin-right:7px"></span><b>'+esc(b.label)+'</b></td>'
+        +'<td style="color:var(--ink-2);font-size:12.5px">'+esc(b.sub||'')+'</td>'
+        +'<td><button class="btn sm ghost" data-gotab="'+esc(b.tab)+'">'+esc(tabName(b.tab))+'</button></td></tr>';
+    });
+  });
+  html+='</tbody></table>';
+  $('schedGrid').innerHTML=html;
+  legend('schedLegend',[]);
+}
+
+function renderSchedToday(){
+  const dow=new Date().getDay(), now=new Date().getHours()*60+new Date().getMinutes();
+  const dt=new Date();
+  $('schedTodayDate').textContent = DAYSL[dow]+', '+dt.toLocaleDateString('en-US',{month:'long',day:'numeric'});
+  const blocks=dayBlocks(dow);
+  if(!blocks.length){ $('schedToday').innerHTML='<div class="empty">Nothing scheduled today.</div>'; return; }
+  $('schedToday').innerHTML='<ul class="none" style="display:flex;flex-direction:column;gap:7px">'+blocks.map(b=>{
+    const past=b.b<now, live=b.a<=now&&b.b>now;
+    return '<li style="display:grid;grid-template-columns:96px 1fr;gap:11px;align-items:baseline;'
+      +(past?'opacity:.4;':'')+(live?'background:var(--crimson-wash);border-radius:6px;padding:4px 7px;margin:-4px -7px;':'')+'">'
+      +'<span style="font-family:var(--mono);font-size:11.5px;color:var(--ink-3)">'+esc(fmtRange(b.a,b.b))+'</span>'
+      +'<span style="display:flex;gap:8px;align-items:baseline">'
+      +'<i style="width:7px;height:7px;border-radius:2px;background:var('+b.color+');flex:none;transform:translateY(-1px)"></i>'
+      +'<span><b>'+esc(b.label)+'</b>'+(b.sub?' <span style="color:var(--ink-3);font-size:12px">'+esc(b.sub)+'</span>':'')
+      +(live?' <span class="pill" style="border-color:var(--crimson)">now</span>':'')+'</span></span></li>';
+  }).join('')+'</ul>';
+}
+
+function renderSchedStats(){
+  const d=D;
+  $('schedStats').innerHTML=[
+    tile('Blocks this week', [0,1,2,3,4,5,6].reduce((s2,dw)=>s2+dayBlocks(dw).length,0), '', 'Across the layers you have on'),
+    tile('Busiest day', DAYS[d.peakDay.dow], '', rnd(d.peakDay.total,1)+'h committed', d.peakDay.over?'crit':''),
+    tile('Free weeknights', freeEvenings(), '', 'No class, study or commitment after 6pm', freeEvenings()<1?'warn':'good'),
+    tile('Open time', rnd(d.freeWeek,1), 'h/wk', 'Protected floor is '+rnd(d.socialFloor,0)+'h', d.socialOK?'good':'crit')
+  ].join('');
+  const out=[];
+  if(d.conflicts.length) out.push('<div class="note crit"><b>Fix the double-bookings first.</b> Everything downstream — the study plan, the strain model, the free-time figure — assumes you can be in one place at a time.</div>');
+  out.push('<div class="note acc"><b>Why there is only one of these.</b> Each tab used to draw its own week and they could drift apart. Now every tab writes into a single block model and this page renders it. Change a class time on Courses, mark a job as held on Work, or say you are going to a game on Life, and it appears here on the next render — and the study planner routes around it automatically.</div>');
+  const est=d.fixedBlocks.some(arr=>arr.some(b=>b.est));
+  if(est) out.push('<div class="note warn"><b>Some class times here are still estimates.</b> They are drawn exactly like confirmed ones, so confirm them on Courses before you trust the layout.</div>');
+  $('schedNotes').innerHTML=out.join('');
+}
+
+/* ======================================================================
+   RENDER — 03 COURSES & STUDY PLAN
    ====================================================================== */
 function renderCourses(){
   const d=D;
@@ -3059,7 +3459,7 @@ function renderCourses(){
 
   $('courseList').innerHTML = d.courses.map(courseCard).join('');
   renderProfTools();
-  renderWeekGrid();
+  renderPlanStats();
   renderPlanCtl();
 }
 
@@ -3185,45 +3585,8 @@ function renderProfTools(){
 }
 
 /* ---------------------------------------------- weekly plan grid ------- */
-function renderWeekGrid(){
-  const d=D, p=S.plan;
-  const startH = Math.floor(toMin(p.wake)/60), endH = Math.ceil(toMin(p.bed)/60);
-  const rows = Math.max(1,(endH-startH))*4;      /* 15-min rows */
-  const cellH = 19;
-  let html='<div class="wk" style="grid-template-rows:auto repeat('+rows+','+cellH+'px)">';
-  html+='<div></div>'+[1,2,3,4,5].map(dw=>'<div class="hd">'+DAYS[dw]+'</div>').join('');
-  for(let r=0;r<rows;r++){
-    const mins = startH*60 + r*15;
-    html += '<div class="hr">'+(mins%60===0?fmt12(mins):'')+'</div>';
-    for(let dw=1; dw<=5; dw++) html += '<div class="cell" data-r="'+r+'" data-d="'+dw+'"></div>';
-  }
-  html+='</div>';
-  $('weekGrid').innerHTML = html;
-
-  const grid = qs('.wk', $('weekGrid'));
-  const place = (dw, a, b, cls, label, sub, color) => {
-    const top = ((a - startH*60)/15)*cellH;
-    const h   = Math.max(cellH, ((b-a)/15)*cellH - 2);
-    if(top < 0) return;
-    const anchor = qs('.cell[data-d="'+dw+'"][data-r="0"]', grid);
-    if(!anchor) return;
-    const blk = el('div',{class:'wkblk '+cls,
-      style:'top:'+top+'px;height:'+h+'px;border-left-color:'+color+';background:'+(cls==='class'?color+'26':'')+';color:var(--ink)'},
-      '<b>'+esc(label)+'</b>'
-      +'<span style="color:var(--ink-3);display:block">'+(sub?esc(sub)+(h>=46?' · ':''):'')
-      +(h>=46?'<span style="font-family:var(--mono);font-size:9px">'+esc(fmtRange(a,b))+'</span>':'')+'</span>');
-    blk.title = label+' · '+fmtRange(a,b);
-    anchor.style.overflow='visible';
-    anchor.appendChild(blk);
-  };
-  for(let dw=1; dw<=5; dw++){
-    (d.byDay[dw]||[]).forEach(m=> place(dw, m.a, m.b, 'class', m.course.code, m.m.type+(m.m.loc?' · '+m.m.loc:''), CV(m.course.color)));
-    (d.plan.byDay[dw]||[]).forEach(b=> place(dw, b.a, b.b, 'study', b.code, 'study', CV(b.color)));
-    if(S.ui.showMeals) (d.plan.meals||[]).forEach(mm=> place(dw, mm.a, mm.b, 'meal', mm.k.charAt(0).toUpperCase()+mm.k.slice(1), '', CV('--s3')));
-  }
-  legend('lWeek', d.courses.map(c=>({k:c.code, c:CV(c.color)}))
-    .concat(S.ui.showMeals?[{k:'Meal window', c:CV('--s3')}]:[]));
-
+function renderPlanStats(){
+  const d=D;
   const wkndMin = ((d.plan.byDay[0]||[]).concat(d.plan.byDay[6]||[])).reduce((s,b)=>s+(b.b-b.a),0);
   $('planStats').innerHTML = [
     tile('Study placed', rnd(d.plan.placed/60,1), 'h', 'Of '+rnd(d.plan.requested/60,1)+'h requested', d.plan.unplaced>30?'warn':'good'),
@@ -3231,7 +3594,7 @@ function renderWeekGrid(){
     tile('On the weekend', rnd(wkndMin/60,1), 'h', Math.round(S.plan.weekendStudyShare*100)+'% target share'),
     tile('Longest gap used', longestGap(), '', 'Between-class time is used before evenings'),
     tile('Blocks per week', [0,1,2,3,4,5,6].reduce((s,dw)=>s+(d.plan.byDay[dw]||[]).length,0), '', S.plan.blockMin+' min each, '+S.plan.breakMin+' min break'),
-    tile('Free evenings', freeEvenings(), '', 'Weeknights with no class and no study block', freeEvenings()<1?'warn':'good')
+    tile('Free evenings', freeEvenings(), '', 'Weeknights with no class, commitment or study block', freeEvenings()<1?'warn':'good')
   ].join('');
 }
 function longestGap(){
@@ -3700,7 +4063,8 @@ function renderFood(){
     +'<div><label class="f">Avoid — allergies and anything you just do not eat</label>'
       +'<div class="row" style="gap:9px">'+ALLERGENS.map(a=>'<label class="row" style="gap:5px;font-size:12.5px"><input type="checkbox" data-avoid="'+a.id+'"'
         +((o.avoid||[]).indexOf(a.id)>=0?' checked':'')+'> '+esc(a.n)+'</label>').join('')+'</div>'
-      +'<div class="hint">'+(o.excludedCount?'<b>'+o.excludedCount+'</b> of '+o.lib.length+' items are filtered out right now.':'Nothing is filtered out.')+'</div>'
+      +'<div class="hint">'+(o.excludedCount?'<b>'+o.excludedCount+'</b> of '+o.lib.length+' items are filtered out right now'
+        +((o.never||[]).length?', including '+o.never.length+' you blocked for good':'')+'.':'Nothing is filtered out.')+'</div>'
       +'<div class="note crit" style="margin-top:12px"><b>This is a planning filter, not an allergy safety check.</b> It filters a generic reference list by the ingredients I recorded against each item. It cannot know what a specific dish at a specific hall contains, and it does not know about cross-contact. For a real allergy, IU Dining\u2019s own item data and a conversation with the staff at the counter are the only sources that count.</div>'
     +'</div>';
 
@@ -3721,7 +4085,59 @@ function renderFood(){
     + Object.keys(STATIONS).map(k=>'<option value="'+k+'">'+esc(STATIONS[k])+'</option>').join('');
   $('foodStation').value = window.__foodSt || '';
 
-  renderFoodList(); renderTray(); renderMealOptions();
+  renderHalls(); renderFoodList(); renderTray(); renderMealOptions(); renderNever();
+}
+
+function renderHalls(){
+  const o=D.dining;
+  $('hallPicker').innerHTML = HALLS.map(h=>{
+    const on = o.hallId===h.id;
+    const best = bestAtHall(o, h.id);
+    return '<button class="btn sm'+(on?' primary':'')+'" data-hall="'+h.id+'">'
+      + (h.home?'★ ':'') + esc(h.n)
+      + ' <span style="font-family:var(--mono);color:'+(on?'rgba(255,255,255,.75)':'var(--ink-3)')+'">'
+      + (best? rnd(best.tot.p,0)+'g' : '—') + '</span></button>';
+  }).join('') + '<span class="hint" style="margin:0 0 0 8px">Best protein one tray can reach at each hall, from your allowed foods.</span>';
+
+  $('hallCompare').innerHTML = HALLS.map(h=>{
+    const best = bestAtHall(o, h.id);
+    const ceil = o.hallCeiling[h.id];
+    const on = o.hallId===h.id;
+    if(!best) return '<div style="border:1px dashed var(--line);border-radius:var(--r);padding:12px;color:var(--ink-3);font-size:12.5px">'
+      + esc(h.n)+' — no stations left switched on, or your filters removed everything it serves.</div>';
+    return '<div style="border:1px solid '+(on?'var(--crimson)':'var(--line)')+';border-radius:var(--r);padding:12px 14px;background:var(--surface-2)">'
+      +'<div class="row spread" style="align-items:baseline"><b style="font-size:13.5px">'+(h.home?'★ ':'')+esc(h.n)+'</b>'
+        + (best.hits?chip('computed','Hits target'):'<span class="pill" style="border-color:rgba(250,178,25,.4);color:var(--warn)">best it can do</span>')+'</div>'
+      +'<div style="font-size:12px;color:var(--ink-3);margin-top:2px">'+esc(h.sub)+' · '+ceil.count+' items you would eat</div>'
+      +'<div class="row" style="gap:6px;margin-top:8px"><span class="pill">'+rnd(best.tot.p,0)+'g protein</span>'
+        +'<span class="pill">'+rnd(best.tot.kcal,0)+' kcal</span>'
+        +(ceil.densest?'<span class="pill">densest: '+esc(ceil.densest.n)+'</span>':'')+'</div>'
+      + (best.gaps.length?'<div style="font-size:12px;color:var(--warn);margin-top:7px">Cannot reach: '+esc(best.gaps.join(', '))+'</div>':'')
+      +'<div class="row" style="margin-top:9px">'+(on?'<span class="pill">selected</span>':'<button class="btn sm" data-hall="'+h.id+'">Use this hall</button>')
+        +'<a class="btn sm ghost" href="'+esc(mapsUrl(S.meta.dormAddr, (placeById(h.id)||{addr:'Indiana University, Bloomington, IN'}).addr))+'" target="_blank" rel="noopener">Walk ↗</a></div>'
+      +'</div>';
+  }).join('');
+
+  const cur=HALLS.find(h=>h.id===o.hallId)||HALLS[0];
+  $('hallStations').innerHTML =
+    '<div class="sect-lbl">Stations at '+esc(cur.n)+' <span style="font-weight:400;text-transform:none;letter-spacing:0">untick what is not there</span></div>'
+    +'<div class="row" style="gap:11px">'+Object.keys(STATIONS).map(st=>{
+      const on=o.hallStations[o.hallId][st]!==false;
+      const n=o.allowed.filter(f=>f.st===st).length;
+      return '<label class="row" style="gap:5px;font-size:12.5px"><input type="checkbox" data-hallst="'+st+'"'+(on?' checked':'')+'> '
+        + esc(STATIONS[st])+' <span style="color:var(--ink-3);font-family:var(--mono)">'+n+'</span></label>';
+    }).join('')+'</div>'
+    +'<div class="note warn" style="margin-top:11px">'+chip('unverified')+' <b>Every hall starts with every station on because IU does not publish a station list I could reach.</b> That is a placeholder, not a claim — the first time you eat somewhere, untick what it does not have and this stops suggesting food you would have to walk for.</div>';
+}
+
+function renderNever(){
+  const o=D.dining;
+  const rows=(o.never||[]).map(id=>o.lib.find(f=>f.id===id)).filter(Boolean);
+  $('neverList').innerHTML = rows.length
+    ? '<div class="row" style="gap:8px">'+rows.map(f=>
+        '<span class="pill" style="border-color:rgba(208,59,59,.4)">'+esc(f.n)
+        +' <button class="btn sm ghost" data-unnever="'+f.id+'" style="padding:0 4px;font-size:13px" title="allow it again">×</button></span>').join('')+'</div>'
+    : '<div class="empty" style="padding:16px">Nothing blocked. Use <b>never</b> on any food in the list above and it disappears for good.</div>';
 }
 
 function renderFoodList(){
@@ -3739,6 +4155,7 @@ function renderFoodList(){
     ? '<table><thead><tr><th>Food</th><th>Portion</th><th class="num">kcal</th><th class="num">Protein</th><th class="num">g/100kcal</th><th></th></tr></thead><tbody>'
       + rows.map(f=>'<tr>'
         +'<td><b>'+esc(f.n)+'</b> <span class="pill" style="font-size:10.5px">'+esc(STATIONS[f.st]||f.st)+'</span>'
+          +(D.dining.hallStations[D.dining.hallId][f.st]===false?' <span class="pill" style="font-size:10.5px;border-color:rgba(250,178,25,.4);color:var(--warn)">not at '+esc((HALLS.find(h=>h.id===D.dining.hallId)||{}).n)+'</span>':'')
           +(f.verified?' '+chip('verified','Checked'):'')+(f.edited?' '+chip('mine','Edited'):'')
           +(f.custom?' '+chip('mine','Yours'):'')+'</td>'
         +'<td style="color:var(--ink-3);font-size:12px">'+esc(f.portion)+'</td>'
@@ -3748,7 +4165,7 @@ function renderFoodList(){
         +'<td style="text-align:right;white-space:nowrap">'
           +'<button class="btn sm" data-addtray="'+f.id+'">+</button> '
           +'<button class="btn sm ghost" data-editfood="'+f.id+'">edit</button> '
-          +'<button class="btn sm ghost" data-hidefood="'+f.id+'" title="never show me this again">×</button>'
+          +'<button class="btn sm ghost danger" data-neverfood="'+f.id+'" title="never recommend this again, anywhere">never</button>'
         +'</td></tr>').join('')
       +'</tbody></table>'
     : '<div class="empty">Nothing matches. Loosen a filter, or add your own item.</div>';
@@ -3801,7 +4218,11 @@ function renderTray(){
 
 function renderMealOptions(){
   const o=D.dining;
-  const opts = buildMealOptions(o, 3);
+  const hall=HALLS.find(h=>h.id===o.hallId)||HALLS[0];
+  const opts = buildMealOptions(o, o.hallId, 3);
+  $('optTitle').textContent = 'Three ways to eat at '+hall.n;
+  $('optSub').innerHTML = 'Every item in these comes from '+esc(hall.n)+' alone — one building, one tray. '
+    + 'Where a hall cannot reach a target, the card says which target rather than pretending it did.';
   $('mealOptions').innerHTML = opts.length
     ? opts.map((op,i)=>
       '<div style="border:1px solid '+(op.hits?'rgba(12,163,12,.32)':'var(--line)')+';border-radius:var(--r);padding:14px;background:var(--surface-2)">'
@@ -3816,9 +4237,12 @@ function renderMealOptions(){
         +(op.hasVeg?'':'<span class="pill" style="border-color:rgba(250,178,25,.4);color:var(--warn)">no veg</span>')
         +(op.hasCarb?'':'<span class="pill" style="border-color:rgba(250,178,25,.4);color:var(--warn)">no grain</span>')
       +'</div>'
+      + (op.gaps.length
+          ? '<div class="note warn" style="margin-top:9px"><b>What this tray cannot do:</b> '+esc(op.gaps.join('; '))+'. College food will not hit every target every day — this is the best '+esc(hall.n)+' can do from what you will eat.</div>'
+          : '<div class="note good" style="margin-top:9px">Hits every target from one hall.</div>')
       +'<div class="row" style="margin-top:11px"><button class="btn sm primary" data-loadopt="'+i+'">Load onto tray</button></div>'
       +'</div>').join('')
-    : '<div class="empty" style="grid-column:1/-1">Your filters leave too few items to build from. Loosen a restriction or add your own foods.</div>';
+    : '<div class="empty" style="grid-column:1/-1">'+esc(hall.n)+' has too few items left after your filters and its switched-on stations. Turn a station back on, loosen a restriction, or pick another hall.</div>';
   window.__mealOpts = opts;
 }
 
@@ -4778,7 +5202,7 @@ function renderCitations(){
    ====================================================================== */
 function renderAll(){
   derive();
-  renderGeneral(); renderCourses(); renderDining(); renderLife(); renderWork();
+  renderGeneral(); renderSchedule(); renderCourses(); renderDining(); renderLife(); renderWork();
   renderDeals(); renderTracker(); renderData();
 }
 function showTab(name){
@@ -4791,7 +5215,7 @@ function showTab(name){
   qsa('section.tab').forEach(s=> s.classList.toggle('on', s.id==='tab-'+name));
   window.scrollTo({top:0, behavior:'instant'});
 }
-const TAB_ORDER=['general','courses','dining','life','work','deals','tracker','data'];
+const TAB_ORDER=['general','schedule','courses','dining','life','work','deals','tracker','data'];
 qsa('nav.tabbar button').forEach(b=>{
   b.addEventListener('click', ()=>showTab(b.dataset.tab));
   b.addEventListener('keydown', e=>{
@@ -4830,7 +5254,7 @@ document.addEventListener('input', e=>{
     if(f==='credits') c.credits = t.value===''? null : +t.value;
     else if(f==='diff') c.diff = +t.value;
     else c[f]=t.value;
-    if(f==='diff'){ save(); derive(); renderGeneral(); renderWeekGrid();
+    if(f==='diff'){ save(); derive(); renderGeneral(); renderSchedule(); renderPlanStats();
       const lab=t.previousElementSibling; if(lab) lab.textContent='Difficulty dial ×'+rnd(+t.value,2);
       return; }
   }
@@ -4898,6 +5322,12 @@ document.addEventListener('change', e=>{
     const a=(S.track.assignments||[]).find(x=>x.id===t.dataset.asgdone);
     if(a){ a.done=t.checked; save(); renderAll(); } return;
   }
+  if(t.dataset.hallst!==undefined){
+    const h=S.dining.hall||'mcnuttdh';
+    S.dining.halls[h]=S.dining.halls[h]||{};
+    S.dining.halls[h][t.dataset.hallst]=t.checked;
+    save(); derive(); renderFood(); return;
+  }
   if(t.dataset.avoid!==undefined){
     const a=t.dataset.avoid, arr=S.dining.avoid||[];
     S.dining.avoid = t.checked ? arr.concat([a]).filter((v,i,x)=>x.indexOf(v)===i) : arr.filter(x=>x!==a);
@@ -4920,13 +5350,12 @@ document.addEventListener('change', e=>{
     const j=(S.jobs||[]).find(x=>x.id===t.dataset.jobhave);
     if(j){ j.have=t.checked; save(); renderAll(); } return;
   }
-  if(t.id==='showMeals'){ S.ui.showMeals=t.checked; save(); derive(); renderWeekGrid(); return; }
   if(t.dataset.dining==='weightUnit'){ S.dining.weightUnit=t.value; save(); derive(); renderDiet(); return; }
   if(t.id==='pasteKind'){ if($('pasteBox').value.trim()) parsePaste(); return; }
 });
 
 document.addEventListener('click', e=>{
-  const t=e.target.closest('[data-plan-pick],[data-dealfilter],[data-delcourse],[data-delgrade],[data-addgrade],[data-scaffold],[data-delasg],[data-delann],[data-dellog],[data-delsrc],[data-retest],[data-delcommit],[data-deltrip],[data-planweekend],[data-sport],[data-delgame],[data-deljob],[data-editjob],[data-diet],[data-meal],[data-addtray],[data-editfood],[data-hidefood],[data-trayq],[data-deltray],[data-loadopt],button,a');
+  const t=e.target.closest('[data-plan-pick],[data-dealfilter],[data-delcourse],[data-delgrade],[data-addgrade],[data-scaffold],[data-delasg],[data-delann],[data-dellog],[data-delsrc],[data-retest],[data-delcommit],[data-deltrip],[data-planweekend],[data-sport],[data-delgame],[data-deljob],[data-editjob],[data-diet],[data-meal],[data-addtray],[data-editfood],[data-hidefood],[data-trayq],[data-deltray],[data-loadopt],[data-layer],[data-schedview],[data-gotab],[data-hall],[data-neverfood],[data-unnever],button,a');
   if(!t) return;
   const id=t.id, ds=t.dataset;
 
@@ -4967,6 +5396,12 @@ document.addEventListener('click', e=>{
   if(ds.delgame){ S.sports.custom=(S.sports.custom||[]).filter(x=>x.id!==ds.delgame); save(); derive(); renderGames(); return; }
   if(ds.deljob){ S.jobs=S.jobs.filter(x=>x.id!==ds.deljob); save(); renderAll(); return; }
   if(ds.editjob){ addJobDialog(S.jobs.find(x=>x.id===ds.editjob)); return; }
+  if(ds.gotab){ showTab(ds.gotab); return; }
+  if(ds.layer){
+    S.ui.layers=S.ui.layers||{};
+    S.ui.layers[ds.layer] = S.ui.layers[ds.layer]===false;
+    save(); renderSchedule(); return; }
+  if(ds.schedview){ S.ui.schedView=ds.schedview; save(); renderSchedule(); return; }
   if(ds.diet){ S.dining.diet=ds.diet; save(); derive(); renderFood(); return; }
   if(ds.meal){ S.dining.meal=ds.meal; save(); derive(); renderFood(); return; }
   if(ds.addtray){ trayAdd(ds.addtray, 1); return; }
@@ -4975,9 +5410,14 @@ document.addEventListener('click', e=>{
     const k=S.dining.meal||'lunch';
     S.dining.tray[k]=(S.dining.tray[k]||[]).filter(x=>x.id!==ds.deltray);
     save(); derive(); renderTray(); return; }
-  if(ds.hidefood){
-    S.dining.hidden=(S.dining.hidden||[]).concat([ds.hidefood]);
-    save(); derive(); renderFood(); toast('Hidden. It will not appear in any generated option either.','warn'); return; }
+  if(ds.hall){ S.dining.hall=ds.hall; save(); derive(); renderFood(); return; }
+  if(ds.neverfood){
+    S.dining.never=(S.dining.never||[]).concat([ds.neverfood]).filter((v,i,a)=>a.indexOf(v)===i);
+    save(); derive(); renderFood();
+    toast('Blocked for good. It will never appear in a generated option again.','warn'); return; }
+  if(ds.unnever){
+    S.dining.never=(S.dining.never||[]).filter(x=>x!==ds.unnever);
+    save(); derive(); renderFood(); return; }
   if(ds.editfood){ editFoodDialog(ds.editfood); return; }
   if(ds.loadopt){
     const op=(window.__mealOpts||[])[+ds.loadopt]; if(!op) return;
@@ -5030,14 +5470,21 @@ document.addEventListener('click', e=>{
       if(m2){ m2.days=[2,4]; m2.tEst=false; m2.disputed=false;
         save(); renderAll(); toast('Lab confirmed as Tuesday and Thursday.','good'); }
       break; }
-    case 'btnRegen': derive(); renderWeekGrid(); renderGeneral(); toast('Plan rebuilt from your current settings.','good'); break;
+    case 'btnRegen': derive(); renderSchedule(); renderPlanStats(); renderGeneral();
+      toast('Plan rebuilt. The Schedule tab already shows it.','good'); break;
     case 'btnAddCourse': addCourseDialog(); break;
+    case 'btnSchedAll':
+      S.ui.layers={class:true,study:true,meal:true,commit:true,work:true,game:true};
+      save(); renderSchedule(); break;
+    case 'btnSchedPrint': window.print(); break;
     case 'btnAddCommit': addCommitDialog(); break;
     case 'btnAddFood': editFoodDialog(null); break;
-    case 'btnGenMeals': derive(); renderMealOptions(); toast('Rebuilt from your current filters.','good'); break;
+    case 'btnGenMeals': derive(); renderMealOptions();
+      toast('Rebuilt from '+((HALLS.find(h=>h.id===D.dining.hallId)||{}).n||'this hall')+' only.','good'); break;
     case 'btnClearTray': {
       const k=S.dining.meal||'lunch'; S.dining.tray[k]=[]; save(); derive(); renderTray(); break; }
     case 'btnUnhide': S.dining.hidden=[]; save(); derive(); renderFood(); toast('All items shown again.','good'); break;
+    case 'btnClearNever': S.dining.never=[]; save(); derive(); renderFood(); toast('Block list cleared.','good'); break;
     case 'btnAddTrip': addTripDialog(); break;
     case 'btnAddGame': addGameDialog(); break;
     case 'btnAddJob': addJobDialog(); break;
@@ -5055,11 +5502,7 @@ document.addEventListener('click', e=>{
     case 'btnCommit': commitParse(); break;
     case 'btnExport': case 'btnExport2': exportData(); break;
     case 'btnImport': case 'btnImport2': importDialog(); break;
-    case 'btnReset': case 'btnReset2':
-      confirmBox('Erase everything?','Every course, grade, meal, tick and source goes. There is no undo — export first if you might want it back.',()=>{
-        try{ localStorage.removeItem(KEY); }catch(err){}
-        S=defaults(); save(); renderAll(); showTab('general'); toast('Everything erased.','warn');
-      },'Erase'); break;
+    case 'btnReset': case 'btnReset2': case 'btnResetScreen': resetFlow(1); break;
   }
 });
 
@@ -5397,6 +5840,84 @@ function commitParse(){
   $('btnCommit').disabled=true; parsed=null;
   $('parsePreview').className='empty'; $('parsePreview').textContent='Imported. Paste something else to continue.';
 }
+/* Three deliberate steps plus a typed word. Nothing here fires on a stray
+   click, and the middle step pushes you to export first. */
+function resetFlow(step, mode){
+  const counts = {
+    courses: S.courses.length,
+    assignments:(S.track.assignments||[]).length,
+    grades: S.courses.reduce((n2,c)=>n2+(c.grades||[]).length,0),
+    commitments:(S.commitments||[]).length,
+    jobs:(S.jobs||[]).length,
+    meals:(S.dining.log||[]).length,
+    deals:Object.keys(S.deals.checked||{}).filter(k=>S.deals.checked[k]).length,
+    sources:(S.sources||[]).length,
+    checkins:(S.track.checkins||[]).length
+  };
+  const total = Object.values(counts).reduce((a,b)=>a+b,0);
+
+  if(step===1){
+    modal('Reset — step 1 of 3: what goes',
+      '<p style="color:var(--ink-2);font-size:13px">Two different things you might mean. Pick one.</p>'
+      +'<div class="stack" style="margin-top:12px">'
+        +'<label class="srcrow" style="cursor:pointer"><div><div class="row" style="gap:9px;align-items:baseline">'
+          +'<input type="radio" name="rsMode" value="blank" checked><b>Hand it to someone else</b></div>'
+          +'<div style="font-size:12.5px;color:var(--ink-2);margin-top:4px">Everything personal is erased and no courses are loaded. They start from an empty planner and enter their own. This is what you want if you are passing the file on.</div></div></label>'
+        +'<label class="srcrow" style="cursor:pointer"><div><div class="row" style="gap:9px;align-items:baseline">'
+          +'<input type="radio" name="rsMode" value="mine"><b>Start my semester over</b></div>'
+          +'<div style="font-size:12.5px;color:var(--ink-2);margin-top:4px">Erases everything you have entered but reloads the Fall 2026 schedule this planner shipped with — the five courses, the meal plan, the confirmed times.</div></div></label>'
+      +'</div>'
+      +'<div class="note crit" style="margin-top:14px"><b>What is about to be erased</b>, in this browser only:'
+        +'<div class="row" style="gap:7px;margin-top:8px">'
+        + Object.keys(counts).filter(k=>counts[k]>0).map(k=>'<span class="pill">'+counts[k]+' '+esc(k)+'</span>').join('')
+        + (total===0?'<span class="pill">nothing yet</span>':'')
+        +'</div></div>',
+      [{label:'Cancel'},{label:'Continue →',primary:true,onClick:()=>{
+        const m=qs('input[name="rsMode"]:checked');
+        setTimeout(()=>resetFlow(2, m?m.value:'blank'), 60);
+      }}]);
+    return;
+  }
+
+  if(step===2){
+    modal('Reset — step 2 of 3: save a copy first',
+      '<p style="color:var(--ink-2);font-size:13px">There is no undo after the next screen. Copy this somewhere before you go on — pasting it back into Import restores everything exactly.</p>'
+      +'<textarea id="rsExp" style="min-height:170px" readonly>'+esc(JSON.stringify(S))+'</textarea>'
+      +'<div class="row" style="margin-top:10px"><button class="btn" id="rsCopy">Copy to clipboard</button>'
+      +'<span class="hint" id="rsCopyMsg" style="margin:0"></span></div>',
+      [{label:'Cancel'},{label:'Back',onClick:()=>setTimeout(()=>resetFlow(1),60)},
+       {label:'Continue →',primary:true,onClick:()=>setTimeout(()=>resetFlow(3, mode),60)}]);
+    setTimeout(()=>{
+      const c=$('rsCopy'); if(!c) return;
+      c.onclick=()=>{ const b2=$('rsExp'); b2.select();
+        try{ document.execCommand('copy'); $('rsCopyMsg').innerHTML='<span style="color:#4fc24f">Copied.</span>'; }
+        catch(e){ $('rsCopyMsg').innerHTML='<span style="color:var(--warn)">Select the text and copy it manually.</span>'; } };
+    },40);
+    return;
+  }
+
+  const word='RESET';
+  modal('Reset — step 3 of 3: confirm',
+    '<div class="note crit"><b>This erases everything and cannot be undone.</b> '
+      + (mode==='blank'
+          ? 'The planner will restart empty, with no courses loaded, ready for someone else.'
+          : 'The planner will restart with the Fall 2026 schedule it shipped with and nothing else.')
+      +'</div>'
+    +'<p style="color:var(--ink-2);font-size:13px;margin-top:12px">Type <b style="font-family:var(--mono);color:var(--ink)">'+word+'</b> to enable the button.</p>'
+    +'<input id="rsWord" placeholder="'+word+'" autocomplete="off" style="font-family:var(--mono);letter-spacing:.2em;text-transform:uppercase">',
+    [{label:'Cancel'},{label:'Back',onClick:()=>setTimeout(()=>resetFlow(2, mode),60)},
+     {label:'Erase everything',danger:true,onClick:()=>{
+       const v=($('rsWord').value||'').trim().toUpperCase();
+       if(v!==word){ toast('Type '+word+' exactly to confirm.','bad'); return true; }
+       try{ localStorage.removeItem(KEY); }catch(e){}
+       S = mode==='blank' ? blankDefaults() : defaults(true);
+       save(); renderAll(); showTab('general');
+       toast(mode==='blank' ? 'Erased. The planner is empty and ready for someone else.'
+                            : 'Erased and reloaded with the Fall 2026 defaults.','warn');
+     }}]);
+  setTimeout(()=>{ const w=$('rsWord'); if(w) w.focus(); },60);
+}
+
 function exportData(){
   const txt=JSON.stringify(S,null,2);
   modal('Export your data',
@@ -5428,7 +5949,6 @@ function importDialog(){
   const had = load();
   renderAll();
   showTab(S.ui.tab||'general');
-  const sm=$('showMeals'); if(sm) sm.checked=!!S.ui.showMeals;
   $('pasteBox').addEventListener('input', ()=>{ clearTimeout(window.__pt); window.__pt=setTimeout(parsePaste,500); });
   $('foodSearch').addEventListener('input', ()=>{ clearTimeout(window.__fs); window.__fs=setTimeout(renderFoodList,220); });
   $('foodStation').addEventListener('change', e=>{ window.__foodSt=e.target.value; renderFoodList(); });
@@ -5437,7 +5957,7 @@ function importDialog(){
     save();
     setTimeout(()=>toast('Loaded your four Fall 2026 courses. Confirm the meeting times on the Courses tab — they were read off a screenshot, not a data feed.','warn'), 700);
   }
-  window.addEventListener('resize', ()=>{ clearTimeout(window.__wt); window.__wt=setTimeout(()=>{ derive(); renderWeekGrid(); },250); });
+  window.addEventListener('resize', ()=>{ clearTimeout(window.__wt); window.__wt=setTimeout(()=>{ derive(); renderSchedule(); },250); });
 })();
 </script>
 </body>

@@ -1,3 +1,8 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Crimson Command</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -396,6 +401,9 @@ ul.none{list-style:none;padding:0;margin:0}
   section.tab{display:block!important}
 }
 </style>
+</head>
+<body>
+
 <header class="mast">
   <div class="mast-in">
     <div class="brand">
@@ -1082,7 +1090,7 @@ ul.none{list-style:none;padding:0;margin:0}
 const KEY = 'iu.crimsonCommand.v1';
 /* 'owner' boots with the pre-loaded Fall 2026 schedule. 'blank' boots empty,
    for the copy you hand to someone else. build-artifact.py flips this. */
-const BOOT_PROFILE = 'owner';
+const BOOT_PROFILE = 'blank';
 const DAYS  = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 const DAYSL = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
 
@@ -5952,3 +5960,5 @@ function importDialog(){
   window.addEventListener('resize', ()=>{ clearTimeout(window.__wt); window.__wt=setTimeout(()=>{ derive(); renderSchedule(); },250); });
 })();
 </script>
+</body>
+</html>
