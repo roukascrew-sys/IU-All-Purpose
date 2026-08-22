@@ -419,9 +419,11 @@ ul.none{list-style:none;padding:0;margin:0}
     <button role="tab" aria-selected="true" aria-controls="tab-general" data-tab="general" class="on"><span class="n">01</span>General</button>
     <button role="tab" aria-selected="false" aria-controls="tab-courses" data-tab="courses"><span class="n">02</span>Courses &amp; Study Plan</button>
     <button role="tab" aria-selected="false" aria-controls="tab-dining" data-tab="dining"><span class="n">03</span>Dining &amp; Map</button>
-    <button role="tab" aria-selected="false" aria-controls="tab-deals" data-tab="deals"><span class="n">04</span>Deals &amp; Savings</button>
-    <button role="tab" aria-selected="false" aria-controls="tab-tracker" data-tab="tracker"><span class="n">05</span>Academic Tracker</button>
-    <button role="tab" aria-selected="false" aria-controls="tab-data" data-tab="data"><span class="n">06</span>Data &amp; Sources</button>
+    <button role="tab" aria-selected="false" aria-controls="tab-life" data-tab="life"><span class="n">04</span>Life &amp; Balance</button>
+    <button role="tab" aria-selected="false" aria-controls="tab-work" data-tab="work"><span class="n">05</span>Work</button>
+    <button role="tab" aria-selected="false" aria-controls="tab-deals" data-tab="deals"><span class="n">06</span>Deals &amp; Savings</button>
+    <button role="tab" aria-selected="false" aria-controls="tab-tracker" data-tab="tracker"><span class="n">07</span>Academic Tracker</button>
+    <button role="tab" aria-selected="false" aria-controls="tab-data" data-tab="data"><span class="n">08</span>Data &amp; Sources</button>
   </div>
 </nav>
 
@@ -630,9 +632,165 @@ ul.none{list-style:none;padding:0;margin:0}
       <div class="stack" id="dietPlan"></div>
     </div>
   </div>
+
+  <div class="panel">
+    <div class="panel-hd"><div class="t">
+      <h2>Diet and allergies</h2>
+      <div class="d">Set these once. Everything below — the food list, the generated options, the whole builder — only ever shows you things that pass these filters.</div>
+    </div></div>
+    <div class="grid g2" id="dietPrefs"></div>
+    <div class="srcline" id="foodSrc"></div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-hd">
+      <div class="t"><h2>Build a tray</h2><div class="d">Pick a meal, add food, watch the protein and calorie totals move against the target for that meal.</div></div>
+      <div class="row" id="mealTabs"></div>
+    </div>
+    <div class="split" style="grid-template-columns:minmax(0,1.3fr) minmax(0,1fr)">
+      <div>
+        <div class="row" style="margin-bottom:11px">
+          <input id="foodSearch" placeholder="Search food…" style="max-width:230px">
+          <select id="foodStation" style="max-width:190px"></select>
+          <label class="pill" style="cursor:pointer"><input type="checkbox" id="foodProteinOnly"> protein-dense only</label>
+          <button class="btn sm" id="btnAddFood">+ Add your own</button>
+        </div>
+        <div class="scroll" style="max-height:430px;overflow-y:auto"><div id="foodList"></div></div>
+      </div>
+      <div>
+        <div class="sect-lbl">Your tray <span id="trayMealName" style="font-weight:400;text-transform:none;letter-spacing:0"></span></div>
+        <div id="trayList"></div>
+        <div class="divider"></div>
+        <div id="trayTotals"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-hd">
+      <div class="t"><h2>Three ways to hit the target</h2>
+      <div class="d">Generated from what is left after your diet and allergy filters — not a prescription, three different shapes of the same meal. Load one onto the tray and edit it from there.</div></div>
+      <div class="row"><button class="btn sm primary" id="btnGenMeals">Regenerate</button></div>
+    </div>
+    <div class="grid g3" id="mealOptions"></div>
+  </div>
 </section>
 
-<!-- ═══════════════ 04 DEALS ═══════════════ -->
+<!-- ═══════════════ 04 LIFE & BALANCE ═══════════════ -->
+<section class="tab" id="tab-life" role="tabpanel">
+  <div class="feedstrip" id="vFeed"></div>
+
+  <div class="callout" id="socialBanner"></div>
+
+  <div class="split">
+    <div class="panel">
+      <div class="panel-hd"><div class="t">
+        <h2>The social floor</h2>
+        <div class="d">This is the one number on the site that constrains study rather than the other way round. Study is capped at whatever is left after this is protected — if the two collide, the page tells you instead of quietly scheduling over your evenings.</div>
+      </div></div>
+      <div class="grid g2" id="socialCtl"></div>
+      <div class="divider"></div>
+      <div class="chartwrap"><div id="cSocial"></div><div class="tt" id="ttSocial"></div></div>
+      <div class="legend" id="lSocial"></div>
+    </div>
+    <div class="panel">
+      <div class="panel-hd"><div class="t"><h2>Where the balance stands</h2><div class="d">Recomputed from every tab.</div></div></div>
+      <div class="stack" id="socialRead"></div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-hd">
+      <div class="t"><h2>Gym, intramurals, clubs and standing plans</h2>
+      <div class="d">Anything here is a hard block: the study planner routes around it exactly like a lecture. Intramurals, clubs and plans with people count fully toward the social floor; the gym counts 30%; a work shift counts 10%.</div></div>
+      <div class="row"><button class="btn sm" id="btnAddCommit">+ Add a commitment</button></div>
+    </div>
+    <div id="commitList"></div>
+    <div class="divider"></div>
+    <div class="grid g2" id="recSportsInfo"></div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-hd">
+      <div class="t"><h2>Trips home</h2>
+      <div class="d">An hour each way, so a weekend at home costs two hours of travel plus whatever it lands on. Add a trip and this works out exactly what it would cost you.</div></div>
+      <div class="row">
+        <label class="pill" style="gap:6px">One way <input type="number" min="0" max="600" step="5" id="tripMins" style="width:64px;padding:3px 6px;font-size:12px;text-align:right"> min</label>
+        <button class="btn sm" id="btnAddTrip">+ Plan a trip</button>
+      </div>
+    </div>
+    <div id="tripList"></div>
+    <div class="divider"></div>
+    <div class="sect-lbl">Cheapest weekends to go — ranked by what each would actually cost</div>
+    <div class="scroll"><div id="tripAdvice"></div></div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-hd">
+      <div class="t"><h2>Home games</h2>
+      <div class="d">Tick the sports you care about and only those show up. Every game is checked against your class schedule, your commitments and your study plan.</div></div>
+      <div class="row"><button class="btn sm" id="btnAddGame">+ Add a game</button></div>
+    </div>
+    <div class="row" id="sportPicker"></div>
+    <div class="divider"></div>
+    <div id="gameList"></div>
+    <div class="divider"></div>
+    <div class="grid g2" id="ticketInfo"></div>
+  </div>
+</section>
+
+<!-- ═══════════════ 05 WORK ═══════════════ -->
+<section class="tab" id="tab-work" role="tabpanel">
+  <div class="feedstrip" id="wFeed"></div>
+
+  <div class="panel">
+    <div class="panel-hd"><div class="t">
+      <h2>What a student job pays here</h2>
+      <div class="d">The anchors every score on this tab is measured against. Two are IU's own figures; the market band is a salary aggregator and is labelled as such.</div>
+    </div></div>
+    <div class="grid g4" id="wageTiles"></div>
+    <div class="srcline" id="wageSrc"></div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-hd"><div class="t">
+      <h2>What matters to you</h2>
+      <div class="d">Move these and the ranking below re-sorts. There is no universal best job — there is only the best one against these weights.</div>
+    </div></div>
+    <div class="grid g3" id="jobWeights"></div>
+    <div class="srcline">Ratings for student experience and flexibility are <strong>yours to enter</strong>. There is no public database of what it is like to work a given campus job, and inventing star ratings for real employers would be exactly the kind of fabrication this planner refuses. Ask people who work there, then score it.</div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-hd">
+      <div class="t"><h2>Jobs you are comparing</h2><div class="d">Scored out of 100 against your weights, then checked against your actual week.</div></div>
+      <div class="row">
+        <button class="btn sm" id="btnAddJob">+ Add a job</button>
+        <button class="btn sm" id="btnJobTemplates">Common campus roles</button>
+      </div>
+    </div>
+    <div id="jobList"></div>
+  </div>
+
+  <div class="split">
+    <div class="panel">
+      <div class="panel-hd"><div class="t"><h2>Score breakdown</h2><div class="d">Where each job earns and loses its points.</div></div></div>
+      <div class="chartwrap"><div id="cJobs"></div><div class="tt" id="ttJobs"></div></div>
+      <div class="legend" id="lJobs"></div>
+    </div>
+    <div class="panel">
+      <div class="panel-hd"><div class="t"><h2>What the hours cost you</h2><div class="d">Earnings against the study and social time they consume.</div></div></div>
+      <div class="stack" id="jobRead"></div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-hd"><div class="t"><h2>Where to look</h2><div class="d">The official routes into student employment at IU Bloomington.</div></div></div>
+    <div class="grid g2" id="jobSources"></div>
+  </div>
+</section>
+
+<!-- ═══════════════ 06 DEALS ═══════════════ -->
 <section class="tab" id="tab-deals" role="tabpanel">
   <div class="feedstrip" id="lFeed"></div>
 
@@ -783,6 +941,14 @@ ul.none{list-style:none;padding:0;margin:0}
       <div class="row"><button class="btn sm" id="btnRetestAll">Re-test all</button></div>
     </div>
     <div class="stack" id="srcList"></div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-hd"><div class="t">
+      <h2>One-click Canvas import</h2>
+      <div class="d">The lowest-input route that actually works. Drag the button to your bookmarks bar, open Canvas, click it — it reads Canvas's own API from inside your signed-in session and copies your courses, grade weights, assignments and scores to the clipboard. Paste below and everything lands at once.</div>
+    </div></div>
+    <div id="bookmarkletBox"></div>
   </div>
 
   <div class="panel">
@@ -997,12 +1163,36 @@ const CITE = {
   genaiKelley:{t:'IU opens free generative AI course to anyone worldwide; class presented by Kelley School', o:'IU Kelley School of Business', u:'https://blog.kelley.iu.edu/2026/04/16/iu-opens-free-generative-ai-course-to-anyone-worldwide-class-presented-by-kelley-school/'},
   genaiNews:{t:'IU opens its free generative AI course to anyone worldwide', o:'IU News', u:'https://news.iu.edu/live/news/49928-iu-opens-its-free-generative-ai-course-to-anyone'},
   genaiUits:{t:'GenAI 101', o:'IU University Information Technology Services', u:'https://uits.iu.edu/ai/genai-101.html'},
-  genaiExpand:{t:'GenAI 101 course listing', o:'IU Expand', u:'https://expand.iu.edu/browse/learningtech/gen-ai/courses/genai-101'}
+  genaiExpand:{t:'GenAI 101 course listing', o:'IU Expand', u:'https://expand.iu.edu/browse/learningtech/gen-ai/courses/genai-101'},
+  imsports:{t:'Intramural Sports — leagues and formats', o:'IU Recreational Sports', u:'https://recsports.indiana.edu/activites/intramural-sports.html'},
+  imsignup:{t:'How to Sign Up for Intramural Sports', o:'IU Recreational Sports', u:'https://recsports.indiana.edu/activites/intramural-sports-how-to-sign-up.html'},
+  imleagues:{t:'IU Bloomington intramural home', o:'IMLeagues', u:'https://www.imleagues.com/indiana'},
+  clubsport:{t:'Sport Clubs', o:'IU Recreational Sports', u:'https://recsports.indiana.edu/activites/sport-clubs.html'},
+  srsc:{t:'Student Recreational Sports Center — facilities and hours', o:'IU Recreational Sports', u:'https://recsports.indiana.edu/facilities/srsc.html'},
+  fbsched:{t:'2026 Football Schedule', o:'Indiana University Athletics', u:'https://iuhoosiers.com/sports/football/schedule'},
+  fbsched2:{t:'Indiana Hoosiers 2026 college football schedule', o:'NBC Sports', u:'https://www.nbcsports.com/college-football/news/indiana-hoosiers-2026-college-football-schedule-dates-opponents-times-tv-stream-info'},
+  iutickets:{t:'Tickets', o:'Indiana University Athletics', u:'https://iuhoosiers.com/sports/tickets'},
+  jobsIUB:{t:'Find part-time jobs or work-study at IU Bloomington', o:'IU Bloomington', u:'https://bloomington.iu.edu/student-support/career-services-jobs/part-time-jobs/'},
+  workstudy:{t:'Work-Study — funding opportunities', o:'IU Student Central', u:'https://studentcentral.indiana.edu/pay-for-college/funding-options/work-study.html'},
+  wsAgency:{t:'Work-Study information for agencies — IU minimum wage for student employment', o:'IU Office of the University Controller', u:'https://controller.iu.edu/services/payroll-processors/work-study/information-for-agencies'},
+  wageZip:{t:'IU student hourly pay in Bloomington, IN', o:'ZipRecruiter', u:'https://www.ziprecruiter.com/Jobs/Iu-Student/-in-Bloomington,IN'},
+  canvasAG:{t:'Assignment Groups — REST API (group_weight, include[]=assignments, include[]=submission)', o:'Instructure', u:'https://canvas.instructure.com/doc/api/assignment_groups.html'},
+  canvasCourses:{t:'Courses — REST API', o:'Instructure', u:'https://canvas.instructure.com/doc/api/courses.html'}
 };
 function citeLine(id, extra){
   const c = CITE[id]; if(!c) return '';
   return '<div class="srcline">'+(extra?esc(extra)+' ':'')+'<strong>'+esc(c.o)+'</strong> — '+esc(c.t)+' <a href="'+esc(c.u)+'" target="_blank" rel="noopener">open</a></div>';
 }
+
+/* --- commitment kinds ------------------------------------------------- */
+const CKIND = {
+  gym:   {label:'Gym',        c:'--s4', icon:'▲', social:0.3, note:'Counts 30% toward your social floor — the SRSC is where a lot of people actually see each other.'},
+  im:    {label:'Intramural', c:'--s6', social:1.0, note:'Counts fully as social time. This is the highest-value hour on your calendar for meeting people.'},
+  club:  {label:'Club',       c:'--s7', social:1.0, note:'Counts fully as social time.'},
+  job:   {label:'Work shift', c:'--s2', social:0.1, note:'Counts 10% — you meet coworkers, but it is not free time.'},
+  social:{label:'Social',     c:'--s5', social:1.0, note:'Counts fully. Blocking it out is the point.'},
+  other: {label:'Other',      c:'--s1', social:0,   note:'Does not count toward the social floor.'}
+};
 
 /* --- Fall 2026 calendar (verified) ------------------------------------ */
 const TERM = {
@@ -1081,6 +1271,38 @@ const CATALOG = {
   }
 };
 
+/* ======================================================================
+   ATHLETICS
+   Access rules are verified. Football dates come from secondary schedule
+   sources that agreed on day-of-week but disagreed on dates with a second
+   roundup, so every row is tagged Reported and the official schedule is
+   linked as the authority. No date here is presented as settled.
+   ====================================================================== */
+const SPORTS = [
+  {id:'fb',  name:'Football',          season:'Fall',   access:'Student season pass. For 2026 you select up to five of the eight home games, in claim windows rather than all at once.', cite:'athl26'},
+  {id:'mbb', name:"Men's Basketball",  season:'Winter', access:'Student season tickets, sold separately through the ticket office.', cite:'athlTix'},
+  {id:'wbb', name:"Women's Basketball",season:'Winter', access:'Covered by the digital Action Pass from 2026-27.', cite:'athl26'},
+  {id:'msoc',name:"Men's Soccer",      season:'Fall',   access:'Covered by the digital Action Pass from 2026-27.', cite:'athl26'},
+  {id:'vb',  name:'Volleyball',        season:'Fall',   access:'Covered by the digital Action Pass from 2026-27.', cite:'athl26'},
+  {id:'bsb', name:'Baseball',          season:'Spring', access:'Covered by the digital Action Pass from 2026-27.', cite:'athl26'},
+  {id:'oth', name:'Everything else',   season:'Varies', access:'Wrestling, swimming, track, softball and the rest are not named in the Action Pass announcement I could verify. Ask the ticket office at 812-855-4006.', cite:'athlTix'}
+];
+const CLAIM_WINDOWS = [
+  {label:'Non-conference games', when:'August 10–13', cite:'athl26'},
+  {label:'Includes the Purdue matchup', when:'August 26–27', cite:'athl26'},
+  {label:'Premium games — Ohio State, USC', when:'September 30 – October 1', cite:'athl26'}
+];
+/* mins = a generous block for the whole outing, not the clock time of play */
+const HOME_GAMES = [
+  {id:'fb1', sport:'fb', opp:'North Texas',       date:'2026-09-05', start:'12:00', mins:240, tv:'Fox',  prov:'reported'},
+  {id:'fb2', sport:'fb', opp:'Howard',            date:'2026-09-12', start:'12:00', mins:240, tv:'BTN',  prov:'reported'},
+  {id:'fb3', sport:'fb', opp:'Western Kentucky',  date:'2026-09-19', start:'16:00', mins:240, tv:'Peacock', prov:'reported'},
+  {id:'fb4', sport:'fb', opp:'Northwestern',      date:'2026-09-25', start:'20:00', mins:240, tv:'',     prov:'reported', note:'Friday night game — the only one that lands on a weekday.'},
+  {id:'fb5', sport:'fb', opp:'Ohio State',        date:'2026-10-17', start:'',      mins:240, tv:'',     prov:'reported', note:'Premium game — claim window September 30 – October 1.'},
+  {id:'fb6', sport:'fb', opp:'Michigan',          date:'2026-10-24', start:'',      mins:240, tv:'',     prov:'reported'},
+  {id:'fb7', sport:'fb', opp:'USC',               date:'2026-11-14', start:'',      mins:240, tv:'',     prov:'reported', note:'Premium game — claim window September 30 – October 1.'}
+];
+
 /* --- meal plans: components verified; prices not published where I could reach --- */
 const PLANS = [
   {id:'scan25',   name:'Meal Scan 25',      scans:'25 scans per semester', scansNum:25, unlimited:false, dollars:25,  combo:null, note:'Elective plan.'},
@@ -1088,6 +1310,89 @@ const PLANS = [
   {id:'classic',  name:'IU 7-Day Classic',  scans:'Unrestricted scans, 7 days a week', scansNum:null, unlimited:true, dollars:50,  combo:3,    note:'Lowest of the three unlimited plans.'},
   {id:'expanded', name:'IU 7-Day Expanded', scans:'Unrestricted scans, 7 days a week', scansNum:null, unlimited:true, dollars:250, combo:5,    comboConfirmed:true, note:'The middle unlimited plan. Your plan.'},
   {id:'premium',  name:'IU 7-Day Premium',  scans:'Unrestricted scans, 7 days a week', scansNum:null, unlimited:true, dollars:450, combo:null, note:'Highest of the three unlimited plans.'}
+];
+
+/* ======================================================================
+   FOOD LIBRARY
+   Reference values for standard portions, from widely published
+   USDA-derived nutrition charts. THIS IS NOT IU'S MENU DATA. A dining
+   hall's own preparation differs — sometimes a lot — and IU publishes
+   per-item nutrition for the actual menu on Nutrislice, which is linked
+   everywhere this library appears. Every value here is editable, and
+   items can be marked as checked against Nutrislice once you have.
+
+   station = the kind of counter you find it at, which is generic across
+   AYCTE halls. It is not a claim about what any hall serves today.
+   has     = things present, for allergy and preference filtering.
+   diet    = diets the item is compatible with.
+   ====================================================================== */
+const STATIONS = {
+  grill:    'Grill',
+  entree:   'Hot entrée',
+  deli:     'Deli / sandwiches',
+  salad:    'Salad bar',
+  bowls:    'Bowls / global',
+  breakfast:'Breakfast',
+  pizza:    'Pizza / pasta',
+  sides:    'Sides & grains',
+  fruit:    'Fruit & veg',
+  dairy:    'Yogurt & dairy',
+  cstore:   'C-store / grab and go'
+};
+const FOODS = [
+  {id:'f01', n:'Grilled chicken breast', st:'grill',    portion:'3 oz cooked',  kcal:140, p:26, c:0,  f:3,  has:[], diet:['omni']},
+  {id:'f02', n:'Ground beef (85% lean)', st:'entree',   portion:'3 oz cooked',  kcal:215, p:22, c:0,  f:13, has:[], diet:['omni']},
+  {id:'f03', n:'Baked salmon',           st:'entree',   portion:'3 oz cooked',  kcal:175, p:19, c:0,  f:10, has:['fish'], diet:['omni','pescatarian']},
+  {id:'f04', n:'Canned tuna',            st:'salad',    portion:'3 oz',         kcal:100, p:20, c:0,  f:1,  has:['fish'], diet:['omni','pescatarian']},
+  {id:'f05', n:'Sliced turkey (deli)',   st:'deli',     portion:'2 oz',         kcal:60,  p:10, c:1,  f:1,  has:[], diet:['omni']},
+  {id:'f06', n:'Bacon',                  st:'breakfast',portion:'2 slices',     kcal:80,  p:6,  c:0,  f:6,  has:['pork'], diet:['omni']},
+  {id:'f07', n:'Hard-boiled eggs',       st:'breakfast',portion:'2 large',      kcal:145, p:12, c:1,  f:10, has:['egg'], diet:['omni','vegetarian','pescatarian']},
+  {id:'f08', n:'Scrambled eggs',         st:'breakfast',portion:'2 large',      kcal:180, p:12, c:2,  f:13, has:['egg','dairy'], diet:['omni','vegetarian','pescatarian']},
+  {id:'f09', n:'Greek yogurt, plain',    st:'dairy',    portion:'6 oz (170 g)', kcal:100, p:16, c:6,  f:1,  has:['dairy'], diet:['omni','vegetarian','pescatarian']},
+  {id:'f10', n:'Cottage cheese',         st:'dairy',    portion:'1/2 cup',      kcal:90,  p:12, c:4,  f:2,  has:['dairy'], diet:['omni','vegetarian','pescatarian']},
+  {id:'f11', n:'Milk, 2%',               st:'dairy',    portion:'1 cup',        kcal:122, p:8,  c:12, f:5,  has:['dairy'], diet:['omni','vegetarian','pescatarian']},
+  {id:'f12', n:'Chocolate milk',         st:'dairy',    portion:'1 cup',        kcal:160, p:8,  c:26, f:3,  has:['dairy'], diet:['omni','vegetarian','pescatarian']},
+  {id:'f13', n:'Cheddar cheese',         st:'deli',     portion:'1 oz',         kcal:115, p:6,  c:1,  f:9,  has:['dairy'], diet:['omni','vegetarian','pescatarian']},
+  {id:'f14', n:'String cheese',          st:'cstore',   portion:'1 stick',      kcal:80,  p:7,  c:1,  f:6,  has:['dairy'], diet:['omni','vegetarian','pescatarian']},
+  {id:'f15', n:'Firm tofu',              st:'bowls',    portion:'1/2 cup',      kcal:144, p:16, c:4,  f:8,  has:['soy'], diet:['omni','vegetarian','pescatarian','vegan']},
+  {id:'f16', n:'Edamame',                st:'salad',    portion:'1/2 cup',      kcal:95,  p:9,  c:7,  f:4,  has:['soy'], diet:['omni','vegetarian','pescatarian','vegan']},
+  {id:'f17', n:'Black beans',            st:'bowls',    portion:'1/2 cup',      kcal:114, p:8,  c:20, f:0,  has:[], diet:['omni','vegetarian','pescatarian','vegan']},
+  {id:'f18', n:'Chickpeas',              st:'salad',    portion:'1/2 cup',      kcal:135, p:6,  c:22, f:2,  has:[], diet:['omni','vegetarian','pescatarian','vegan']},
+  {id:'f19', n:'Lentils',                st:'bowls',    portion:'1/2 cup',      kcal:115, p:9,  c:20, f:0,  has:[], diet:['omni','vegetarian','pescatarian','vegan']},
+  {id:'f20', n:'Hummus',                 st:'salad',    portion:'2 tbsp',       kcal:70,  p:2,  c:6,  f:5,  has:['sesame'], diet:['omni','vegetarian','pescatarian','vegan']},
+  {id:'f21', n:'Peanut butter',          st:'breakfast',portion:'2 tbsp',       kcal:190, p:8,  c:6,  f:16, has:['peanut'], diet:['omni','vegetarian','pescatarian','vegan']},
+  {id:'f22', n:'Almonds',                st:'cstore',   portion:'1 oz',         kcal:165, p:6,  c:6,  f:14, has:['treenut'], diet:['omni','vegetarian','pescatarian','vegan']},
+  {id:'f23', n:'Brown rice',             st:'sides',    portion:'1 cup cooked', kcal:215, p:5,  c:45, f:2,  has:[], diet:['omni','vegetarian','pescatarian','vegan']},
+  {id:'f24', n:'Quinoa',                 st:'sides',    portion:'1/2 cup cooked',kcal:110,p:4,  c:20, f:2,  has:[], diet:['omni','vegetarian','pescatarian','vegan']},
+  {id:'f25', n:'Pasta',                  st:'pizza',    portion:'1 cup cooked', kcal:220, p:8,  c:43, f:1,  has:['gluten'], diet:['omni','vegetarian','pescatarian','vegan']},
+  {id:'f26', n:'Cheese pizza',           st:'pizza',    portion:'1 slice',      kcal:285, p:12, c:36, f:10, has:['gluten','dairy'], diet:['omni','vegetarian','pescatarian']},
+  {id:'f27', n:'Whole-wheat bread',      st:'deli',     portion:'2 slices',     kcal:160, p:6,  c:28, f:2,  has:['gluten'], diet:['omni','vegetarian','pescatarian','vegan']},
+  {id:'f28', n:'Oatmeal',                st:'breakfast',portion:'1 cup cooked', kcal:165, p:6,  c:28, f:4,  has:[], diet:['omni','vegetarian','pescatarian','vegan']},
+  {id:'f29', n:'Breakfast cereal',       st:'breakfast',portion:'1 cup',        kcal:120, p:3,  c:26, f:1,  has:['gluten'], diet:['omni','vegetarian','pescatarian','vegan']},
+  {id:'f30', n:'Baked potato',           st:'sides',    portion:'1 medium',     kcal:160, p:4,  c:37, f:0,  has:[], diet:['omni','vegetarian','pescatarian','vegan']},
+  {id:'f31', n:'Steamed broccoli',       st:'fruit',    portion:'1 cup',        kcal:55,  p:4,  c:11, f:1,  has:[], diet:['omni','vegetarian','pescatarian','vegan']},
+  {id:'f32', n:'Mixed greens',           st:'salad',    portion:'2 cups',       kcal:15,  p:2,  c:2,  f:0,  has:[], diet:['omni','vegetarian','pescatarian','vegan']},
+  {id:'f33', n:'Banana',                 st:'fruit',    portion:'1 medium',     kcal:105, p:1,  c:27, f:0,  has:[], diet:['omni','vegetarian','pescatarian','vegan']},
+  {id:'f34', n:'Apple',                  st:'fruit',    portion:'1 medium',     kcal:95,  p:1,  c:25, f:0,  has:[], diet:['omni','vegetarian','pescatarian','vegan']},
+  {id:'f35', n:'Berries',                st:'fruit',    portion:'1 cup',        kcal:70,  p:1,  c:17, f:0,  has:[], diet:['omni','vegetarian','pescatarian','vegan']},
+  {id:'f36', n:'Grilled chicken sandwich',st:'grill',   portion:'1',            kcal:400, p:32, c:40, f:10, has:['gluten'], diet:['omni']},
+  {id:'f37', n:'Cheeseburger',           st:'grill',    portion:'1',            kcal:520, p:28, c:40, f:27, has:['gluten','dairy'], diet:['omni']},
+  {id:'f38', n:'French fries',           st:'grill',    portion:'medium',       kcal:365, p:4,  c:48, f:17, has:[], diet:['omni','vegetarian','pescatarian','vegan']},
+  {id:'f39', n:'Stir-fry vegetables',    st:'bowls',    portion:'1 cup',        kcal:90,  p:3,  c:12, f:4,  has:['soy'], diet:['omni','vegetarian','pescatarian','vegan']},
+  {id:'f40', n:'Protein shake (whey)',   st:'cstore',   portion:'1 scoop + water',kcal:120,p:24, c:3,  f:1,  has:['dairy'], diet:['omni','vegetarian','pescatarian']}
+];
+const ALLERGENS = [
+  {id:'dairy',    n:'Dairy'},      {id:'egg',       n:'Egg'},
+  {id:'gluten',   n:'Gluten'},     {id:'peanut',    n:'Peanuts'},
+  {id:'treenut',  n:'Tree nuts'},  {id:'soy',       n:'Soy'},
+  {id:'fish',     n:'Fish'},       {id:'shellfish', n:'Shellfish'},
+  {id:'sesame',   n:'Sesame'},     {id:'pork',      n:'Pork'}
+];
+const DIETS = [
+  {id:'omni',        n:'No restriction'},
+  {id:'vegetarian',  n:'Vegetarian'},
+  {id:'pescatarian', n:'Pescatarian'},
+  {id:'vegan',       n:'Vegan'}
 ];
 
 /* --- dining + campus locations. Addresses verified; layout is schematic. --- */
@@ -1304,7 +1609,7 @@ const DEAL_GROUPS = [
    ====================================================================== */
 function defaults(){
   return {
-    v:2,
+    v:3,
     meta:{term:TERM.name, dorm:'McNutt Quad', dormAddr:'1101 N. Fee Lane, Bloomington, IN 47406'},
     courses:[
       {id:'c1', code:'CSCI-C 212', credits:4, instructor:'', diff:1.35,
@@ -1342,10 +1647,23 @@ function defaults(){
     dining:{
       planId:'expanded', priceSem:2000, comboPerWeek:5,
       dollarsStart:250, dollarsLeft:250, scansLeft:null, log:[],
-      weight:null, weightUnit:'lb', kcal:2400
+      weight:null, weightUnit:'lb', kcal:2400,
+      diet:'omni', avoid:[], hidden:[], favs:[], custom:[], edits:{}, checked:{},
+      tray:{breakfast:[], lunch:[], dinner:[], snack:[]}, meal:'lunch', proteinTarget:null
     },
     deals:{checked:{}, qty:{}, val:{}, custom:[]},
     walk:{},
+    /* Everything that is not class and not study. These are hard blocks the
+       planner routes around, exactly like a lecture — because the whole point
+       of being here in person is that they happen. */
+    commitments:[],
+    /* The floor, not the leftover. Study is capped before this is touched. */
+    social:{floorWeek:14, protectEvenings:[5,6], note:''},
+    trips:[],
+    tripMins:60,
+    jobs:[],
+    jobW:{pay:3, flex:3, ben:2, exp:2, fit:3},
+    sports:{interest:{}, games:{}, custom:[]},
     track:{assignments:[], announcements:[], checkins:[]},
     sources:[],
     ui:{tab:'general', dealFilter:'all', showMeals:false}
@@ -1374,8 +1692,19 @@ function load(){
    here, once, and only where the user has not already overridden them. */
 function migrate(){
   const from = +S.v || 1;
-  if(from >= 2){ S.v = 2; return; }
+  if(from >= 3) return;
   const say = [];
+
+  if(from >= 2){
+    /* v2 -> v3: the new keys are supplied by deepMerge; nothing to correct. */
+    S.commitments = S.commitments || [];
+    S.trips = S.trips || [];
+    S.jobs = S.jobs || [];
+    S.sports = S.sports || {interest:{}, games:{}, custom:[]};
+    S.v = 3; save();
+    setTimeout(()=>toast('Added Life & Balance and Work. Your existing data is untouched.','good'), 900);
+    return;
+  }
 
   const i101 = S.courses.find(c=>c.code==='INFO-I 101');
   if(i101){
@@ -1400,7 +1729,11 @@ function migrate(){
     say.push('lunch moved to 1:30 (12:30 collided with INFO-T 100)'); }
   if(S.plan.mealAt.dinner==='18:15'){ S.plan.mealAt.dinner='19:10';
     say.push('dinner moved to 7:10 (6:15 collided with the INFO-I 101 lab)'); }
-  S.v = 2;
+  S.commitments = S.commitments || [];
+  S.trips = S.trips || [];
+  S.jobs = S.jobs || [];
+  S.sports = S.sports || {interest:{}, games:{}, custom:[]};
+  S.v = 3;
   save();
   if(say.length) setTimeout(()=>toast('Updated your saved data: '+say.join('; ')+'.','good'), 900);
 }
@@ -1456,6 +1789,28 @@ function derive(){
   d.courses.forEach(c=> c.meets.forEach(mt=> d.byDay[mt.dow].push({...mt, course:c})));
   d.byDay.forEach(arr=> arr.sort((x,y)=> x.a-y.a));
 
+  /* --- commitments: gym, intramurals, clubs, shifts, social ------------ */
+  d.commitByDay = [[],[],[],[],[],[],[]];
+  (S.commitments||[]).forEach(cm=>{
+    const a=toMin(cm.start), b=toMin(cm.end);
+    if(!(b>a)) return;
+    if(cm.weekly===false){
+      if(!cm.date) return;
+      d.commitByDay[dowOf(cm.date)].push({a, b, cm, once:true});
+    } else {
+      (cm.days||[]).forEach(dw=> d.commitByDay[dw].push({a, b, cm}));
+    }
+  });
+  d.commitByDay.forEach(arr=>arr.sort((x,y)=>x.a-y.a));
+  d.commitWeek = d.commitByDay.reduce((s2,arr)=> s2 + arr.reduce((t,x)=>t+(x.b-x.a)/60, 0), 0);
+  d.commitByKind = {};
+  Object.keys(CKIND).forEach(k=>{
+    d.commitByKind[k] = d.commitByDay.reduce((s2,arr)=>
+      s2 + arr.filter(x=>x.cm.kind===k).reduce((t,x)=>t+(x.b-x.a)/60,0), 0);
+  });
+  /* how much of that already counts as time with other people */
+  d.socialCredit = Object.keys(CKIND).reduce((s2,k)=> s2 + d.commitByKind[k]*CKIND[k].social, 0);
+
   /* --- transitions: every walk the week actually requires -------------- */
   d.transitions = [];
   const seen = {};
@@ -1500,19 +1855,37 @@ function derive(){
     ? homeLegs.reduce((s2,t)=>s2+t.walk,0)/60
     : d.classDays * 2 * (p.commuteMinPerTrip/60);
 
-  /* --- fixed time budget --------------------------------------------- */
+  /* --- fixed time budget ---------------------------------------------
+     Social is a floor, not a remainder. Study gets capped before it is
+     touched, and if the cap bites the page says so instead of quietly
+     scheduling over the reason you came here in person. */
   const mealHrs = (p.mealMin.breakfast + p.mealMin.lunch + p.mealMin.dinner)/60 * 7;
   d.sleepWeek = p.sleepTarget * 7;
   d.mealWeek  = mealHrs;
-  d.committed = d.contactWeek + d.studyWeek + d.commuteWeek;
-  d.freeWeek  = Math.max(0, 168 - d.sleepWeek - d.mealWeek - d.committed);
+  d.fixedWeek = d.contactWeek + d.commuteWeek + d.commitWeek;
+  d.awake     = 168 - d.sleepWeek - d.mealWeek;
+  d.discretionary = Math.max(0, d.awake - d.fixedWeek);
+
+  d.socialFloor  = Math.max(0, +S.social.floorWeek || 0);
+  d.socialNeeded = Math.max(0, d.socialFloor - d.socialCredit);
+  d.studyCap     = Math.max(0, d.discretionary - d.socialNeeded);
+  d.studyDemand  = d.studyWeek;
+  d.studyCapped  = d.studyDemand > d.studyCap + 0.01;
+  d.studyShort   = Math.max(0, d.studyDemand - d.studyCap);
+  d.studyPlanned = Math.min(d.studyDemand, d.studyCap);
+
+  d.committed = d.contactWeek + d.studyPlanned + d.commuteWeek + d.commitWeek;
+  d.freeWeek  = Math.max(0, d.awake - d.fixedWeek - d.studyPlanned);
+  d.socialTotal = d.freeWeek + d.socialCredit;
+  d.socialOK  = d.socialTotal >= d.socialFloor - 0.01;
+
   d.buckets = [
-    {k:'Class contact', h:d.contactWeek, c:'--s1', from:'Courses'},
-    {k:'Study',         h:d.studyWeek,   c:'--s2', from:'Courses'},
-    {k:'Sleep',         h:d.sleepWeek,   c:'--s3', from:'Plan controls'},
-    {k:'Meals',         h:d.mealWeek,    c:'--s4', from:'Dining'},
-    {k:'Commute',       h:d.commuteWeek, c:'--s5', from:'Plan controls'},
-    {k:'Unclaimed',     h:d.freeWeek,    c:'--s6', from:'What is left'}
+    {k:'Class contact', h:d.contactWeek,  c:'--s1', from:'Courses'},
+    {k:'Study',         h:d.studyPlanned, c:'--s2', from:'Courses'},
+    {k:'Sleep',         h:d.sleepWeek,    c:'--s3', from:'Plan controls'},
+    {k:'Meals',         h:d.mealWeek,     c:'--s4', from:'Dining'},
+    {k:'Commitments',   h:d.commitWeek,   c:'--s5', from:'Life & Balance'},
+    {k:'Open / social', h:d.freeWeek,     c:'--s6', from:'Protected floor '+rnd(d.socialFloor,0)+'h'}
   ];
 
   /* --- study plan ----------------------------------------------------- */
@@ -1520,8 +1893,10 @@ function derive(){
   d.dayLoad = [0,1,2,3,4,5,6].map(dow=>{
     const contact = d.byDay[dow].reduce((s,m)=> s+(m.b-m.a)/60, 0);
     const study   = (d.plan.byDay[dow]||[]).reduce((s,b)=> s+(b.b-b.a)/60, 0);
+    const commit  = (d.commitByDay[dow]||[]).reduce((s,x)=> s+(x.b-x.a)/60, 0);
     const commute = d.byDay[dow].length ? 2*(p.commuteMinPerTrip/60) : 0;
-    return {dow, contact, study, commute, total:contact+study+commute, over:(contact+study+commute) > p.maxDayHours};
+    const total = contact+study+commute+commit;
+    return {dow, contact, study, commute, commit, total, over: total > p.maxDayHours};
   });
   d.peakDay = d.dayLoad.reduce((a,b)=> b.total>a.total?b:a, d.dayLoad[0]);
   d.overDays = d.dayLoad.filter(x=>x.over).length;
@@ -1549,6 +1924,16 @@ function derive(){
   /* --- strain ---------------------------------------------------------- */
   d.strain = deriveStrain(d);
 
+  /* --- trips home ------------------------------------------------------ */
+  d.trips = deriveTrips(d);
+  d.tripAdvice = suggestTripWeekends(d);
+
+  /* --- part-time work -------------------------------------------------- */
+  d.jobs = deriveJobs(d);
+
+  /* --- home games ------------------------------------------------------- */
+  d.games = deriveGames(d);
+
   /* --- sources --------------------------------------------------------- */
   d.srcOk  = S.sources.filter(s=>s.status==='ok').length;
   d.srcBad = S.sources.filter(s=>s.status==='bad').length;
@@ -1567,9 +1952,15 @@ function buildStudyPlan(d){
   const wake = toMin(p.wake), bed = toMin(p.bed);
   const blocks = {byDay:[[],[],[],[],[],[],[]], placed:0, requested:0, unplaced:0, perCourse:{}};
 
+  /* If the social floor capped study, every course is scaled down by the same
+     factor rather than one course being silently starved. */
+  const scale = d.studyDemand>0 ? Math.min(1, d.studyPlanned/d.studyDemand) : 1;
   const need = d.courses.filter(c=>c.studyPlan>0)
-                        .map(c=>({id:c.id, code:c.code, color:c.color, mins:Math.round(c.studyPlan*60), left:Math.round(c.studyPlan*60)}))
+                        .map(c=>{ const m=Math.round(c.studyPlan*60*scale);
+                                  return {id:c.id, code:c.code, color:c.color, mins:m, left:m}; })
+                        .filter(c=>c.mins>=30)
                         .sort((a,b)=> b.mins-a.mins);
+  blocks.scale = scale;
   blocks.requested = need.reduce((s,c)=>s+c.mins,0);
   if(!need.length) return blocks;
 
@@ -1578,8 +1969,11 @@ function buildStudyPlan(d){
   });
 
   /* free windows per day, minus class, sleep, meals */
+  const protectedEve = new Set(S.social.protectEvenings||[]);
+  const EVE = toMin('18:00');
   function freeWindows(dow){
     const busy = d.byDay[dow].map(m=>({a:m.a, b:m.b}))
+      .concat((d.commitByDay[dow]||[]).map(x=>({a:x.a, b:x.b})))
       .concat(meals.map(m=>({a:m.a, b:m.b})))
       .sort((x,y)=>x.a-y.a);
     const merged=[];
@@ -1588,10 +1982,17 @@ function buildStudyPlan(d){
       if(last && w.a <= last.b) last.b = Math.max(last.b, w.b); else merged.push({...w});
     });
     const MINW = 45;                     /* a sub-45-minute sliver is not a study block */
+    /* A protected evening is off limits to study entirely — that is what
+       protecting it means. */
+    const lastUsable = protectedEve.has(dow) ? Math.min(bed, EVE) : bed;
     const out=[]; let cur = wake + 30;   /* buffer: nobody opens a textbook the minute they wake up */
-    merged.forEach(w=>{ if(w.a - cur >= MINW) out.push({a:cur, b:w.a}); cur = Math.max(cur, w.b); });
-    if(bed - cur >= MINW) out.push({a:cur, b:bed});
-    return out;
+    merged.forEach(w=>{
+      const wa = Math.min(w.a, lastUsable);
+      if(wa - cur >= MINW) out.push({a:cur, b:wa});
+      cur = Math.max(cur, w.b);
+    });
+    if(lastUsable - cur >= MINW) out.push({a:cur, b:lastUsable});
+    return out.filter(w=>w.b>w.a);
   }
 
   /* weekday capacity target vs weekend */
@@ -1756,7 +2157,99 @@ function deriveDining(d){
     fat: {lo:o.kcal*0.20/9, hi:o.kcal*0.35/9}
   };
   o.protRDA = o.kg==null ? null : o.kg*0.8;
+
+  /* --- the food library, filtered to what this person will actually eat --- */
+  const dg2 = S.dining;
+  const lib = FOODS.concat(dg2.custom||[]).map(f=>{
+    const e = (dg2.edits||{})[f.id] || {};
+    return {...f, kcal:+(e.kcal!=null?e.kcal:f.kcal), p:+(e.p!=null?e.p:f.p),
+            c:+(e.c!=null?e.c:f.c), f:+(e.f!=null?e.f:f.f),
+            edited:Object.keys(e).length>0, verified:!!(dg2.checked||{})[f.id]};
+  });
+  o.diet = dg2.diet || 'omni';
+  o.avoid = dg2.avoid || [];
+  o.lib = lib;
+  o.allowed = lib.filter(f=>{
+    if((dg2.hidden||[]).indexOf(f.id)>=0) return false;
+    if(o.diet!=='omni' && (f.diet||[]).indexOf(o.diet)<0) return false;
+    return !(f.has||[]).some(h=> o.avoid.indexOf(h)>=0);
+  });
+  o.excludedCount = lib.length - o.allowed.length;
+
+  /* per-meal protein and energy targets, split from the daily figures */
+  const split = {breakfast:0.25, lunch:0.35, dinner:0.35, snack:0.05};
+  o.proteinTargetDay = (dg2.proteinTarget!=null && dg2.proteinTarget!=='')
+    ? +dg2.proteinTarget
+    : Math.max(o.protRDA||0, o.macro.prot.lo);
+  o.mealKey = dg2.meal || 'lunch';
+  o.mealShare = split[o.mealKey] || 0.33;
+  o.mealKcalTarget = o.kcal * o.mealShare;
+  o.mealProtTarget = o.proteinTargetDay * o.mealShare;
+
+  o.tray = (dg2.tray && dg2.tray[o.mealKey] || []).map(entry=>{
+    const f = lib.find(x=>x.id===entry.id);
+    return f ? {...f, qty:entry.qty||1} : null;
+  }).filter(Boolean);
+  o.trayTot = o.tray.reduce((t,f)=>({
+    kcal:t.kcal+f.kcal*f.qty, p:t.p+f.p*f.qty, c:t.c+f.c*f.qty, f:t.f+f.f*f.qty
+  }), {kcal:0,p:0,c:0,f:0});
+
+  /* whole day across all four trays */
+  o.dayTot = ['breakfast','lunch','dinner','snack'].reduce((t,k)=>{
+    ((dg2.tray&&dg2.tray[k])||[]).forEach(entry=>{
+      const f=lib.find(x=>x.id===entry.id); if(!f) return;
+      const q=entry.qty||1;
+      t.kcal+=f.kcal*q; t.p+=f.p*q; t.c+=f.c*q; t.f+=f.f*q;
+    });
+    return t;
+  }, {kcal:0,p:0,c:0,f:0});
   return o;
+}
+
+/* --- three different ways to hit the target from what you will eat ------
+   Not an optimiser: three deliberately different shapes, so the answer is a
+   choice rather than a single prescription. */
+function buildMealOptions(o, n){
+  const pool = o.allowed.filter(f=>f.kcal>0);
+  if(pool.length < 4) return [];
+  const kcalCap = o.mealKcalTarget * 1.18;
+  const pTarget = o.mealProtTarget;
+  const dens = f => f.p / Math.max(1, f.kcal);
+
+  /* Pools are defined by what the food actually IS, not by which counter it
+     sits at — otherwise bacon gets picked as the grain. */
+  const anchors = pool.filter(f=>f.p>=10).sort((x,y)=>dens(y)-dens(x));
+  const carbs   = pool.filter(f=>f.c>=18 && f.p<15).sort((x,y)=>dens(y)-dens(x));
+  const veg     = pool.filter(f=>(f.st==='fruit'||f.st==='salad') && f.kcal<=140).sort((x,y)=>y.p-x.p);
+  const sides   = pool.filter(f=>f.p>=4 && f.p<12 && f.kcal<=200).sort((x,y)=>dens(y)-dens(x));
+
+  const take=(arr,i,k)=> arr.length ? arr.slice(i % arr.length).concat(arr).slice(0,k) : [];
+  const styles = [
+    {name:'Leanest', why:'Most protein for the fewest calories.',
+     pick:()=> take(anchors,0,2).concat(take(veg,0,2))},
+    {name:'Balanced', why:'A protein, a grain and something green — the standard tray.',
+     pick:()=> take(anchors,1,1).concat(take(carbs,0,1), take(veg,1,1), take(sides,0,1))},
+    {name:'Biggest plate', why:'Highest total food, for when you are actually hungry.',
+     pick:()=> take(anchors,2,1).concat(take(carbs,1,2), take(veg,2,1), take(sides,1,1))}
+  ];
+
+  const out=[];
+  styles.slice(0, n||3).forEach(st=>{
+    const seen=new Set();
+    let items = st.pick().filter(Boolean).filter(f=> seen.has(f.id)?false:(seen.add(f.id),true));
+    let tot = items.reduce((t,f)=>({kcal:t.kcal+f.kcal, p:t.p+f.p}),{kcal:0,p:0});
+    /* top up with the densest protein still allowed, inside the calorie cap */
+    for(const f of anchors){
+      if(tot.p >= pTarget) break;
+      if(seen.has(f.id)) continue;
+      if(tot.kcal + f.kcal > kcalCap) continue;
+      items.push(f); seen.add(f.id); tot.kcal+=f.kcal; tot.p+=f.p;
+    }
+    const T = items.reduce((t,f)=>({kcal:t.kcal+f.kcal,p:t.p+f.p,c:t.c+f.c,f:t.f+f.f}),{kcal:0,p:0,c:0,f:0});
+    out.push({...st, items, tot:T, hits: T.p >= pTarget*0.95, over: T.kcal > kcalCap,
+              hasCarb: items.some(f=>f.c>=18), hasVeg: items.some(f=>f.st==='fruit'||f.st==='salad')});
+  });
+  return out;
 }
 
 /* -------------------------------------------------------- deals derive */
@@ -1807,6 +2300,141 @@ function deriveGrades(d){
   out.credGraded = cr;
   out.gpa = cr>0 ? pts/cr : null;
   return out;
+}
+
+/* --------------------------------------------------------- trips home */
+function deriveTrips(d){
+  const oneWay = Math.max(0, +S.tripMins || 0);
+  return (S.trips||[]).map(t=>{
+    const o = {...t, oneWay, travelH: oneWay*2/60};
+    if(!t.out || !t.back){ o.invalid = true; return o; }
+    o.days = [];
+    for(let iso=t.out; iso<=t.back; iso=isoAdd(iso,1)){ o.days.push(iso); if(o.days.length>21) break; }
+    o.nights = Math.max(0, daysBetween(t.out, t.back));
+    /* what the trip costs you */
+    o.classesMissed = [];
+    o.commitMissed = [];
+    o.studyLost = 0;
+    o.days.forEach((iso,i)=>{
+      const dw = dowOf(iso);
+      const first = i===0, last = i===o.days.length-1;
+      const from = first ? toMin(t.outAt||'00:00') : 0;
+      const to   = last  ? toMin(t.backAt||'23:59') : 1440;
+      (d.byDay[dw]||[]).forEach(m=>{ if(m.a < to && m.b > from)
+        o.classesMissed.push({iso, dw, label:m.course.code+' '+m.m.type, at:fmtRange(m.a,m.b)}); });
+      (d.commitByDay[dw]||[]).forEach(x=>{ if(x.a < to && x.b > from)
+        o.commitMissed.push({iso, dw, label:x.cm.label||CKIND[x.cm.kind].label, at:fmtRange(x.a,x.b)}); });
+      (d.plan.byDay[dw]||[]).forEach(b=>{ if(b.a < to && b.b > from) o.studyLost += (b.b-b.a)/60; });
+    });
+    o.dueInWindow = (S.track.assignments||[]).filter(a=>a.due && a.due>=t.out && a.due<=isoAdd(t.back,2) && !a.done);
+    o.weekNo = clamp(Math.floor(daysBetween(TERM.start, t.out)/7)+1, 1, 20);
+    const wk = d.strain.weeks[o.weekNo-1];
+    o.strain = wk ? wk.idx : null;
+    o.verdict = o.classesMissed.length ? 'costly' : (o.dueInWindow.length>1 || (o.strain!=null && o.strain>=85)) ? 'tight' : 'clean';
+    return o;
+  }).sort((a,b)=>(a.out||'').localeCompare(b.out||''));
+}
+
+/* Fri-evening-to-Sunday windows ranked by what they would actually cost. */
+function suggestTripWeekends(d){
+  const out=[];
+  const weeks = d.strain.weeks||[];
+  weeks.forEach(w=>{
+    const fri = isoAdd(w.start, (5 - dowOf(w.start) + 7) % 7);
+    if(fri > TERM.lastClass) return;
+    const sun = isoAdd(fri, 2);
+    const satCl = (d.byDay[6]||[]).length, sunCl = (d.byDay[0]||[]).length;
+    const dueSoon = (S.track.assignments||[]).filter(a=>a.due && a.due>=fri && a.due<=isoAdd(sun,2) && !a.done);
+    const dueWeight = dueSoon.reduce((s2,a)=>s2+(+a.weight||0),0);
+    const studyLost = ((d.plan.byDay[5]||[]).filter(b=>b.a>=toMin('17:00')).reduce((s2,b)=>s2+(b.b-b.a)/60,0))
+                    + ((d.plan.byDay[6]||[]).reduce((s2,b)=>s2+(b.b-b.a)/60,0))
+                    + ((d.plan.byDay[0]||[]).reduce((s2,b)=>s2+(b.b-b.a)/60,0));
+    const isBreak = fri>=TERM.thanksLast && sun<=TERM.thanksBack;
+    const isFinals = sun>=TERM.finalsStart;
+    let cost = (w.idx*0.35) + (dueSoon.length*8) + (dueWeight*0.5) + (satCl+sunCl)*20 + studyLost*1.5;
+    if(isFinals) cost += 60;
+    if(isBreak) cost -= 40;
+    out.push({week:w.w, fri, sun, cost:rnd(cost,0), strain:w.idx, due:dueSoon.length,
+              dueWeight:rnd(dueWeight,0), studyLost:rnd(studyLost,1), isBreak, isFinals});
+  });
+  const future = out.filter(x=>x.fri >= d.today);
+  const pool = future.length ? future : out;
+  return {all:out, best: pool.slice().sort((a,b)=>a.cost-b.cost).slice(0,4)};
+}
+
+/* --------------------------------------------------------- part-time work */
+const WAGE = {min:10.15, avgLo:13.56, avg:15.33, avgHi:17.12, typHours:'10–12'};
+function deriveJobs(d){
+  const W = S.jobW || {pay:3, flex:3, ben:2, exp:2, fit:3};
+  const wsum = (W.pay+W.flex+W.ben+W.exp+W.fit) || 1;
+  const rows = (S.jobs||[]).map(j=>{
+    const o = {...j};
+    const pay = +j.pay || 0;
+    /* 0 at the IU student minimum, 1 at the top of the local band */
+    o.payScore = pay<=0 ? null : clamp((pay - WAGE.min) / (WAGE.avgHi - WAGE.min), 0, 1.35);
+    o.vsMarket = pay>0 ? pay - WAGE.avg : null;
+    o.benCount = (j.benefits||[]).length;
+    o.benScore = clamp(o.benCount/5, 0, 1);
+    o.flexScore = clamp(((+j.flex||0)-1)/4, 0, 1);
+    o.expScore  = clamp(((+j.exp||0)-1)/4, 0, 1);
+
+    /* schedule fit: does the shift pattern actually survive contact with your week? */
+    const a=toMin(j.start), b=toMin(j.end);
+    o.clashes=[]; o.eatsSocial=0; o.hoursWeek=0;
+    if(b>a){
+      (j.days||[]).forEach(dw=>{
+        o.hoursWeek += (b-a)/60;
+        (d.byDay[dw]||[]).forEach(m=>{ if(m.a<b && m.b>a)
+          o.clashes.push({dw, what:m.course.code+' '+m.m.type, at:fmtRange(m.a,m.b)}); });
+        (d.commitByDay[dw]||[]).forEach(x=>{ if(x.a<b && x.b>a)
+          o.clashes.push({dw, what:(x.cm.label||CKIND[x.cm.kind].label), at:fmtRange(x.a,x.b)}); });
+        if((S.social.protectEvenings||[]).indexOf(dw)>=0 && b>toMin('18:00'))
+          o.eatsSocial += (b - Math.max(a, toMin('18:00')))/60;
+      });
+    }
+    o.hoursWeek = j.hours!=null && j.hours!=='' ? +j.hours : o.hoursWeek;
+    o.weekly = o.hoursWeek * pay;
+    o.term   = o.weekly * (d.weeksTotal||15);
+    /* fit falls with every clash and with every protected hour it eats */
+    o.fitScore = clamp(1 - o.clashes.length*0.34 - o.eatsSocial*0.12
+                         - Math.max(0, o.hoursWeek - (d.freeWeek||0))*0.05, 0, 1);
+    const parts = [[o.payScore==null?0:Math.min(1,o.payScore), W.pay], [o.flexScore, W.flex],
+                   [o.benScore, W.ben], [o.expScore, W.exp], [o.fitScore, W.fit]];
+    o.score = Math.round(parts.reduce((s2,x)=>s2+x[0]*x[1], 0)/wsum * 100);
+    o.blocked = o.clashes.length>0;
+    return o;
+  }).sort((a,b)=> b.score-a.score);
+  return {rows, W,
+    best: rows.filter(r=>!r.blocked)[0] || null,
+    totalWeekly: rows.filter(r=>r.have).reduce((s2,r)=>s2+r.weekly, 0),
+    haveCount: rows.filter(r=>r.have).length};
+}
+
+/* --------------------------------------------------------- home games */
+function deriveGames(d){
+  const all = HOME_GAMES.concat(S.sports.custom||[]);
+  const rows = all.map(g=>{
+    const o = {...g};
+    o.interested = !!S.sports.interest[g.sport];
+    o.st = S.sports.games[g.id] || {};
+    o.dw = g.date ? dowOf(g.date) : null;
+    o.past = g.date ? g.date < d.today : false;
+    o.clashes = [];
+    if(g.date && g.start){
+      const a=toMin(g.start), b=a + (g.mins||210);
+      (d.byDay[o.dw]||[]).forEach(m=>{ if(m.a<b && m.b>a)
+        o.clashes.push(m.course.code+' '+m.m.type+' '+fmtRange(m.a,m.b)); });
+      (d.commitByDay[o.dw]||[]).forEach(x=>{ if(x.a<b && x.b>a)
+        o.clashes.push((x.cm.label||CKIND[x.cm.kind].label)+' '+fmtRange(x.a,x.b)); });
+      o.studyThatDay = (d.plan.byDay[o.dw]||[]).filter(bb=>bb.a<b&&bb.b>a).reduce((s2,bb)=>s2+(bb.b-bb.a)/60,0);
+    }
+    return o;
+  });
+  const mine = rows.filter(r=>r.interested && !r.past);
+  return {rows, mine,
+    claimed: rows.filter(r=>r.st.claimed).length,
+    going: rows.filter(r=>r.st.going).length,
+    clashing: mine.filter(r=>r.clashes.length).length};
 }
 
 /* ------------------------------------------------------- strain derive */
@@ -2685,7 +3313,7 @@ function renderDining(){
    +'<div style="margin-top:6px">'+chip('unverified')+' <b>Prices.</b> IU states that Board-approved meal plan rates are posted to the IU Dining site each May, and IU News reported that 2026-27 dining plan rates rise 2% with Bloomington room and board totalling $12,679 per year. I could not reach a page listing per-plan prices, so no price is pre-filled here. '
    +'<a href="'+CITE.rates27.u+'" target="_blank" rel="noopener">IU News on 2026-27 rates</a></div>';
 
-  renderBurn(); renderValueEngine(); renderLog(); renderMap(); renderDiet();
+  renderBurn(); renderValueEngine(); renderLog(); renderMap(); renderDiet(); renderFood();
 }
 
 function renderBurn(){
@@ -3052,8 +3680,489 @@ function renderDiet(){
   $('dietPlan').innerHTML = out.join('');
 }
 
+/* ---------------------------------------------- food & meal builder --- */
+const MEALS = [['breakfast','Breakfast'],['lunch','Lunch'],['dinner','Dinner'],['snack','Snack']];
+
+function renderFood(){
+  const o=D.dining, dg=S.dining;
+
+  /* preferences */
+  $('dietPrefs').innerHTML =
+    '<div><label class="f">Diet</label>'
+      +'<div class="row" style="gap:8px">'+DIETS.map(x=>'<button class="btn sm'+(o.diet===x.id?' primary':'')+'" data-diet="'+x.id+'">'+esc(x.n)+'</button>').join('')+'</div>'
+      +'<div class="hint">Anything incompatible disappears from the list and can never appear in a generated option.</div>'
+      +'<label class="f" style="margin-top:14px">Daily protein target</label>'
+      +'<div class="row" style="flex-wrap:nowrap"><input type="number" min="0" max="400" step="5" value="'+(dg.proteinTarget==null?'':dg.proteinTarget)+'" data-dining="proteinTarget" placeholder="'+rnd(o.proteinTargetDay,0)+'">'
+      +'<span class="pill" style="white-space:nowrap">g/day</span></div>'
+      +'<div class="hint">Blank uses the higher of your RDA floor'+(o.protRDA?' ('+rnd(o.protRDA,0)+'g)':'')+' and the bottom of the AMDR band ('+rnd(o.macro.prot.lo,0)+'g). '
+      +'<b>That is a floor, not a goal.</b> The band runs up to '+rnd(o.macro.prot.hi,0)+'g at your energy target, and anyone training will want to sit well above the bottom of it. I have no basis to pick a number for you, so the default is the one figure that is actually defensible.</div>'
+    +'</div>'
+    +'<div><label class="f">Avoid — allergies and anything you just do not eat</label>'
+      +'<div class="row" style="gap:9px">'+ALLERGENS.map(a=>'<label class="row" style="gap:5px;font-size:12.5px"><input type="checkbox" data-avoid="'+a.id+'"'
+        +((o.avoid||[]).indexOf(a.id)>=0?' checked':'')+'> '+esc(a.n)+'</label>').join('')+'</div>'
+      +'<div class="hint">'+(o.excludedCount?'<b>'+o.excludedCount+'</b> of '+o.lib.length+' items are filtered out right now.':'Nothing is filtered out.')+'</div>'
+      +'<div class="note crit" style="margin-top:12px"><b>This is a planning filter, not an allergy safety check.</b> It filters a generic reference list by the ingredients I recorded against each item. It cannot know what a specific dish at a specific hall contains, and it does not know about cross-contact. For a real allergy, IU Dining\u2019s own item data and a conversation with the staff at the counter are the only sources that count.</div>'
+    +'</div>';
+
+  $('foodSrc').innerHTML =
+    chip('reported')+' <b>Where these numbers come from.</b> They are reference values for standard portions, from widely published USDA-derived nutrition charts. '
+    +'<b>They are not IU\u2019s menu data.</b> A dining hall\u2019s own preparation differs — portion size, oil, sauce — sometimes by a lot. IU publishes per-item nutrition for the actual menu on Nutrislice; every number here is editable so you can correct it against that, and corrected items get marked.'
+    + citeLine('nutrislice','IU\u2019s real menu and nutrition:')
+    + '<div style="margin-top:6px">'+chip('verified')+' The macronutrient bands and the 0.8 g/kg protein RDA those targets are built on are the Dietary Reference Intakes. '+citeLine('amdr')+'</div>';
+
+  /* meal tabs */
+  $('mealTabs').innerHTML = MEALS.map(m=>{
+    const tot = (dg.tray&&dg.tray[m[0]]||[]).length;
+    return '<button class="btn sm'+(o.mealKey===m[0]?' primary':'')+'" data-meal="'+m[0]+'">'+esc(m[1])+(tot?' · '+tot:'')+'</button>';
+  }).join('');
+  $('trayMealName').textContent = '— '+(MEALS.find(m=>m[0]===o.mealKey)||['','']) [1].toLowerCase();
+
+  $('foodStation').innerHTML = '<option value="">Every station</option>'
+    + Object.keys(STATIONS).map(k=>'<option value="'+k+'">'+esc(STATIONS[k])+'</option>').join('');
+  $('foodStation').value = window.__foodSt || '';
+
+  renderFoodList(); renderTray(); renderMealOptions();
+}
+
+function renderFoodList(){
+  const o=D.dining;
+  const q=(($('foodSearch')||{}).value||'').toLowerCase().trim();
+  const st=window.__foodSt||'';
+  const dense=!!(($('foodProteinOnly')||{}).checked);
+  let rows=o.allowed.slice();
+  if(q) rows=rows.filter(f=>f.n.toLowerCase().includes(q));
+  if(st) rows=rows.filter(f=>f.st===st);
+  if(dense) rows=rows.filter(f=>f.p/Math.max(1,f.kcal) >= 0.06);
+  rows.sort((a,b)=> (b.p/Math.max(1,b.kcal)) - (a.p/Math.max(1,a.kcal)));
+
+  $('foodList').innerHTML = rows.length
+    ? '<table><thead><tr><th>Food</th><th>Portion</th><th class="num">kcal</th><th class="num">Protein</th><th class="num">g/100kcal</th><th></th></tr></thead><tbody>'
+      + rows.map(f=>'<tr>'
+        +'<td><b>'+esc(f.n)+'</b> <span class="pill" style="font-size:10.5px">'+esc(STATIONS[f.st]||f.st)+'</span>'
+          +(f.verified?' '+chip('verified','Checked'):'')+(f.edited?' '+chip('mine','Edited'):'')
+          +(f.custom?' '+chip('mine','Yours'):'')+'</td>'
+        +'<td style="color:var(--ink-3);font-size:12px">'+esc(f.portion)+'</td>'
+        +'<td class="num">'+f.kcal+'</td>'
+        +'<td class="num"><b>'+f.p+'g</b></td>'
+        +'<td class="num" style="color:'+(f.p/Math.max(1,f.kcal)>=0.09?'#4fc24f':'var(--ink-3)')+'">'+rnd(f.p/Math.max(1,f.kcal)*100,1)+'</td>'
+        +'<td style="text-align:right;white-space:nowrap">'
+          +'<button class="btn sm" data-addtray="'+f.id+'">+</button> '
+          +'<button class="btn sm ghost" data-editfood="'+f.id+'">edit</button> '
+          +'<button class="btn sm ghost" data-hidefood="'+f.id+'" title="never show me this again">×</button>'
+        +'</td></tr>').join('')
+      +'</tbody></table>'
+    : '<div class="empty">Nothing matches. Loosen a filter, or add your own item.</div>';
+
+  const hidden=(S.dining.hidden||[]).length;
+  if(hidden) $('foodList').innerHTML += '<div class="row" style="margin-top:10px"><span class="hint" style="margin:0">'+hidden+' item'+(hidden===1?'':'s')+' hidden by you.</span><button class="btn sm" id="btnUnhide">Show them again</button></div>';
+}
+
+function renderTray(){
+  const o=D.dining, t=o.tray;
+  $('trayList').innerHTML = t.length
+    ? '<div class="stack" style="gap:7px">'+t.map(f=>
+      '<div class="row spread" style="gap:9px;padding:7px 10px;border:1px solid var(--line);border-radius:7px;background:var(--surface-2)">'
+      +'<div style="min-width:0"><b style="font-size:13px">'+esc(f.n)+'</b>'
+        +'<div style="font-size:11.5px;color:var(--ink-3)">'+esc(f.portion)+' · '+f.kcal+' kcal · '+f.p+'g protein</div></div>'
+      +'<div class="row" style="gap:5px;flex-wrap:nowrap">'
+        +'<button class="btn sm ghost" data-trayq="'+f.id+':-1">−</button>'
+        +'<span style="font-family:var(--mono);min-width:20px;text-align:center">'+f.qty+'</span>'
+        +'<button class="btn sm ghost" data-trayq="'+f.id+':1">+</button>'
+        +'<button class="btn sm danger" data-deltray="'+f.id+'">×</button>'
+      +'</div></div>').join('')+'</div>'
+    : '<div class="empty" style="padding:18px">Empty tray. Add food from the list, or load one of the generated options below.</div>';
+
+  const T=o.trayTot, pt=o.mealProtTarget, kt=o.mealKcalTarget;
+  const bar=(label,val,target,unit,color)=>{
+    const pct=Math.min(100, target>0? val/target*100 : 0);
+    const over=target>0 && val>target*1.15;
+    return '<div style="margin-bottom:11px"><div class="row spread" style="font-size:12px;margin-bottom:4px">'
+      +'<span style="color:var(--ink-2)">'+label+'</span>'
+      +'<span style="font-family:var(--mono);color:'+(over?'var(--warn)':'var(--ink)')+'"><b>'+rnd(val,0)+'</b> / '+rnd(target,0)+' '+unit+'</span></div>'
+      +'<div class="meter"><i style="background:var('+color+');width:'+pct+'%"></i></div></div>';
+  };
+  $('trayTotals').innerHTML =
+    bar('Protein this meal', T.p, pt, 'g', T.p>=pt?'--good':'--s3')
+  + bar('Energy this meal', T.kcal, kt, 'kcal', T.kcal>kt*1.15?'--warn':'--s1')
+  + '<div class="row" style="gap:8px;margin-top:4px"><span class="pill">carbs <b>'+rnd(T.c,0)+'g</b></span>'
+    +'<span class="pill">fat <b>'+rnd(T.f,0)+'g</b></span>'
+    +'<span class="pill">'+rnd(T.p/Math.max(1,T.kcal)*100,1)+' g protein / 100 kcal</span></div>'
+  + '<div class="divider"></div>'
+  + '<div class="sect-lbl">Whole day, all four trays</div>'
+  + bar('Protein today', o.dayTot.p, o.proteinTargetDay, 'g', o.dayTot.p>=o.proteinTargetDay?'--good':'--s3')
+  + bar('Energy today', o.dayTot.kcal, o.kcal, 'kcal', o.dayTot.kcal>o.kcal*1.15?'--warn':'--s1')
+  + (T.p < pt && o.allowed.length
+      ? '<div class="note warn" style="margin-top:10px"><b>'+rnd(pt-T.p,0)+'g of protein short for this meal.</b> The densest thing left on your list is <b>'
+        + esc((o.allowed.slice().sort((a,b)=>(b.p/Math.max(1,b.kcal))-(a.p/Math.max(1,a.kcal)))[0]||{}).n||'—')
+        + '</b> — one portion moves you most for the fewest calories.</div>'
+      : (T.p>0 ? '<div class="note good" style="margin-top:10px"><b>Protein target met for this meal.</b></div>' : ''))
+  + '<div class="row" style="margin-top:11px"><button class="btn sm danger" id="btnClearTray">Clear tray</button></div>';
+}
+
+function renderMealOptions(){
+  const o=D.dining;
+  const opts = buildMealOptions(o, 3);
+  $('mealOptions').innerHTML = opts.length
+    ? opts.map((op,i)=>
+      '<div style="border:1px solid '+(op.hits?'rgba(12,163,12,.32)':'var(--line)')+';border-radius:var(--r);padding:14px;background:var(--surface-2)">'
+      +'<div class="row spread" style="align-items:baseline"><b style="font-family:var(--display);font-size:16px;letter-spacing:.02em">'+esc(op.name)+'</b>'
+        +(op.hits?chip('computed','Hits target'):'<span class="pill" style="border-color:rgba(250,178,25,.4);color:var(--warn)">short</span>')+'</div>'
+      +'<div style="font-size:12px;color:var(--ink-3);margin-top:3px">'+esc(op.why)+'</div>'
+      +'<ul class="tight" style="margin-top:10px">'+op.items.map(f=>'<li>'+esc(f.n)+' <span style="color:var(--ink-3)">— '+esc(f.portion)+'</span></li>').join('')+'</ul>'
+      +'<div class="row" style="gap:7px;margin-top:10px">'
+        +'<span class="pill">'+rnd(op.tot.p,0)+'g protein</span>'
+        +'<span class="pill">'+rnd(op.tot.kcal,0)+' kcal</span>'
+        +'<span class="pill">'+rnd(op.tot.p/Math.max(1,op.tot.kcal)*100,1)+' g/100kcal</span>'
+        +(op.hasVeg?'':'<span class="pill" style="border-color:rgba(250,178,25,.4);color:var(--warn)">no veg</span>')
+        +(op.hasCarb?'':'<span class="pill" style="border-color:rgba(250,178,25,.4);color:var(--warn)">no grain</span>')
+      +'</div>'
+      +'<div class="row" style="margin-top:11px"><button class="btn sm primary" data-loadopt="'+i+'">Load onto tray</button></div>'
+      +'</div>').join('')
+    : '<div class="empty" style="grid-column:1/-1">Your filters leave too few items to build from. Loosen a restriction or add your own foods.</div>';
+  window.__mealOpts = opts;
+}
+
 /* ======================================================================
-   RENDER — 04 DEALS
+   RENDER — 04 LIFE & BALANCE
+   ====================================================================== */
+function renderLife(){
+  const d=D;
+  feed('vFeed',[
+    {k:'Caps the study plan', v:'Study is capped at <b>'+rnd(d.studyCap,1)+'h</b> so the social floor survives'+(d.studyCapped?' · <b style="color:#e2645f">currently biting</b>':'')},
+    {k:'Reads from Courses',  v:'Commitments and games are checked against your real class times'},
+    {k:'Feeds the General tab', v:'Commitments are <b>'+rnd(d.commitWeek,1)+'h</b> of the 168-hour split'},
+    {k:'Feeds the Tracker',   v:'Committed hours drive the load term; trips home move the crunch weeks'}
+  ]);
+
+  $('socialBanner').innerHTML = d.studyCapped
+    ? '<b>Your study demand does not fit inside the time left after your social floor — and the floor won.</b> IU\u2019s credit-hour minimum implies <b>'+rnd(d.studyDemand,1)+'h</b> of study a week. After class, commute, commitments, sleep and meals, only <b>'+rnd(d.studyCap,1)+'h</b> remain if you keep <b>'+rnd(d.socialFloor,0)+'h</b> of social time. The plan schedules the '+rnd(d.studyCap,1)+'h and every course is scaled down by the same factor rather than one being starved. That is a real trade-off, not a rounding error: you are '+rnd(d.studyShort,1)+'h a week short of the nominal minimum. Lower the floor, drop a commitment, trim a difficulty dial, or accept it deliberately — but do it with your eyes open.'
+    : '<b>Your week balances.</b> Study fits in <b>'+rnd(d.studyPlanned,1)+'h</b>, and <b>'+rnd(d.socialTotal,1)+'h</b> of social and open time survives against a floor of '+rnd(d.socialFloor,0)+'h. You came here in person for the second number — this page treats it as a constraint, not a leftover.';
+
+  renderSocialCtl(); renderSocialChart(); renderSocialRead();
+  renderCommitments(); renderTrips(); renderGames();
+}
+
+function renderSocialCtl(){
+  const d=D;
+  $('socialCtl').innerHTML =
+    '<div><label class="f">Protected social hours a week — '+rnd(d.socialFloor,0)+'h</label>'
+     +'<input type="range" min="0" max="40" step="1" value="'+d.socialFloor+'" data-social="floorWeek" style="padding:0">'
+     +'<div class="hint">Study never gets scheduled into this. At 0 the planner will happily fill every waking hour, which is exactly the failure you said you wanted to avoid.</div></div>'
+   +'<div><label class="f">Evenings kept clear of study</label>'
+     +'<div class="row" style="gap:10px;margin-top:6px">'
+     + [1,2,3,4,5,6,0].map(dw=>'<label class="row" style="gap:5px;font-size:12.5px"><input type="checkbox" data-eve="'+dw+'"'
+        +((S.social.protectEvenings||[]).indexOf(dw)>=0?' checked':'')+'> '+DAYS[dw]+'</label>').join('')
+     +'</div><div class="hint">After 6pm on a ticked day, no study block is placed at all. Class and commitments still can be — this only stops the planner from claiming the evening.</div></div>';
+}
+
+function renderSocialChart(){
+  const d=D;
+  chartStackBar('cSocial','ttSocial','lSocial', [
+    {k:'Fixed — class, commute, commitments', h:d.fixedWeek,   c:'--s1', from:'Courses + Life'},
+    {k:'Study (capped)',                      h:d.studyPlanned,c:'--s2', from:'Courses'},
+    {k:'Open / social',                       h:d.freeWeek,    c:'--s6', from:'What survives'}
+  ], {title:'YOUR '+rnd(d.awake,0)+' WAKING HOURS, AFTER SLEEP AND MEALS',
+      ticks:[0, 20, 40, 60, 80, 100, Math.round(d.awake)]});
+}
+
+function renderSocialRead(){
+  const d=D, out=[];
+  const box=(t,v,sub,tone)=>'<div class="tile '+(tone||'')+'"><div class="k">'+t+'</div><div class="v">'+v+'</div><div class="n">'+sub+'</div></div>';
+  out.push('<div class="grid g2">'
+    + box('Social + open', rnd(d.socialTotal,1)+'<span class="u">h</span>', 'Against a floor of '+rnd(d.socialFloor,0)+'h', d.socialOK?'good':'crit')
+    + box('Of that, already booked', rnd(d.socialCredit,1)+'<span class="u">h</span>', 'Intramurals, clubs and plans on your calendar')
+    + box('Unscheduled', rnd(d.freeWeek,1)+'<span class="u">h</span>', rnd(d.freeWeek/7,1)+'h a day with nothing claimed on it')
+    + box('Study fits?', d.studyCapped?'No':'Yes', d.studyCapped? rnd(d.studyShort,1)+'h a week short of IU\u2019s minimum' : 'All '+rnd(d.studyPlanned,1)+'h placed', d.studyCapped?'warn':'good')
+    + '</div>');
+
+  if(d.socialCredit < 3)
+    out.push('<div class="note warn"><b>Almost none of your social time is actually booked.</b> '+rnd(d.freeWeek,1)+'h a week is unclaimed, which sounds like freedom and usually turns into scrolling. One recurring thing with other people on the calendar — an intramural team, a club, a standing dinner — is worth more than ten unscheduled hours.</div>');
+  if((S.social.protectEvenings||[]).length===0)
+    out.push('<div class="note warn"><b>No evening is protected.</b> The planner is currently allowed to put study on any night of the week. Tick at least Friday and Saturday unless you genuinely want it filling them.</div>');
+  const freeEve=[1,2,3,4,5].filter(dw=>!(d.byDay[dw]||[]).some(m=>m.b>toMin('18:00'))
+                                     && !(d.plan.byDay[dw]||[]).some(b=>b.b>toMin('18:00'))
+                                     && !(d.commitByDay[dw]||[]).some(x=>x.b>toMin('18:00')));
+  out.push('<div class="note '+(freeEve.length>=2?'good':'warn')+'"><b>'+freeEve.length+' free weeknight'+(freeEve.length===1?'':'s')+'</b>'
+    +(freeEve.length?': '+freeEve.map(dw=>DAYSL[dw]).join(', ')+'.':'. Every Monday-to-Friday evening has class, a commitment or a study block on it.')
+    +' Weeknights are when most of the unplanned social life at a residential campus actually happens.</div>');
+  if(d.commitByKind && d.commitByKind.gym===0)
+    out.push('<div class="note"><b>No gym time is blocked out.</b> You are already paying for the SRSC and the Wildermuth through the student activity fee, stated at $84.68 a semester, whether or not you go. It also counts 30% toward the social floor here, because that is roughly what it is.</div>');
+  $('socialRead').innerHTML = out.join('');
+}
+
+function renderCommitments(){
+  const d=D, list=S.commitments||[];
+  $('commitList').innerHTML = list.length
+    ? '<div class="stack">'+list.map(cm=>{
+        const k=CKIND[cm.kind]||CKIND.other;
+        const hrs=(toMin(cm.end)-toMin(cm.start))/60;
+        const per=cm.weekly===false ? 1 : (cm.days||[]).length;
+        return '<div class="srcrow" style="border-left:3px solid var('+k.c+')">'
+        +'<div><div class="row" style="gap:8px;align-items:baseline">'
+          +'<b>'+esc(cm.label||k.label)+'</b><span class="pill">'+esc(k.label)+'</span>'
+          +'<span class="pill">'+(cm.weekly===false ? esc(niceDate(cm.date)) : (cm.days||[]).map(x=>DAYS[x]).join(' '))+' · '+esc(fmtRange(toMin(cm.start),toMin(cm.end)))+'</span>'
+          +'<span class="pill">'+rnd(hrs*per,1)+'h/wk</span>'
+          +(k.social>0?'<span class="pill" style="border-color:rgba(12,163,12,.35);color:#4fc24f">'+Math.round(k.social*100)+'% social</span>':'')
+        +'</div>'
+        +(cm.loc?'<div class="u">'+esc(cm.loc)+'</div>':'')
+        +(cm.note?'<div style="font-size:12.5px;color:var(--ink-2);margin-top:4px">'+esc(cm.note)+'</div>':'')
+        +'</div><button class="btn sm danger" data-delcommit="'+cm.id+'">×</button></div>';
+      }).join('')+'</div>'
+    : '<div class="empty">Nothing blocked out yet. Until something is here, the study planner assumes every waking hour outside class is available — which is how a semester quietly becomes nothing but coursework.</div>';
+
+  $('recSportsInfo').innerHTML = [
+    {n:'Intramural Sports', ck:'verified', cite:'imsports',
+     d:'Run through IMLeagues, which is the platform IU Recreational Sports uses for registration, rosters, schedules and payments. You buy an Intramural Sports Player Pass there. Competitive leagues run a three-game regular season plus a single-elimination playoff; recreational leagues run five games with no playoffs and are explicitly about the social and fitness side rather than winning.',
+     use:'Recreational is the right league if the point is meeting people. Five guaranteed games beats three plus a possible playoff, and nobody is angry at you.',
+     go:'https://www.imleagues.com/indiana'},
+    {n:'Sport Clubs', ck:'verified', cite:'clubsport',
+     d:'Student-led competitive clubs, a step up in commitment from intramurals and a step down from varsity. Practice schedules are set by each club.',
+     use:'Higher time cost, much higher social return — a club is a fixed group of people you see several times a week all year.',
+     go:'https://recsports.indiana.edu/activites/sport-clubs.html'}
+  ].map(x=>'<div style="border:1px solid var(--line);border-radius:var(--r);padding:14px;background:var(--surface-2)">'
+    +'<div class="row spread" style="align-items:baseline"><b style="font-size:13.5px">'+esc(x.n)+'</b>'+chip(x.ck)+'</div>'
+    +'<p style="font-size:12.5px;color:var(--ink-2);margin-top:7px">'+esc(x.d)+'</p>'
+    +'<div class="note acc" style="margin-top:9px">'+esc(x.use)+'</div>'
+    +'<div class="row" style="margin-top:10px"><a class="btn sm" href="'+esc(x.go)+'" target="_blank" rel="noopener">Open ↗</a></div>'
+    + citeLine(x.cite)+'</div>').join('');
+}
+
+function renderTrips(){
+  const d=D;
+  $('tripMins').value = S.tripMins;
+  const list=d.trips;
+  $('tripList').innerHTML = list.length
+    ? '<div class="stack">'+list.map(t=>{
+      if(t.invalid) return '<div class="srcrow bad"><div><b>'+esc(t.label||'Trip')+'</b><div class="u">Missing a date — edit or remove it.</div></div><button class="btn sm danger" data-deltrip="'+t.id+'">×</button></div>';
+      const tone = t.verdict==='costly'?'bad':t.verdict==='tight'?'pend':'ok';
+      return '<div class="srcrow '+tone+'"><div>'
+      +'<div class="row" style="gap:8px;align-items:baseline"><b>'+esc(t.label||'Trip home')+'</b>'
+        +'<span class="pill">'+esc(niceDate(t.out))+' '+esc(t.outAt||'')+' → '+esc(niceDate(t.back))+' '+esc(t.backAt||'')+'</span>'
+        +'<span class="pill">'+t.nights+' night'+(t.nights===1?'':'s')+'</span>'
+        +'<span class="pill">'+rnd(t.travelH,1)+'h travelling</span>'
+        +'<span class="pill">week '+t.weekNo+(t.strain!=null?' · strain '+t.strain:'')+'</span></div>'
+      +'<div style="margin-top:7px;font-size:12.5px;color:var(--ink-2)">'
+        + (t.classesMissed.length
+            ? '<span style="color:#e2645f">Misses '+t.classesMissed.length+' class meeting'+(t.classesMissed.length===1?'':'s')+':</span> '+t.classesMissed.map(x=>esc(DAYS[x.dw]+' '+x.label)).join(', ')
+            : '<span style="color:#4fc24f">Misses no classes.</span>')
+      +'</div>'
+      + (t.commitMissed.length?'<div style="font-size:12.5px;color:var(--warn);margin-top:3px">Misses '+t.commitMissed.map(x=>esc(DAYS[x.dw]+' '+x.label)).join(', ')+'</div>':'')
+      +'<div style="font-size:12.5px;color:var(--ink-3);margin-top:3px">Costs <b style="color:var(--ink);font-family:var(--mono)">'+rnd(t.studyLost+t.travelH,1)+'h</b> — '+rnd(t.studyLost,1)+'h of planned study plus '+rnd(t.travelH,1)+'h on the road.'
+        + (t.dueInWindow.length?' <span style="color:var(--warn)">'+t.dueInWindow.length+' thing'+(t.dueInWindow.length===1?'':'s')+' due within two days of getting back: '+t.dueInWindow.map(a=>esc(a.name)).join(', ')+'.</span>':' Nothing due right after.')
+      +'</div></div><button class="btn sm danger" data-deltrip="'+t.id+'">×</button></div>';
+    }).join('')+'</div>'
+    : '<div class="empty">No trips planned. Add one and this works out exactly what it costs — including whether anything is due the Monday you get back.</div>';
+
+  const best=(d.tripAdvice&&d.tripAdvice.best)||[];
+  $('tripAdvice').innerHTML = best.length
+    ? '<table><thead><tr><th>Week</th><th>Weekend</th><th class="num">Strain</th><th class="num">Due nearby</th><th class="num">Study lost</th><th>Verdict</th><th></th></tr></thead><tbody>'
+      + best.map((w,i)=>'<tr>'
+        +'<td>'+w.week+'</td><td>'+esc(niceDate(w.fri))+' → '+esc(niceDate(w.sun))+'</td>'
+        +'<td class="num">'+w.strain+'</td>'
+        +'<td class="num">'+w.due+(w.dueWeight?' ('+w.dueWeight+'%)':'')+'</td>'
+        +'<td class="num">'+w.studyLost+'h</td>'
+        +'<td>'+(i===0?'<b style="color:#4fc24f">Cheapest weekend to go</b>':(w.isFinals?'<span style="color:#e2645f">Finals — avoid</span>':(w.isBreak?'Break week':'Workable')))+'</td>'
+        +'<td style="text-align:right"><button class="btn sm" data-planweekend="'+w.fri+'">Plan it</button></td></tr>').join('')
+      +'</tbody></table>'
+      +'<div class="note" style="margin-top:11px"><b>How the ranking works.</b> Cost = the week\u2019s strain index × 0.35, plus 8 per item due within two days of getting back, plus half a point per point of graded weight, plus 20 per weekend class, plus 1.5× the study hours the weekend would displace. Finals weeks are penalised, break weeks discounted. It is arithmetic on your own data, not a judgement about whether you should go home.</div>'
+    : '<div class="empty">No weekends left in the term to rank.</div>';
+}
+
+function renderGames(){
+  const d=D;
+  $('sportPicker').innerHTML = SPORTS.map(sp=>
+    '<button class="btn sm'+(S.sports.interest[sp.id]?' primary':'')+'" data-sport="'+sp.id+'" title="'+esc(sp.access)+'">'
+    + esc(sp.name)+'</button>').join('')
+    + '<span class="hint" style="margin:0 0 0 6px">'+d.games.mine.length+' upcoming game'+(d.games.mine.length===1?'':'s')+' in the sports you picked</span>';
+
+  const picked = Object.keys(S.sports.interest).filter(k=>S.sports.interest[k]);
+  const rows = d.games.rows.filter(g=>g.interested);
+  $('gameList').innerHTML = !picked.length
+    ? '<div class="empty">Pick a sport above and its home games appear here.</div>'
+    : (rows.length
+      ? '<div class="stack">'+rows.map(gameRow).join('')+'</div>'
+      : '<div class="empty">No home games loaded for '+esc(picked.map(k=>(SPORTS.find(s2=>s2.id===k)||{}).name).join(', '))
+        +'. Only the football home schedule is pre-loaded — add games with the button above, or check the official schedule.'
+        +'<div class="row" style="justify-content:center;margin-top:11px"><a class="btn sm" href="https://iuhoosiers.com/sports/tickets/schedule" target="_blank" rel="noopener">Official schedules ↗</a></div></div>');
+
+  $('ticketInfo').innerHTML =
+    '<div style="border:1px solid var(--line);border-radius:var(--r);padding:14px;background:var(--surface-2)">'
+    +'<div class="row spread" style="align-items:baseline"><b style="font-size:13.5px">Claim windows for 2026 football</b>'+chip('verified')+'</div>'
+    +'<ul class="tight" style="margin-top:8px">'+CLAIM_WINDOWS.map(w=>'<li><b>'+esc(w.when)+'</b> — '+esc(w.label)+'</li>').join('')+'</ul>'
+    +'<div class="note warn" style="margin-top:10px"><b>No page can claim a ticket for you.</b> You asked whether these could be reserved automatically — they cannot. Claiming runs through IU\u2019s ticketing system behind your login, and anything that tried to drive it on your behalf would be handling your credentials. What this does instead is tell you which window is open, which games clash with your week, and keep the checklist.</div>'
+    + citeLine('athl26') +'</div>'
+    +'<div style="border:1px solid var(--line);border-radius:var(--r);padding:14px;background:var(--surface-2)">'
+    +'<div class="row spread" style="align-items:baseline"><b style="font-size:13.5px">What your access covers</b>'+chip('verified')+'</div>'
+    +'<ul class="tight" style="margin-top:8px">'+SPORTS.map(sp=>'<li><b>'+esc(sp.name)+'</b> — '+esc(sp.access)+'</li>').join('')+'</ul>'
+    + citeLine('athlTix')
+    +'<div class="row" style="margin-top:10px"><a class="btn sm" href="https://iuhoosiers.com/sports/tickets" target="_blank" rel="noopener">Tickets ↗</a>'
+    +'<a class="btn sm" href="https://iuhoosiers.com/sports/tickets/schedule" target="_blank" rel="noopener">All schedules ↗</a></div></div>';
+}
+
+function gameRow(g){
+  const sp = SPORTS.find(x=>x.id===g.sport)||{name:g.sport};
+  const st = g.st||{};
+  const clash = g.clashes.length;
+  return '<div class="deal'+(st.going?' done':'')+'" style="grid-template-columns:auto 1fr auto">'
+    +'<div class="cb"><input type="checkbox" data-going="'+esc(g.id)+'"'+(st.going?' checked':'')+' aria-label="Going to '+esc(g.opp)+'"></div>'
+    +'<div><div class="dname">'+esc(sp.name)+' vs '+esc(g.opp)+'</div>'
+      +'<div class="ddesc">'+(g.date?esc(DAYSL[g.dw]+', '+niceDate(g.date)):'date not set')
+        +(g.start?' · '+esc(fmt12(toMin(g.start))):' · time not announced')
+        +(g.tv?' · '+esc(g.tv):'')+'</div>'
+      +(g.note?'<div class="ddesc" style="color:var(--ink-3)">'+esc(g.note)+'</div>':'')
+      +'<div class="dmeta">'+chip(g.prov||'mine')
+        +(clash
+          ? '<span class="pill" style="border-color:rgba(208,59,59,.5);color:#e2645f">clashes: '+esc(g.clashes.join('; '))+'</span>'
+          : '<span class="pill" style="border-color:rgba(12,163,12,.35);color:#4fc24f">no clash</span>')
+        +(g.studyThatDay>0?'<span class="pill">'+rnd(g.studyThatDay,1)+'h study that slot</span>':'')
+        +(g.custom?'<button class="btn sm danger" data-delgame="'+esc(g.id)+'" style="padding:2px 8px">remove</button>':'')
+      +'</div></div>'
+    +'<div class="dval"><label class="pill" style="cursor:pointer"><input type="checkbox" data-claimed="'+esc(g.id)+'"'+(st.claimed?' checked':'')+'> claimed</label></div>'
+  +'</div>';
+}
+
+/* ======================================================================
+   RENDER — 05 WORK
+   ====================================================================== */
+const JOB_TEMPLATES = [
+  {title:'Dining services', employer:'IU Dining', onCampus:true, benefits:['Meal during shift','On campus','Flexible around classes']},
+  {title:'Library desk assistant', employer:'IU Libraries', onCampus:true, benefits:['Study during downtime','On campus','Quiet']},
+  {title:'Rec Sports front desk', employer:'IU Recreational Sports', onCampus:true, benefits:['On campus','Free facility access','Study during downtime']},
+  {title:'IM sports official', employer:'IU Recreational Sports', onCampus:true, benefits:['Short shifts','On campus','Social']},
+  {title:'Undergraduate research assistant', employer:'Academic department', onCampus:true, benefits:['Resume relevant','Faculty contact','On campus']},
+  {title:'IT support / Luddy lab consultant', employer:'IU UITS or Luddy', onCampus:true, benefits:['Resume relevant','Study during downtime','On campus']},
+  {title:'Barista or food service', employer:'Off campus', onCampus:false, benefits:['Tips','Free drinks']},
+  {title:'Retail on Kirkwood', employer:'Off campus', onCampus:false, benefits:['Staff discount']}
+];
+const JOB_BENEFITS = ['Meal during shift','On campus','Flexible around classes','Study during downtime','Resume relevant',
+                      'Faculty contact','Tips','Staff discount','Free facility access','Paid training','Social','Short shifts'];
+
+function renderWork(){
+  const d=D, J=d.jobs;
+  feed('wFeed',[
+    {k:'Reads from Courses',   v:'Every shift is checked against your class times before it scores'},
+    {k:'Reads from Life',      v:'Hours that eat a protected evening cost the job points'},
+    {k:'Feeds the General tab',v: J.haveCount ? '<b>'+money(J.totalWeekly)+'</b>/week from '+J.haveCount+' job'+(J.haveCount===1?'':'s') : 'No job marked as held yet'},
+    {k:'Time available',       v:'<b>'+rnd(d.freeWeek,1)+'h</b> unclaimed a week before a job touches your social floor'}
+  ]);
+
+  $('wageTiles').innerHTML = [
+    tile('IU student minimum', money(WAGE.min), '/hr', 'Set by IU; agencies may pay more', 'acc'),
+    tile('Local median', money(WAGE.avg), '/hr', 'Most land '+money(WAGE.avgLo)+'–'+money(WAGE.avgHi)),
+    tile('Typical load', WAGE.typHours, 'h/wk', 'What IU says students average'),
+    tile('Your spare time', rnd(d.freeWeek,1), 'h/wk', 'Above the social floor — a job comes out of this', d.freeWeek<10?'warn':'good')
+  ].join('');
+  $('wageSrc').innerHTML =
+    '<div style="margin-bottom:9px">'+chip('verified')+' The $'+WAGE.min+' floor is IU\u2019s stated minimum wage for student employment.'+citeLine('wsAgency')+'</div>'
+   +'<div style="margin-bottom:9px">'+chip('reported')+' The $'+WAGE.avg+' median and the $'+WAGE.avgLo+'–$'+WAGE.avgHi+' band are a salary aggregator\u2019s figures for "IU student" roles in Bloomington as of July 2026, not an IU publication — a sanity check on an offer, not a guarantee.'+citeLine('wageZip')+'</div>'
+   +'<div>'+chip('reported')+' The 10–12 hour average comes from IU\u2019s own part-time jobs page.'+citeLine('jobsIUB')+'</div>';
+
+  const W=S.jobW;
+  const wctl=(k,label,hint)=>'<div><label class="f">'+esc(label)+' — weight '+W[k]+'</label>'
+    +'<input type="range" min="0" max="5" step="1" value="'+W[k]+'" data-jobw="'+k+'" style="padding:0">'
+    +'<div class="hint">'+hint+'</div></div>';
+  $('jobWeights').innerHTML =
+    wctl('pay','Pay per hour','Scored against the local band: 0 at IU\u2019s $'+WAGE.min+' floor, 1.0 at $'+WAGE.avgHi+'.')
+   +wctl('flex','Flexibility','Your 1–5 rating of how easily shifts move around exams and illness.')
+   +wctl('ben','Benefits','Counted from the boxes you tick on each job. Five or more scores full marks.')
+   +wctl('exp','Student experience','Your 1–5 rating from talking to people who work there.')
+   +wctl('fit','Schedule fit','Computed, not entered. Falls with every class clash and every protected hour the shift eats.');
+
+  renderJobList(); renderJobChart(); renderJobRead();
+  $('jobSources').innerHTML = [
+    {n:'Part-time jobs at IU Bloomington', ck:'verified', cite:'jobsIUB',
+     d:'The university\u2019s own starting point for part-time and work-study roles, run through Career Exploration & Student Employment.',
+     go:'https://bloomington.iu.edu/student-support/career-services-jobs/part-time-jobs/'},
+    {n:'Work-Study', ck:'verified', cite:'workstudy',
+     d:'Part-time jobs on and off campus funded through financial aid. Your hourly rate is set by the hiring agency and cannot go below IU\u2019s $'+WAGE.min+' student minimum. Check whether you were offered work-study in your aid package before assuming you qualify.',
+     go:'https://studentcentral.indiana.edu/pay-for-college/funding-options/work-study.html'}
+  ].map(x=>'<div style="border:1px solid var(--line);border-radius:var(--r);padding:14px;background:var(--surface-2)">'
+    +'<div class="row spread" style="align-items:baseline"><b style="font-size:13.5px">'+esc(x.n)+'</b>'+chip(x.ck)+'</div>'
+    +'<p style="font-size:12.5px;color:var(--ink-2);margin-top:7px">'+esc(x.d)+'</p>'
+    +'<div class="row" style="margin-top:10px"><a class="btn sm" href="'+esc(x.go)+'" target="_blank" rel="noopener">Open ↗</a></div>'
+    + citeLine(x.cite)+'</div>').join('');
+}
+
+function renderJobList(){
+  const d=D, rows=d.jobs.rows;
+  $('jobList').innerHTML = rows.length
+    ? '<div class="stack">'+rows.map((j,i)=>{
+      const tone = j.blocked?'crit':(j.score>=70?'good':j.score>=50?'':'warn');
+      return '<div style="border:1px solid '+(j.blocked?'rgba(208,59,59,.4)':'var(--line)')+';border-radius:var(--r);padding:14px;background:var(--surface-2)">'
+      +'<div class="row spread" style="align-items:flex-start;gap:12px">'
+        +'<div style="min-width:0">'
+          +'<div class="row" style="gap:9px;align-items:baseline">'
+            +'<b style="font-family:var(--display);font-size:17px;letter-spacing:.02em">'+esc(j.title||'Untitled role')+'</b>'
+            +(j.employer?'<span class="pill">'+esc(j.employer)+'</span>':'')
+            +(j.onCampus?'<span class="pill" style="border-color:rgba(57,135,229,.4)">on campus</span>':'')
+            +(j.have?'<span class="pill" style="border-color:rgba(12,163,12,.4);color:#4fc24f">you have this</span>':'')
+            +(i===0&&!j.blocked?'<span class="pill" style="border-color:var(--crimson);color:var(--crimson-lift)">best fit</span>':'')
+          +'</div>'
+          +'<div style="font-size:12.5px;color:var(--ink-2);margin-top:5px">'
+            + money(+j.pay||0)+'/hr · '+rnd(j.hoursWeek,1)+'h a week · '+(j.days||[]).map(x=>DAYS[x]).join(' ')+' '+esc(fmtRange(toMin(j.start),toMin(j.end)))
+            + ' · <b style="font-family:var(--mono);color:var(--ink)">'+money(j.weekly)+'</b>/week'
+            + (j.vsMarket!=null?' · <span style="color:'+(j.vsMarket>=0?'#4fc24f':'var(--warn)')+'">'+(j.vsMarket>=0?'+':'')+money(j.vsMarket)+' vs local median</span>':'')
+          +'</div>'
+          +(j.blocked
+            ? '<div class="note crit" style="margin-top:8px"><b>These shifts do not fit your week.</b> '+esc(j.clashes.map(c=>DAYS[c.dw]+' '+c.what+' '+c.at).join('; '))+'.</div>'
+            : (j.eatsSocial>0
+              ? '<div class="note warn" style="margin-top:8px">Eats '+rnd(j.eatsSocial,1)+'h a week from evenings you asked to keep clear.</div>'
+              : ''))
+          +'<div class="dmeta">'+(j.benefits||[]).map(b=>'<span class="pill">'+esc(b)+'</span>').join('')+'</div>'
+        +'</div>'
+        +'<div style="text-align:right;white-space:nowrap">'
+          +'<div class="tile '+tone+'" style="padding:9px 13px;min-width:104px"><div class="k">Score</div><div class="v" style="font-size:25px">'+j.score+'</div></div>'
+          +'<div class="row" style="justify-content:flex-end;margin-top:8px;gap:6px">'
+            +'<label class="pill" style="cursor:pointer"><input type="checkbox" data-jobhave="'+j.id+'"'+(j.have?' checked':'')+'> have it</label>'
+            +'<button class="btn sm" data-editjob="'+j.id+'">Edit</button>'
+            +'<button class="btn sm danger" data-deljob="'+j.id+'">×</button>'
+          +'</div></div>'
+      +'</div>'
+      +'<div class="meter" style="margin-top:11px">'
+        + [['pay',j.payScore,'--s1'],['flex',j.flexScore,'--s3'],['ben',j.benScore,'--s4'],['exp',j.expScore,'--s5'],['fit',j.fitScore,'--s7']]
+          .map(x=>'<i title="'+x[0]+'" style="background:var('+x[2]+');width:'+(Math.min(1,x[1]||0)*d.jobs.W[x[0]]/((d.jobs.W.pay+d.jobs.W.flex+d.jobs.W.ben+d.jobs.W.exp+d.jobs.W.fit)||1)*100)+'%"></i>').join('')
+      +'</div></div>';
+    }).join('')+'</div>'
+    : '<div class="empty">No jobs to compare. Add one, or start from a common campus role.<div class="row" style="justify-content:center;margin-top:11px"><button class="btn sm primary" id="btnJobTemplates2">Common campus roles</button></div></div>';
+}
+
+function renderJobChart(){
+  const rows=D.jobs.rows.slice(0,6);
+  if(!rows.length){ $('cJobs').innerHTML='<div class="empty">Add a job and the breakdown appears here.</div>'; legend('lJobs',[]); return; }
+  const W=D.jobs.W, wsum=(W.pay+W.flex+W.ben+W.exp+W.fit)||1;
+  const keys=[{k:'Pay',c:'--s1'},{k:'Flexibility',c:'--s3'},{k:'Benefits',c:'--s4'},{k:'Experience',c:'--s5'},{k:'Schedule fit',c:'--s7'}];
+  chartDayBars('cJobs','ttJobs','lJobs',
+    rows.map(j=>({label:(j.title||'—').slice(0,11), full:(j.title||'')+(j.employer?' · '+j.employer:''),
+      'Pay':Math.min(1,j.payScore||0)*W.pay/wsum*100, 'Flexibility':j.flexScore*W.flex/wsum*100,
+      'Benefits':j.benScore*W.ben/wsum*100, 'Experience':j.expScore*W.exp/wsum*100,
+      'Schedule fit':j.fitScore*W.fit/wsum*100})),
+    keys, {h:250});
+}
+
+function renderJobRead(){
+  const d=D, J=d.jobs, out=[];
+  const box=(t,v,sub,tone)=>'<div class="tile '+(tone||'')+'"><div class="k">'+t+'</div><div class="v">'+v+'</div><div class="n">'+sub+'</div></div>';
+  if(!J.rows.length){ $('jobRead').innerHTML='<div class="empty">Add a job to see what its hours would cost.</div>'; return; }
+  const j = J.rows.find(r=>r.have) || J.best || J.rows[0];
+  const afterJob = d.freeWeek - j.hoursWeek;
+  out.push('<div class="grid g2">'
+    + box('Weekly', money(j.weekly), (j.title||'')+' at '+rnd(j.hoursWeek,1)+'h')
+    + box('Over the term', money(j.term), d.weeksTotal+' weeks')
+    + box('Open time left', rnd(afterJob,1)+'<span class="u">h</span>', 'After the shifts, before the social floor', afterJob<0?'crit':afterJob<6?'warn':'good')
+    + box('Deals equivalent', J.rows.length? rnd(j.term / Math.max(1,d.deals.left||1),1)+'×' : '—', 'Term earnings vs the '+money0(d.deals.left)+' still unclaimed on the Deals tab')
+    + '</div>');
+  if(afterJob < 0)
+    out.push('<div class="note crit"><b>This job does not fit.</b> It needs '+rnd(j.hoursWeek,1)+'h a week and you have '+rnd(d.freeWeek,1)+'h of open time. Taking it means eating into the social floor, the study plan, or sleep — the page will not pretend otherwise.</div>');
+  else if(afterJob < 6)
+    out.push('<div class="note warn"><b>It fits, but only just.</b> '+rnd(afterJob,1)+'h a week of slack left after the shifts. That is enough for the job and almost nothing else unplanned.</div>');
+  else
+    out.push('<div class="note good"><b>It fits.</b> '+rnd(afterJob,1)+'h a week still unclaimed after the shifts, with your '+rnd(d.socialFloor,0)+'h social floor already protected underneath that.</div>');
+  out.push('<div class="note acc"><b>Worth comparing against the Deals tab before you take hours.</b> '+money0(d.deals.left)+' of value is sitting unclaimed there. At '+money(+j.pay||WAGE.avg)+'/hr that is about '+rnd((d.deals.left)/Math.max(1,+j.pay||WAGE.avg),0)+' hours of work you would not have to do. Claiming deals is not income, but it has the same effect on your balance and costs an afternoon once.</div>');
+  $('jobRead').innerHTML = out.join('');
+}
+
+/* ======================================================================
+   RENDER — 06 DEALS
    ====================================================================== */
 function renderDeals(){
   const d=D, dl=d.deals;
@@ -3373,6 +4482,7 @@ const SRC_KINDS=[
 ];
 const PASTE_KINDS=[
   {id:'auto', n:'Work it out from the content'},
+  {id:'canvas', n:'Canvas export from the bookmarklet'},
   {id:'ics', n:'Calendar feed text (.ics)'},
   {id:'assignments', n:'Assignments — one per line'},
   {id:'announcements', n:'Announcements — one per line'}
@@ -3388,6 +4498,7 @@ function renderData(){
   $('srcKind').innerHTML = SRC_KINDS.map(k=>'<option value="'+k.id+'">'+esc(k.n)+'</option>').join('');
   $('pasteKind').innerHTML = PASTE_KINDS.map(k=>'<option value="'+k.id+'">'+esc(k.n)+'</option>').join('');
   renderSourceList();
+  renderBookmarklet();
   $('howto').innerHTML = SRC_KINDS.filter(k=>k.how && k.id!=='other').map(k=>
     '<div style="border:1px solid var(--line);border-radius:var(--r);padding:13px;background:var(--surface-2)">'
     +'<b style="font-size:13.5px">'+esc(k.n)+'</b>'
@@ -3470,15 +4581,98 @@ async function testSource(s){
   return s;
 }
 
+/* --- the Canvas bookmarklet -------------------------------------------
+   Runs ON canvas, so it is same-origin: the session cookie authenticates it
+   and CORS never enters the picture. That is why this works where a fetch
+   from this page cannot. It reads three documented endpoints and nothing
+   else, writes nothing back, and puts the result on your clipboard. */
+function canvasBookmarkletSource(){
+  return "(async()=>{" +
+    "var J=async function(u){var r=await fetch(u,{credentials:'same-origin',headers:{Accept:'application/json'}});" +
+      "if(!r.ok)throw new Error(u.split('?')[0]+' -> '+r.status);" +
+      "return JSON.parse((await r.text()).replace(/^while\\(1\\);/,''))};" +
+    "try{" +
+      "var cs=await J('/api/v1/courses?enrollment_state=active&per_page=100');" +
+      "var out={source:'canvas',host:location.host,at:new Date().toISOString(),courses:[]};" +
+      "for(var i=0;i<cs.length;i++){var c=cs[i],gs=[];" +
+        "try{gs=await J('/api/v1/courses/'+c.id+'/assignment_groups?include[]=assignments&include[]=submission&per_page=100')}catch(e){continue}" +
+        "out.courses.push({id:c.id,name:c.name,code:c.course_code,groups:gs.map(function(g){" +
+          "return{name:g.name,weight:g.group_weight,assignments:(g.assignments||[]).map(function(a){" +
+            "return{name:a.name,due:a.due_at,points:a.points_possible," +
+              "score:a.submission?a.submission.score:null," +
+              "submitted:a.submission?!!a.submission.submitted_at:false}})}})})}" +
+      "var t=JSON.stringify(out);" +
+      "try{await navigator.clipboard.writeText(t);alert('Crimson Command: copied '+out.courses.length+' courses. Paste it into Data & Sources.')}" +
+      "catch(e){var w=window.open('','_blank');w.document.write('<textarea style=\"width:99%;height:90vh\">'+t.replace(/</g,'&lt;')+'</textarea>');alert('Clipboard blocked - copy the text in the new tab instead.')}" +
+    "}catch(e){alert('Crimson Command: '+e.message+'\\n\\nOpen Canvas and sign in first, then click this on a Canvas page.')}})()";
+}
+function renderBookmarklet(){
+  const href = 'javascript:' + encodeURIComponent(canvasBookmarkletSource());
+  $('bookmarkletBox').innerHTML =
+    '<div class="row" style="gap:14px;align-items:center;flex-wrap:wrap">'
+      +'<a class="btn primary" draggable="true" href="'+href.replace(/"/g,'&quot;')+'" '
+      +'onclick="return false" style="cursor:grab;font-size:14px;padding:11px 20px">⇱ Send Canvas → Crimson</a>'
+      +'<span class="hint" style="margin:0;max-width:52ch">Drag that onto your bookmarks bar. Clicking it here does nothing on purpose — it only works on a Canvas page.</span>'
+    +'</div>'
+    +'<div class="grid g2" style="margin-top:16px">'
+      +'<div><div class="sect-lbl">How to use it</div><ol class="tight" style="padding-left:19px">'
+        +'<li>Show your bookmarks bar, then drag the crimson button onto it.</li>'
+        +'<li>Open <b>iu.instructure.com</b> and sign in.</li>'
+        +'<li>Click the bookmark. It reads your active courses and their assignment groups.</li>'
+        +'<li>Come back here, paste into the box below, and press Import.</li>'
+      +'</ol>'
+      +'<div class="note good" style="margin-top:10px"><b>What you get in one click.</b> Every active course, every assignment group <em>with its weight</em>, every assignment with its due date and points, and your score on each one. That is the grade table and the deadline table filled in together.</div></div>'
+      +'<div><div class="sect-lbl">What it does and does not do</div>'
+      +'<ul class="tight">'
+        +'<li>Runs only on the Canvas page you click it on, using the session you are already signed in to. It never sees your password.</li>'
+        +'<li><b>Read-only.</b> Three GET requests, no writes, nothing submitted.</li>'
+        +'<li>Nothing is sent anywhere. The data goes to your clipboard and then into this page\u2019s local storage.</li>'
+        +'<li>Caps at 100 courses and 100 assignments per group. Past that, Canvas paginates and this takes the first page.</li>'
+        +'<li>Weights only exist if your instructor uses weighted assignment groups. If a course comes in with 0% weights, that course is scored on raw points and you should leave the weights blank.</li>'
+      +'</ul>'
+      + citeLine('canvasAG','Endpoint and fields:') + citeLine('canvasCourses')
+      +'</div>'
+    +'</div>'
+    +'<div class="divider"></div>'
+    +'<div class="note warn"><b>On reading a screen recording instead.</b> You asked whether that could work. It cannot, and I would rather say so than ship something that half-works: there is no OCR engine that can be bundled into a single HTML file at a sane size, video frames of a grade table decode into text with errors that are invisible until your GPA is wrong, and the whole approach is strictly worse than an API that returns exact numbers. The bookmarklet above is the same one click and the data is exact.</div>';
+}
+
 /* --- paste parsing ------------------------------------------------------ */
 let parsed=null;
 function parsePaste(){
   const raw=$('pasteBox').value.trim();
   let kind=$('pasteKind').value;
   if(!raw){ $('parsePreview').className='empty'; $('parsePreview').textContent='Nothing to parse — the box is empty.'; $('btnCommit').disabled=true; parsed=null; return; }
-  if(kind==='auto') kind = /BEGIN:VCALENDAR/i.test(raw) ? 'ics' : (/\|/.test(raw) ? 'assignments' : 'announcements');
+  if(kind==='auto'){
+    if(/"source"\s*:\s*"canvas"/.test(raw)) kind='canvas';
+    else if(/BEGIN:VCALENDAR/i.test(raw)) kind='ics';
+    else if(/\|/.test(raw)) kind='assignments';
+    else kind='announcements';
+  }
   let items=[], warn=[];
-  if(kind==='ics'){
+  if(kind==='canvas'){
+    let o=null;
+    try{ o=JSON.parse(raw); }catch(e){ warn.push('That is not valid JSON — copy the whole clipboard contents, including the outer braces.'); }
+    if(o && o.source!=='canvas') warn.push('This JSON did not come from the bookmarklet, so the fields may not line up.');
+    if(o && Array.isArray(o.courses)){
+      o.courses.forEach(c=>{
+        const code = matchCourse(c.code||'') || matchCourse(c.name||'') || (c.code||c.name||'').trim();
+        const known = S.courses.some(x=>x.code===code);
+        (c.groups||[]).forEach(g=>{
+          if(g.weight>0) items.push({id:uid(), type:'weight', code, known, name:g.name, weight:+g.weight});
+          (g.assignments||[]).forEach(a=>{
+            const due = a.due ? String(a.due).slice(0,10) : '';
+            items.push({id:uid(), type:'assignment', code, known, name:a.name, due,
+                        weight:null, group:g.name, points:a.points, score:a.score});
+          });
+        });
+      });
+      if(!items.length) warn.push('Parsed the export but it contained no assignment groups.');
+      const unknown=[...new Set(items.filter(i=>!i.known).map(i=>i.code))];
+      if(unknown.length) warn.push('These Canvas courses do not match anything on your Courses tab and will be skipped: '+unknown.join(', ')+'.');
+    }
+  }
+  else if(kind==='ics'){
     if(!/BEGIN:VEVENT/i.test(raw)) warn.push('No VEVENT blocks found — this does not look like calendar data.');
     const unfolded = raw.replace(/\r\n[ \t]/g,'').replace(/\n[ \t]/g,'');
     const blocks = unfolded.split(/BEGIN:VEVENT/i).slice(1);
@@ -3515,10 +4709,17 @@ function parsePaste(){
   pv.innerHTML = (warn.length? '<div class="note warn" style="margin-bottom:10px">'+warn.slice(0,4).map(esc).join('<br>')+'</div>' : '')
     + (items.length
       ? '<div class="row" style="margin-bottom:9px"><span class="pill">'+items.length+' item'+(items.length===1?'':'s')+'</span>'
-        +'<span class="pill">as '+esc(kind==='ics'?'assignments (from calendar)':kind)+'</span>'
+        +'<span class="pill">as '+esc(kind==='canvas'?'Canvas export':(kind==='ics'?'assignments (from calendar)':kind))+'</span>'
+        +(kind==='canvas'?'<span class="pill">'+items.filter(i=>i.type==='weight').length+' weights</span>'
+            +'<span class="pill">'+items.filter(i=>i.score!=null).length+' scored</span>':'')
         +'<span class="pill">'+items.filter(i=>i.code&&S.courses.some(c=>c.code===i.code)).length+' matched to your courses</span></div>'
-        +'<div class="scroll" style="max-height:280px;overflow-y:auto"><table><thead><tr><th>Course</th><th>Item</th><th>Date</th></tr></thead><tbody>'
-        + items.slice(0,60).map(i=>'<tr><td>'+esc(i.code||'—')+'</td><td>'+esc(i.name||i.title||'')+'</td><td>'+esc(i.due||i.date||'—')+'</td></tr>').join('')
+        +'<div class="scroll" style="max-height:300px;overflow-y:auto"><table><thead><tr><th>Course</th><th>What</th><th>Date</th><th class="num">Score</th></tr></thead><tbody>'
+        + items.slice(0,80).map(i=>'<tr'+(i.known===false?' style="opacity:.45"':'')+'>'
+            +'<td>'+esc(i.code||'—')+'</td>'
+            +'<td>'+(i.type==='weight'?'<span class="pill">weight</span> ':'')+esc(i.name||i.title||'')
+              +(i.type==='weight'?' — <b>'+rnd(i.weight,1)+'%</b>':'')+'</td>'
+            +'<td>'+esc(i.due||i.date||'—')+'</td>'
+            +'<td class="num">'+(i.score!=null&&i.points?esc(i.score)+'/'+esc(i.points):'—')+'</td></tr>').join('')
         +'</tbody></table></div>'
       : 'Nothing usable found.');
   $('btnCommit').disabled = !items.length;
@@ -3562,6 +4763,11 @@ function renderCitations(){
    +'<li><b>The INFO-I 101 lab.</b> You said its times were wrong but not what they should be, so it is still marked unresolved rather than quietly changed to something plausible.</li>'
    +'<li><b>INFO-T 100 credit hours.</b> The bulletin says 1–3, variable by section. Left blank.</li>'
    +'<li><b>BUS-X 101 as a course code, and its 1.5 credits.</b> Your figures. I could not find BUS-X 101 in a bulletin I could reach. What I could verify is Kelley\u2019s GenAI 101 content — and that the free IU Expand version of it explicitly does <em>not</em> carry degree credit, which means your for-credit section is a different offering and your syllabus governs it.</li>'
+   +'<li><b>Football home game dates.</b> Two secondary schedule roundups gave different dates for the same games. I kept the set whose dates all land on Saturdays and match the stated days of week, tagged every row Reported, and linked the official schedule as the authority. Only seven of the eight home games are accounted for — I could not confirm the eighth.</li>'
+   +'<li><b>Everything except football.</b> No basketball, soccer, volleyball or baseball schedule was available to me, so none is pre-loaded. The access rules for each sport are verified; the fixtures are not.</li>'
+   +'<li><b>Job ratings.</b> There is no public database of what it is like to work a given campus job. Flexibility and student-experience scores are yours to enter and are tagged as your input wherever they appear. The $10.15 IU student minimum is IU\u2019s own figure; the $13.56–$17.12 market band is a salary aggregator, not IU.</li>'
+   +'<li><b>Food nutrition values.</b> Reference values for standard portions from published USDA-derived charts, <em>not</em> IU menu data. Portion sizes and preparation at a given hall will differ. Every value is editable and IU\u2019s own per-item nutrition is on Nutrislice, linked from the builder. The allergy filter is a planning aid and knows nothing about cross-contact.</li>'
+   +'<li><b>Intramural and club schedules.</b> Set per league on IMLeagues once you are rostered, so nothing could be pre-loaded. The league formats — three games plus playoffs for competitive, five without for recreational — are verified.</li>'
    +'<li><b>Walking times.</b> Not fetched. Every routing and geocoding service is blocked from the environment this was built in, and a published page cannot query Google\u2019s Distance Matrix without a key. The page instead derives exactly which routes your timetable needs and hands you the Google Maps link for each.</li>'
    +'<li><b>Retail prices behind the estimated deal values.</b> Where a source stated only a student price and not a standard one, the saving is left blank for you rather than inferred.</li>'
    +'</ul>';
@@ -3572,7 +4778,8 @@ function renderCitations(){
    ====================================================================== */
 function renderAll(){
   derive();
-  renderGeneral(); renderCourses(); renderDining(); renderDeals(); renderTracker(); renderData();
+  renderGeneral(); renderCourses(); renderDining(); renderLife(); renderWork();
+  renderDeals(); renderTracker(); renderData();
 }
 function showTab(name){
   S.ui.tab=name; save();
@@ -3584,7 +4791,7 @@ function showTab(name){
   qsa('section.tab').forEach(s=> s.classList.toggle('on', s.id==='tab-'+name));
   window.scrollTo({top:0, behavior:'instant'});
 }
-const TAB_ORDER=['general','courses','dining','deals','tracker','data'];
+const TAB_ORDER=['general','courses','dining','life','work','deals','tracker','data'];
 qsa('nav.tabbar button').forEach(b=>{
   b.addEventListener('click', ()=>showTab(b.dataset.tab));
   b.addEventListener('keydown', e=>{
@@ -3638,6 +4845,7 @@ document.addEventListener('input', e=>{
     const f=t.dataset.dining;
     if(f==='weightUnit') S.dining.weightUnit=t.value;
     else S.dining[f] = t.value===''? null : +t.value;
+    if(f==='proteinTarget'){ save(); clearTimeout(window.__pv); window.__pv=setTimeout(()=>{ derive(); renderFood(); }, 500); return; }
     if(f==='dollarsStart' && S.dining.dollarsLeft==null) S.dining.dollarsLeft=+t.value;
   }
   else if(t.dataset.dealval!==undefined){ S.deals.val[t.dataset.dealval]= t.value===''? '' : +t.value; save(); derive(); renderDeals(); renderGeneral(); return; }
@@ -3650,6 +4858,20 @@ document.addEventListener('input', e=>{
     const row=t.closest('div[style*="border-radius"]'); /* light refresh of the header pills only */
     clearTimeout(window.__gt); window.__gt=setTimeout(()=>{ renderTracker(); }, 700);
     return;
+  }
+  else if(t.dataset.social!==undefined){
+    S.social[t.dataset.social] = +t.value;
+    const lab=t.previousElementSibling;
+    if(lab) lab.textContent='Protected social hours a week — '+rnd(+t.value,0)+'h';
+    save(); clearTimeout(window.__sc2); window.__sc2=setTimeout(renderAll, 420); return;
+  }
+  else if(t.dataset.jobw!==undefined){
+    S.jobW[t.dataset.jobw] = +t.value;
+    save(); derive(); renderWork(); return;
+  }
+  else if(t.id==='tripMins'){
+    S.tripMins = Math.max(0, +t.value||0);
+    save(); clearTimeout(window.__tm); window.__tm=setTimeout(()=>{ derive(); renderTrips(); }, 450); return;
   }
   else if(t.dataset.walkpair!==undefined){
     S.walk=S.walk||{};
@@ -3676,13 +4898,35 @@ document.addEventListener('change', e=>{
     const a=(S.track.assignments||[]).find(x=>x.id===t.dataset.asgdone);
     if(a){ a.done=t.checked; save(); renderAll(); } return;
   }
+  if(t.dataset.avoid!==undefined){
+    const a=t.dataset.avoid, arr=S.dining.avoid||[];
+    S.dining.avoid = t.checked ? arr.concat([a]).filter((v,i,x)=>x.indexOf(v)===i) : arr.filter(x=>x!==a);
+    save(); derive(); renderFood(); return;
+  }
+  if(t.dataset.eve!==undefined){
+    const dw=+t.dataset.eve; const arr=S.social.protectEvenings||[];
+    S.social.protectEvenings = t.checked ? arr.concat([dw]).filter((v,i,a)=>a.indexOf(v)===i) : arr.filter(x=>x!==dw);
+    save(); renderAll(); return;
+  }
+  if(t.dataset.going!==undefined){
+    const g=S.sports.games[t.dataset.going]=S.sports.games[t.dataset.going]||{};
+    g.going=t.checked; save(); derive(); renderGames(); renderGeneral(); return;
+  }
+  if(t.dataset.claimed!==undefined){
+    const g=S.sports.games[t.dataset.claimed]=S.sports.games[t.dataset.claimed]||{};
+    g.claimed=t.checked; save(); derive(); renderGames(); return;
+  }
+  if(t.dataset.jobhave!==undefined){
+    const j=(S.jobs||[]).find(x=>x.id===t.dataset.jobhave);
+    if(j){ j.have=t.checked; save(); renderAll(); } return;
+  }
   if(t.id==='showMeals'){ S.ui.showMeals=t.checked; save(); derive(); renderWeekGrid(); return; }
   if(t.dataset.dining==='weightUnit'){ S.dining.weightUnit=t.value; save(); derive(); renderDiet(); return; }
   if(t.id==='pasteKind'){ if($('pasteBox').value.trim()) parsePaste(); return; }
 });
 
 document.addEventListener('click', e=>{
-  const t=e.target.closest('[data-plan-pick],[data-dealfilter],[data-delcourse],[data-delgrade],[data-addgrade],[data-scaffold],[data-delasg],[data-delann],[data-dellog],[data-delsrc],[data-retest],button,a');
+  const t=e.target.closest('[data-plan-pick],[data-dealfilter],[data-delcourse],[data-delgrade],[data-addgrade],[data-scaffold],[data-delasg],[data-delann],[data-dellog],[data-delsrc],[data-retest],[data-delcommit],[data-deltrip],[data-planweekend],[data-sport],[data-delgame],[data-deljob],[data-editjob],[data-diet],[data-meal],[data-addtray],[data-editfood],[data-hidefood],[data-trayq],[data-deltray],[data-loadopt],button,a');
   if(!t) return;
   const id=t.id, ds=t.dataset;
 
@@ -3716,6 +4960,30 @@ document.addEventListener('click', e=>{
   if(ds.dellog){ S.dining.log=S.dining.log.filter(x=>x.id!==ds.dellog); save(); renderAll(); return; }
   if(ds.delsrc){ S.sources=S.sources.filter(x=>x.id!==ds.delsrc); save(); renderData(); toast('Source removed.'); return; }
   if(ds.retest){ const s=S.sources.find(x=>x.id===ds.retest); if(s) testSource(s); return; }
+  if(ds.delcommit){ S.commitments=S.commitments.filter(x=>x.id!==ds.delcommit); save(); renderAll(); return; }
+  if(ds.deltrip){ S.trips=S.trips.filter(x=>x.id!==ds.deltrip); save(); renderAll(); return; }
+  if(ds.planweekend){ addTripDialog(ds.planweekend); return; }
+  if(ds.sport){ S.sports.interest[ds.sport]=!S.sports.interest[ds.sport]; save(); derive(); renderGames(); renderGeneral(); return; }
+  if(ds.delgame){ S.sports.custom=(S.sports.custom||[]).filter(x=>x.id!==ds.delgame); save(); derive(); renderGames(); return; }
+  if(ds.deljob){ S.jobs=S.jobs.filter(x=>x.id!==ds.deljob); save(); renderAll(); return; }
+  if(ds.editjob){ addJobDialog(S.jobs.find(x=>x.id===ds.editjob)); return; }
+  if(ds.diet){ S.dining.diet=ds.diet; save(); derive(); renderFood(); return; }
+  if(ds.meal){ S.dining.meal=ds.meal; save(); derive(); renderFood(); return; }
+  if(ds.addtray){ trayAdd(ds.addtray, 1); return; }
+  if(ds.trayq){ const [fid,dq]=ds.trayq.split(':'); trayAdd(fid, +dq); return; }
+  if(ds.deltray){
+    const k=S.dining.meal||'lunch';
+    S.dining.tray[k]=(S.dining.tray[k]||[]).filter(x=>x.id!==ds.deltray);
+    save(); derive(); renderTray(); return; }
+  if(ds.hidefood){
+    S.dining.hidden=(S.dining.hidden||[]).concat([ds.hidefood]);
+    save(); derive(); renderFood(); toast('Hidden. It will not appear in any generated option either.','warn'); return; }
+  if(ds.editfood){ editFoodDialog(ds.editfood); return; }
+  if(ds.loadopt){
+    const op=(window.__mealOpts||[])[+ds.loadopt]; if(!op) return;
+    const k=S.dining.meal||'lunch';
+    S.dining.tray[k]=op.items.map(f=>({id:f.id, qty:1}));
+    save(); derive(); renderTray(); toast('Loaded "'+op.name+'". Edit it from the tray.','good'); return; }
 
   switch(id){
     case 'btnConfirmTimes':
@@ -3764,6 +5032,16 @@ document.addEventListener('click', e=>{
       break; }
     case 'btnRegen': derive(); renderWeekGrid(); renderGeneral(); toast('Plan rebuilt from your current settings.','good'); break;
     case 'btnAddCourse': addCourseDialog(); break;
+    case 'btnAddCommit': addCommitDialog(); break;
+    case 'btnAddFood': editFoodDialog(null); break;
+    case 'btnGenMeals': derive(); renderMealOptions(); toast('Rebuilt from your current filters.','good'); break;
+    case 'btnClearTray': {
+      const k=S.dining.meal||'lunch'; S.dining.tray[k]=[]; save(); derive(); renderTray(); break; }
+    case 'btnUnhide': S.dining.hidden=[]; save(); derive(); renderFood(); toast('All items shown again.','good'); break;
+    case 'btnAddTrip': addTripDialog(); break;
+    case 'btnAddGame': addGameDialog(); break;
+    case 'btnAddJob': addJobDialog(); break;
+    case 'btnJobTemplates': case 'btnJobTemplates2': jobTemplateDialog(); break;
     case 'btnAddAsg': addAsgDialog(); break;
     case 'btnAddAnn': addAnnDialog(); break;
     case 'btnAddDeal': addDealDialog(); break;
@@ -3862,6 +5140,193 @@ function addDealDialog(){
       save(); derive(); renderDeals(); renderGeneral(); toast('Added.','good');
     }}]);
 }
+function dayPicker(cls, sel){
+  return '<div class="row" style="gap:11px">'+[1,2,3,4,5,6,0].map(dw=>
+    '<label class="row" style="gap:4px;font-size:12.5px"><input type="checkbox" class="'+cls+'" value="'+dw+'"'
+    +((sel||[]).indexOf(dw)>=0?' checked':'')+'> '+DAYS[dw]+'</label>').join('')+'</div>';
+}
+function addCommitDialog(){
+  modal('Block out a commitment',
+    '<div class="grid g2">'
+    +'<div><label class="f">What is it</label><select id="ckKind">'
+      + Object.keys(CKIND).map(k=>'<option value="'+k+'">'+esc(CKIND[k].label)+'</option>').join('')+'</select>'
+      +'<div class="hint" id="ckHint">'+esc(CKIND.gym.note)+'</div></div>'
+    +'<div><label class="f">Name it</label><input id="ckLabel" placeholder="Lifting, IM soccer, Luddy club…"></div>'
+    +'<div><label class="f">Repeats</label><select id="ckRep"><option value="week">Every week</option><option value="once">One-off</option></select></div>'
+    +'<div id="ckDateWrap" style="display:none"><label class="f">Date</label><input type="date" id="ckDate" value="'+todayISO()+'"></div>'
+    +'<div style="grid-column:1/-1" id="ckDaysWrap"><label class="f">Days</label>'+dayPicker('ckDay',[])+'</div>'
+    +'<div><label class="f">Start</label><input type="time" id="ckS" value="17:30"></div>'
+    +'<div><label class="f">End</label><input type="time" id="ckE" value="19:00"></div>'
+    +'<div style="grid-column:1/-1"><label class="f">Where / note</label><input id="ckNote" placeholder="SRSC, IMLeagues field 3…"></div>'
+    +'</div>'
+    +'<div class="note acc" style="margin-top:11px">The study planner treats this exactly like a lecture: it will not schedule over it. How much it counts toward your social floor depends on the kind you pick.</div>',
+    [{label:'Cancel'},{label:'Block it out',primary:true,onClick:()=>{
+      const rep=$('ckRep').value;
+      const days=qsa('.ckDay').filter(c=>c.checked).map(c=>+c.value);
+      if(rep==='week' && !days.length){ toast('Pick at least one day.','bad'); return true; }
+      const a=toMin($('ckS').value), b=toMin($('ckE').value);
+      if(!(b>a)){ toast('The end time has to be after the start.','bad'); return true; }
+      S.commitments.push({id:uid(), kind:$('ckKind').value, label:$('ckLabel').value.trim(),
+        weekly: rep==='week', date: rep==='once'?$('ckDate').value:'', days,
+        start:$('ckS').value, end:$('ckE').value, loc:$('ckNote').value.trim(), note:''});
+      save(); renderAll(); toast('Blocked out. The study plan has moved around it.','good');
+    }}]);
+  const sync=()=>{
+    const once=$('ckRep').value==='once';
+    $('ckDateWrap').style.display = once?'':'none';
+    $('ckDaysWrap').style.display = once?'none':'';
+  };
+  $('ckRep').onchange=sync;
+  $('ckKind').onchange=()=>{ $('ckHint').textContent=CKIND[$('ckKind').value].note; };
+}
+
+function addTripDialog(friISO){
+  const out = friISO || isoAdd(todayISO(), (5 - dowOf(todayISO()) + 7) % 7 || 7);
+  modal('Plan a trip home',
+    '<div class="grid g2">'
+    +'<div><label class="f">Label</label><input id="tpL" placeholder="Home for the weekend"></div>'
+    +'<div><label class="f">One way (min)</label><input type="number" id="tpM" min="0" max="600" step="5" value="'+S.tripMins+'"></div>'
+    +'<div><label class="f">Leave</label><input type="date" id="tpO" value="'+out+'"></div>'
+    +'<div><label class="f">…at</label><input type="time" id="tpOA" value="17:00"></div>'
+    +'<div><label class="f">Back</label><input type="date" id="tpB" value="'+isoAdd(out,2)+'"></div>'
+    +'<div><label class="f">…by</label><input type="time" id="tpBA" value="18:00"></div>'
+    +'</div>'
+    +'<div class="note acc" style="margin-top:11px">This will work out which classes and commitments the window covers, how much planned study it displaces, and whether anything is due within two days of you getting back.</div>',
+    [{label:'Cancel'},{label:'Add trip',primary:true,onClick:()=>{
+      if(!$('tpO').value || !$('tpB').value){ toast('Both dates, please.','bad'); return true; }
+      if($('tpB').value < $('tpO').value){ toast('You cannot get back before you leave.','bad'); return true; }
+      S.tripMins = Math.max(0, +$('tpM').value||0);
+      S.trips.push({id:uid(), label:$('tpL').value.trim()||'Home', out:$('tpO').value, outAt:$('tpOA').value,
+                    back:$('tpB').value, backAt:$('tpBA').value});
+      save(); renderAll(); toast('Trip added.','good');
+    }}]);
+}
+
+function addGameDialog(){
+  modal('Add a home game',
+    '<div class="grid g2">'
+    +'<div><label class="f">Sport</label><select id="ggS">'+SPORTS.map(x=>'<option value="'+x.id+'">'+esc(x.name)+'</option>').join('')+'</select></div>'
+    +'<div><label class="f">Opponent</label><input id="ggO" placeholder="Michigan State"></div>'
+    +'<div><label class="f">Date</label><input type="date" id="ggD" value="'+todayISO()+'"></div>'
+    +'<div><label class="f">Start</label><input type="time" id="ggT" value="19:00"></div>'
+    +'<div><label class="f">Block out (min)</label><input type="number" id="ggM" min="30" max="480" step="15" value="180"><div class="hint">Travel, queueing and the game itself, not just the clock.</div></div>'
+    +'</div>'
+    +'<div class="note warn" style="margin-top:11px">Only the football home schedule is pre-loaded, and even that is from secondary sources. Copy anything else from the official schedule rather than from memory.'
+    +'<div class="row" style="margin-top:9px"><a class="btn sm" href="https://iuhoosiers.com/sports/tickets/schedule" target="_blank" rel="noopener">Official schedules ↗</a></div></div>',
+    [{label:'Cancel'},{label:'Add game',primary:true,onClick:()=>{
+      const opp=$('ggO').value.trim(); if(!opp){ toast('Who are they playing?','bad'); return true; }
+      const sp=$('ggS').value;
+      S.sports.custom.push({id:'u'+uid(), sport:sp, opp, date:$('ggD').value, start:$('ggT').value,
+                            mins:+$('ggM').value||180, prov:'mine', custom:true});
+      S.sports.interest[sp]=true;
+      save(); derive(); renderGames(); toast('Added.','good');
+    }}]);
+}
+
+function addJobDialog(existing){
+  const j = existing || {benefits:[], days:[], flex:3, exp:3, pay:'', hours:'', start:'16:00', end:'20:00'};
+  modal(existing?'Edit job':'Add a job to compare',
+    '<div class="grid g2">'
+    +'<div><label class="f">Role</label><input id="jbT" value="'+esc(j.title||'')+'" placeholder="Library desk assistant"></div>'
+    +'<div><label class="f">Employer</label><input id="jbE" value="'+esc(j.employer||'')+'" placeholder="IU Libraries"></div>'
+    +'<div><label class="f">Pay per hour</label><input type="number" id="jbP" step="0.25" min="0" value="'+esc(j.pay==null?'':j.pay)+'" placeholder="'+WAGE.min+' minimum"></div>'
+    +'<div><label class="f">Hours a week</label><input type="number" id="jbH" step="0.5" min="0" value="'+esc(j.hours==null?'':j.hours)+'" placeholder="leave blank to use the shift pattern"></div>'
+    +'<div style="grid-column:1/-1"><label class="f">Shift days</label>'+dayPicker('jbDay', j.days)+'</div>'
+    +'<div><label class="f">Shift start</label><input type="time" id="jbS" value="'+esc(j.start||'16:00')+'"></div>'
+    +'<div><label class="f">Shift end</label><input type="time" id="jbF" value="'+esc(j.end||'20:00')+'"></div>'
+    +'<div><label class="f">Flexibility — '+(j.flex||3)+'/5</label><input type="range" id="jbFl" min="1" max="5" step="1" value="'+(j.flex||3)+'" style="padding:0"><div class="hint">How easily do shifts move around an exam?</div></div>'
+    +'<div><label class="f">Student experience — '+(j.exp||3)+'/5</label><input type="range" id="jbEx" min="1" max="5" step="1" value="'+(j.exp||3)+'" style="padding:0"><div class="hint">What people who work there actually say.</div></div>'
+    +'<div style="grid-column:1/-1"><label class="f">Benefits</label><div class="row" style="gap:9px">'
+      + JOB_BENEFITS.map(b=>'<label class="row" style="gap:4px;font-size:12.5px"><input type="checkbox" class="jbB" value="'+esc(b)+'"'
+        +((j.benefits||[]).indexOf(b)>=0?' checked':'')+'> '+esc(b)+'</label>').join('')+'</div></div>'
+    +'<div style="grid-column:1/-1"><label class="row" style="gap:7px"><input type="checkbox" id="jbOn"'+(j.onCampus?' checked':'')+'> On campus</label></div>'
+    +'</div>'
+    +'<div class="note warn" style="margin-top:11px">Flexibility and student experience are your judgement, tagged as your input everywhere they appear. Nothing here rates a real employer on your behalf.</div>',
+    [{label:'Cancel'},{label:existing?'Save':'Add job',primary:true,onClick:()=>{
+      const title=$('jbT').value.trim(); if(!title){ toast('Give the role a name.','bad'); return true; }
+      const rec={id: existing?existing.id:uid(), title, employer:$('jbE').value.trim(),
+        pay: $('jbP').value===''?'':+$('jbP').value, hours: $('jbH').value===''?'':+$('jbH').value,
+        days: qsa('.jbDay').filter(c=>c.checked).map(c=>+c.value),
+        start:$('jbS').value, end:$('jbF').value, flex:+$('jbFl').value, exp:+$('jbEx').value,
+        benefits: qsa('.jbB').filter(c=>c.checked).map(c=>c.value),
+        onCampus:$('jbOn').checked, have: existing?existing.have:false};
+      if(existing) S.jobs = S.jobs.map(x=>x.id===existing.id?rec:x); else S.jobs.push(rec);
+      save(); renderAll(); toast(existing?'Saved.':'Added — scored against your weights and your week.','good');
+    }}]);
+  const bind=(id,label)=>{ const el2=$(id); el2.oninput=()=>{ el2.previousElementSibling.textContent=label+' — '+el2.value+'/5'; }; };
+  bind('jbFl','Flexibility'); bind('jbEx','Student experience');
+}
+
+function jobTemplateDialog(){
+  modal('Common campus roles',
+    '<p style="color:var(--ink-2);font-size:13px">Starting points, not listings. Each one comes in with the benefits that role usually carries and <b>no pay figure</b> — you fill that in from the actual posting, because advertised rates vary by department and I will not guess one.</p>'
+    +'<div class="stack" style="margin-top:12px">'+JOB_TEMPLATES.map((t,i)=>
+      '<label class="srcrow" style="cursor:pointer"><div><div class="row" style="gap:8px;align-items:baseline">'
+      +'<input type="checkbox" class="jtSel" value="'+i+'"><b>'+esc(t.title)+'</b>'
+      +'<span class="pill">'+esc(t.employer)+'</span>'+(t.onCampus?'<span class="pill" style="border-color:rgba(57,135,229,.4)">on campus</span>':'')+'</div>'
+      +'<div class="dmeta">'+t.benefits.map(b=>'<span class="pill">'+esc(b)+'</span>').join('')+'</div></div></label>').join('')+'</div>',
+    [{label:'Cancel'},{label:'Add selected',primary:true,onClick:()=>{
+      const sel=qsa('.jtSel').filter(c=>c.checked).map(c=>JOB_TEMPLATES[+c.value]);
+      if(!sel.length){ toast('Nothing selected.','warn'); return true; }
+      sel.forEach(t=> S.jobs.push({id:uid(), title:t.title, employer:t.employer, pay:'', hours:'',
+        days:[], start:'16:00', end:'20:00', flex:3, exp:3, benefits:t.benefits.slice(), onCampus:t.onCampus, have:false}));
+      save(); renderAll(); toast('Added '+sel.length+' role'+(sel.length===1?'':'s')+'. Fill in pay and shift days to score them.','good');
+    }}]);
+}
+
+function trayAdd(fid, dq){
+  const k=S.dining.meal||'lunch';
+  S.dining.tray[k]=S.dining.tray[k]||[];
+  const ex=S.dining.tray[k].find(x=>x.id===fid);
+  if(ex){ ex.qty=(ex.qty||1)+dq; if(ex.qty<1) S.dining.tray[k]=S.dining.tray[k].filter(x=>x.id!==fid); }
+  else if(dq>0) S.dining.tray[k].push({id:fid, qty:1});
+  save(); derive(); renderTray();
+  const tabs=$('mealTabs'); if(tabs) renderFood();
+}
+
+function editFoodDialog(fid){
+  const lib=D.dining.lib;
+  const f = fid ? lib.find(x=>x.id===fid) : null;
+  const isNew = !f;
+  const cur = f || {n:'', st:'entree', portion:'1 serving', kcal:'', p:'', c:'', f:'', has:[], diet:['omni','vegetarian','pescatarian','vegan']};
+  modal(isNew?'Add a food':'Edit '+cur.n,
+    (isNew?'':'<div class="note warn" style="margin-bottom:12px"><b>Correct this against Nutrislice, not against memory.</b> IU publishes real per-item nutrition for the actual menu. Saving an edit marks the item as yours; ticking the box below marks it as checked against IU\u2019s own data.'
+      +'<div class="row" style="margin-top:9px"><a class="btn sm" href="https://indiana-dining.nutrislice.com/" target="_blank" rel="noopener">Open Nutrislice ↗</a></div></div>')
+    +'<div class="grid g2">'
+    +'<div><label class="f">Name</label><input id="fdN" value="'+esc(cur.n)+'"'+(isNew?'':' disabled')+'></div>'
+    +'<div><label class="f">Station</label><select id="fdSt"'+(isNew?'':' disabled')+'>'
+      + Object.keys(STATIONS).map(k=>'<option value="'+k+'"'+(cur.st===k?' selected':'')+'>'+esc(STATIONS[k])+'</option>').join('')+'</select></div>'
+    +'<div><label class="f">Portion</label><input id="fdP" value="'+esc(cur.portion)+'"></div>'
+    +'<div><label class="f">Calories</label><input type="number" id="fdK" min="0" step="5" value="'+esc(cur.kcal)+'"></div>'
+    +'<div><label class="f">Protein (g)</label><input type="number" id="fdPr" min="0" step="0.5" value="'+esc(cur.p)+'"></div>'
+    +'<div><label class="f">Carbs (g)</label><input type="number" id="fdC" min="0" step="0.5" value="'+esc(cur.c)+'"></div>'
+    +'<div><label class="f">Fat (g)</label><input type="number" id="fdF" min="0" step="0.5" value="'+esc(cur.f)+'"></div>'
+    +'<div style="grid-column:1/-1"><label class="f">Contains</label><div class="row" style="gap:9px">'
+      + ALLERGENS.map(a=>'<label class="row" style="gap:4px;font-size:12.5px"><input type="checkbox" class="fdHas" value="'+a.id+'"'
+        +((cur.has||[]).indexOf(a.id)>=0?' checked':'')+(isNew?'':' disabled')+'> '+esc(a.n)+'</label>').join('')+'</div></div>'
+    + (isNew?'<div style="grid-column:1/-1"><label class="f">Suitable for</label><div class="row" style="gap:9px">'
+        + DIETS.filter(x=>x.id!=='omni').map(dd=>'<label class="row" style="gap:4px;font-size:12.5px"><input type="checkbox" class="fdDiet" value="'+dd.id+'"> '+esc(dd.n)+'</label>').join('')+'</div></div>'
+      : '<div style="grid-column:1/-1"><label class="row" style="gap:7px"><input type="checkbox" id="fdChk"'+(cur.verified?' checked':'')+'> I checked these numbers against IU\u2019s published nutrition</label></div>')
+    +'</div>',
+    [{label:'Cancel'}].concat(isNew?[]:[{label:'Reset to reference',danger:true,onClick:()=>{
+        delete S.dining.edits[fid]; delete S.dining.checked[fid];
+        save(); derive(); renderFood(); toast('Back to the reference value.','warn'); }}])
+    .concat([{label:isNew?'Add food':'Save',primary:true,onClick:()=>{
+      const num=id=>{ const v=$(id).value; return v===''?null:+v; };
+      if(isNew){
+        const nm=$('fdN').value.trim(); if(!nm){ toast('Give it a name.','bad'); return true; }
+        S.dining.custom.push({id:'u'+uid(), n:nm, st:$('fdSt').value, portion:$('fdP').value.trim()||'1 serving',
+          kcal:num('fdK')||0, p:num('fdPr')||0, c:num('fdC')||0, f:num('fdF')||0,
+          has:qsa('.fdHas').filter(c=>c.checked).map(c=>c.value),
+          diet:['omni'].concat(qsa('.fdDiet').filter(c=>c.checked).map(c=>c.value)), custom:true});
+      } else {
+        S.dining.edits[fid] = {portion:$('fdP').value.trim(), kcal:num('fdK'), p:num('fdPr'), c:num('fdC'), f:num('fdF')};
+        if($('fdChk').checked) S.dining.checked[fid]=true; else delete S.dining.checked[fid];
+      }
+      save(); derive(); renderFood(); toast(isNew?'Added.':'Saved.','good');
+    }}]));
+}
+
 function logMeal(){
   const pay=$('lgPay').value, amt=$('lgAmt').value===''?null:+$('lgAmt').value;
   S.dining.log.push({id:uid(), date:$('lgDate').value||todayISO(), where:$('lgWhere').value, pay, amt});
@@ -3891,18 +5356,44 @@ function addSource(withTest){
 }
 function commitParse(){
   if(!parsed || !parsed.items.length) return;
-  let a=0, n2=0;
+  let a=0, n2=0, w=0, g=0;
   parsed.items.forEach(i=>{
-    if(i.type==='assignment'){
+    if(i.type==='weight'){
+      const c=S.courses.find(x=>x.code===i.code); if(!c) return;
+      c.grades=c.grades||[];
+      const ex=c.grades.find(x=>x.name===i.name);
+      if(ex){ ex.w=i.weight; } else { c.grades.push({name:i.name, w:i.weight, earned:'', max:''}); }
+      w++;
+    }
+    else if(i.type==='assignment'){
+      /* a graded item folds into the course's grade table as well as the deadline list */
+      if(i.score!=null && i.points){
+        const c=S.courses.find(x=>x.code===i.code);
+        if(c){
+          c.grades=c.grades||[];
+          const gr=c.grades.find(x=>x.name===i.group);
+          if(gr){
+            gr.earned = (+gr.earned||0) + (+i.score);
+            gr.max    = (+gr.max||0) + (+i.points);
+            g++;
+          }
+        }
+      }
+      if(!i.due) return;
       const dup=(S.track.assignments||[]).some(x=>x.name===i.name && x.due===i.due);
-      if(!dup){ S.track.assignments.push({id:uid(), code:i.code, name:i.name, due:i.due, weight:i.weight, done:false}); a++; }
+      if(!dup){ S.track.assignments.push({id:uid(), code:i.code, name:i.name, due:i.due, weight:i.weight, done:i.score!=null}); a++; }
     } else {
       const dup=(S.track.announcements||[]).some(x=>x.title===i.title && x.date===i.date);
       if(!dup){ S.track.announcements.push(i); n2++; }
     }
   });
   save(); renderAll();
-  toast('Imported '+a+' assignment'+(a===1?'':'s')+(n2?' and '+n2+' announcement'+(n2===1?'':'s'):'')+'. Duplicates were skipped.','good');
+  const bits=[];
+  if(a) bits.push(a+' assignment'+(a===1?'':'s'));
+  if(w) bits.push(w+' grade weight'+(w===1?'':'s'));
+  if(g) bits.push(g+' score'+(g===1?'':'s'));
+  if(n2) bits.push(n2+' announcement'+(n2===1?'':'s'));
+  toast('Imported '+(bits.length?bits.join(', '):'nothing new')+'. Duplicates were skipped.','good');
   $('btnCommit').disabled=true; parsed=null;
   $('parsePreview').className='empty'; $('parsePreview').textContent='Imported. Paste something else to continue.';
 }
@@ -3939,6 +5430,9 @@ function importDialog(){
   showTab(S.ui.tab||'general');
   const sm=$('showMeals'); if(sm) sm.checked=!!S.ui.showMeals;
   $('pasteBox').addEventListener('input', ()=>{ clearTimeout(window.__pt); window.__pt=setTimeout(parsePaste,500); });
+  $('foodSearch').addEventListener('input', ()=>{ clearTimeout(window.__fs); window.__fs=setTimeout(renderFoodList,220); });
+  $('foodStation').addEventListener('change', e=>{ window.__foodSt=e.target.value; renderFoodList(); });
+  $('foodProteinOnly').addEventListener('change', renderFoodList);
   if(!had){
     save();
     setTimeout(()=>toast('Loaded your four Fall 2026 courses. Confirm the meeting times on the Courses tab — they were read off a screenshot, not a data feed.','warn'), 700);
