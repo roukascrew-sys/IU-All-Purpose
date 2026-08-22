@@ -689,5 +689,19 @@ for _o,_n in [("accepting less study time than IU\\'s credit-hour minimum implie
 pathlib.Path('trine.html').write_text(out)
 assert pathlib.Path('index.html').read_text() == before, 'index.html was modified!'
 print(f'wrote trine.html — {len(LOG)} sections swapped')
+# ─────────────────────────────────────────────── artifact body for publishing
+body = out
+for pat in (r'^<!DOCTYPE html>\s*', r'<html lang="en">\s*', r'</html>\s*$',
+            r'<head>\s*', r'</head>\s*', r'<body>\s*', r'</body>\s*'):
+    body = re.sub(pat, '', body, flags=re.M)
+body = re.sub(r'<meta[^>]*>\s*', '', body)
+for tag in ('!doctype', 'html', 'head', 'body'):
+    if re.search(r'</?' + tag + r'[\s>]', body, flags=re.I):
+        sys.exit(f'ERROR: <{tag}> survived the artifact strip')
+if '<title>' not in body[:8192]:
+    sys.exit('ERROR: <title> must sit in the first 8KB')
+pathlib.Path('trine-artifact.html').write_text(body.strip() + '\n')
+print('wrote trine-artifact.html')
+
 if MISSES:
     print('MISSED anchors: ' + ', '.join(MISSES))
