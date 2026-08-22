@@ -599,6 +599,20 @@ ul.none{list-style:none;padding:0;margin:0}
     <div class="grid g2" style="margin-top:14px" id="mapList"></div>
   </div>
 
+  <div class="panel">
+    <div class="panel-hd"><div class="t">
+      <h2>Walking times between classes</h2>
+      <div class="d">Every walk your week actually requires, taken from your real meeting order. Measure each one once on Google Maps and the gap analysis below turns from a question mark into a number.</div>
+    </div>
+    <div class="row"><button class="btn sm" id="btnOpenAllWalks">Open all routes</button></div>
+    </div>
+    <div id="walkMatrix"></div>
+    <div class="divider"></div>
+    <div class="sect-lbl">Passing periods — day by day</div>
+    <div class="scroll"><div id="transTable"></div></div>
+    <div class="srcline" id="walkSrc"></div>
+  </div>
+
   <div class="split">
     <div class="panel">
       <div class="panel-hd"><div class="t">
@@ -979,7 +993,11 @@ const CITE = {
   monroe:  {t:'Monroe County History Center', o:'Monroe County Historical Society', u:'https://monroehistory.org/'},
   nbcDeals:{t:'37+ Best College Discounts to Shop in 2026', o:'NBC Select', u:'https://www.nbcnews.com/select/shopping/best-college-discounts-2026-rcna590001'},
   perplexEdu:{t:'Perplexity for students', o:'Perplexity', u:'https://www.perplexity.ai/students'},
-  activityFee:{t:'Recreational Sports membership via student activity fee', o:'IU Recreational Sports', u:'https://recsports.indiana.edu/join-us/students.html'}
+  activityFee:{t:'Recreational Sports membership via student activity fee', o:'IU Recreational Sports', u:'https://recsports.indiana.edu/join-us/students.html'},
+  genaiKelley:{t:'IU opens free generative AI course to anyone worldwide; class presented by Kelley School', o:'IU Kelley School of Business', u:'https://blog.kelley.iu.edu/2026/04/16/iu-opens-free-generative-ai-course-to-anyone-worldwide-class-presented-by-kelley-school/'},
+  genaiNews:{t:'IU opens its free generative AI course to anyone worldwide', o:'IU News', u:'https://news.iu.edu/live/news/49928-iu-opens-its-free-generative-ai-course-to-anyone'},
+  genaiUits:{t:'GenAI 101', o:'IU University Information Technology Services', u:'https://uits.iu.edu/ai/genai-101.html'},
+  genaiExpand:{t:'GenAI 101 course listing', o:'IU Expand', u:'https://expand.iu.edu/browse/learningtech/gen-ai/courses/genai-101'}
 };
 function citeLine(id, extra){
   const c = CITE[id]; if(!c) return '';
@@ -1038,6 +1056,19 @@ const CATALOG = {
     watch:['Large-lecture memorisation course. Spaced retrieval beats re-reading by a wide margin here — schedule short repeat sessions rather than one long block.','It clears a GenEd N&M requirement, so the grade counts toward breadth as well as GPA.','Biological/psychophysiology units are where non-majors most often lose points — they are the least intuitive of the three perspectives.'],
     color:'--s5'
   },
+  'BUS-X 101':{
+    title:'GenAI 101', credits:null, creditsVerified:false, cite:'genaiKelley',
+    desc:'Kelley School of Business generative-AI course. Eight self-paced modules and sixteen concise lessons, each with practical takeaways and real-world applications. Module topics include Foundational Prompt Engineering, GenAI as a Thought Partner, and GenAI as a Productivity Amplifier. All tools and examples are built around publicly accessible platforms such as Google Gemini and ChatGPT.',
+    prereq:'No prior experience needed.',
+    topics:['Foundational prompt engineering','GenAI as a thought partner','GenAI as a productivity amplifier','Data storytelling','Fact-checking AI-generated content','Ethical AI use','Hands-on work in Gemini and ChatGPT'],
+    topicsCite:'genaiKelley',
+    reported:[
+      {claim:'The course carries a real-time conversational AI learning agent named Crimson, giving on-demand support to learners. Lead professor is Brian Williams, the Sam Frumer Professor of Accounting and chair of Kelley\u2019s Virtual Advanced Business Technologies Department.', where:'Kelley School of Business blog', u:'https://blog.kelley.iu.edu/2026/04/16/iu-opens-free-generative-ai-course-to-anyone-worldwide-class-presented-by-kelley-school/'},
+      {claim:'More than 114,000 students, staff and faculty have enrolled since it launched in August, and it is now open free to anyone worldwide through IU Expand.', where:'IU News', u:'https://news.iu.edu/live/news/49928-iu-opens-its-free-generative-ai-course-to-anyone'}
+    ],
+    watch:['<b>A discrepancy worth resolving in week 1.</b> The publicly documented GenAI 101 \u2014 the free IU Expand version \u2014 awards a resume credential that explicitly <em>does not</em> appear on transcripts and does not count toward degree credit. You have told me yours is BUS-X 101 for 1.5 credits, so you are in a different, for-credit Kelley section. The content above is verified for GenAI 101 as publicly described; your syllabus is the only authority on how the credit-bearing version is assessed.','Fully asynchronous with no fixed meeting, which makes it the first thing to slip. It is scheduled here as protected self-paced blocks precisely so it does not become the course you do at 1 a.m. in December.','Eight modules across roughly fifteen teaching weeks is about one module every two weeks. If you fall two modules behind, you are a month behind \u2014 that is the failure mode for every async course.'],
+    color:'--s7'
+  },
   'INFO-T 100':{
     title:'Topics in Informatics Technology', credits:null, creditsVerified:false, cite:'infoT100',
     desc:'Variable topic. The course serves as an introduction to a specific information technology in a hands-on setting. Emphasis is on problem solving techniques using technology.',
@@ -1055,7 +1086,7 @@ const PLANS = [
   {id:'scan25',   name:'Meal Scan 25',      scans:'25 scans per semester', scansNum:25, unlimited:false, dollars:25,  combo:null, note:'Elective plan.'},
   {id:'scan125',  name:'Meal Scan 125',     scans:'125 scans per semester', scansNum:125, unlimited:false, dollars:200, combo:null, note:'Elective plan.'},
   {id:'classic',  name:'IU 7-Day Classic',  scans:'Unrestricted scans, 7 days a week', scansNum:null, unlimited:true, dollars:50,  combo:3,    note:'Lowest of the three unlimited plans.'},
-  {id:'expanded', name:'IU 7-Day Expanded', scans:'Unrestricted scans, 7 days a week', scansNum:null, unlimited:true, dollars:250, combo:5,    comboUncertain:true, note:'The middle unlimited plan.'},
+  {id:'expanded', name:'IU 7-Day Expanded', scans:'Unrestricted scans, 7 days a week', scansNum:null, unlimited:true, dollars:250, combo:5,    comboConfirmed:true, note:'The middle unlimited plan. Your plan.'},
   {id:'premium',  name:'IU 7-Day Premium',  scans:'Unrestricted scans, 7 days a week', scansNum:null, unlimited:true, dollars:450, combo:null, note:'Highest of the three unlimited plans.'}
 ];
 
@@ -1273,37 +1304,43 @@ const DEAL_GROUPS = [
    ====================================================================== */
 function defaults(){
   return {
-    v:1,
+    v:2,
     meta:{term:TERM.name, dorm:'McNutt Quad', dormAddr:'1101 N. Fee Lane, Bloomington, IN 47406'},
     courses:[
       {id:'c1', code:'CSCI-C 212', credits:4, instructor:'', diff:1.35,
        meetings:[
-         {type:'LEC', section:'0100', classNo:'5412', days:[1,3], start:'16:00', end:'17:15', loc:'', tEst:true},
-         {type:'LAB', section:'0124', classNo:'9335', days:[4],   start:'14:00', end:'15:45', loc:'', tEst:true}
+         {type:'LEC', section:'0100', classNo:'5412', days:[1,3], start:'16:00', end:'17:15', loc:'', bldg:'luddy', tEst:true},
+         {type:'LAB', section:'0124', classNo:'9335', days:[4],   start:'14:00', end:'15:45', loc:'', bldg:'luddy', tEst:true}
        ], grades:[], notes:''},
       {id:'c2', code:'INFO-I 101', credits:4, instructor:'', diff:1.0,
        meetings:[
-         {type:'LEC', section:'0301', classNo:'4230', days:[4],   start:'09:45', end:'11:00', loc:'', tEst:true},
-         {type:'LAB', section:'0328', classNo:'5902', days:[2,4], start:'17:45', end:'19:00', loc:'', tEst:true}
+         /* Tue/Thu 9:45–11:00 stated directly by you — treated as confirmed. */
+         {type:'LEC', section:'0301', classNo:'4230', days:[2,4], start:'09:45', end:'11:00', loc:'', bldg:'luddy', tEst:false},
+         /* Still the one meeting I have no confirmed reading of. See the lab notice. */
+         {type:'LAB', section:'0328', classNo:'5902', days:[2,4], start:'17:45', end:'19:00', loc:'', bldg:'luddy', tEst:true, disputed:true}
        ], grades:[], notes:''},
       {id:'c3', code:'PSY-P 101', credits:3, instructor:'', diff:1.0,
        meetings:[
-         {type:'LEC', section:'', classNo:'', days:[1,3,5], start:'11:30', end:'12:20', loc:'', tEst:true}
+         {type:'LEC', section:'', classNo:'', days:[1,3,5], start:'11:30', end:'12:20', loc:'', bldg:'psych', tEst:true}
        ], grades:[], notes:''},
       {id:'c4', code:'INFO-T 100', credits:null, instructor:'', diff:0.85,
        meetings:[
-         {type:'LEC', section:'', classNo:'', days:[1,3], start:'12:40', end:'13:30', loc:'', tEst:true}
-       ], grades:[], notes:''}
+         {type:'LEC', section:'', classNo:'', days:[1,3], start:'12:40', end:'13:30', loc:'', bldg:'luddy', tEst:true}
+       ], grades:[], notes:''},
+      {id:'c5', code:'BUS-X 101', credits:1.5, instructor:'', diff:0.8,
+       online:true, meetings:[], grades:[], notes:''}
     ],
     plan:{
       hoursPerCredit:2.0, sleepTarget:8, wake:'07:30', bed:'23:30',
       maxDayHours:10, blockMin:75, breakMin:15, commuteMinPerTrip:10,
-      mealMin:{breakfast:30, lunch:40, dinner:45},
-      mealAt:{breakfast:'08:00', lunch:'12:30', dinner:'18:15'},
+      /* Chosen against the actual timetable, not by habit: 13:30 is the only
+         half-hour free on all five weekdays, and 19:10 clears the evening lab. */
+      mealMin:{breakfast:30, lunch:30, dinner:45},
+      mealAt:{breakfast:'08:00', lunch:'13:30', dinner:'19:10'},
       weekendStudyShare:0.22, confirmed:false
     },
     dining:{
-      planId:'expanded', priceSem:null, comboPerWeek:null,
+      planId:'expanded', priceSem:2000, comboPerWeek:5,
       dollarsStart:250, dollarsLeft:250, scansLeft:null, log:[],
       weight:null, weightUnit:'lb', kcal:2400
     },
@@ -1328,9 +1365,46 @@ function load(){
     const o = JSON.parse(raw);
     if(!o || typeof o!=='object') return false;
     S = deepMerge(defaults(), o);
+    migrate();
     return true;
   }catch(e){ return false; }
 }
+/* Saved state replaces whole arrays, so a browser that opened v1 would keep
+   the old timetable forever. Corrections the user has since given are applied
+   here, once, and only where the user has not already overridden them. */
+function migrate(){
+  const from = +S.v || 1;
+  if(from >= 2){ S.v = 2; return; }
+  const say = [];
+
+  const i101 = S.courses.find(c=>c.code==='INFO-I 101');
+  if(i101){
+    const lec = (i101.meetings||[]).find(m=>m.type==='LEC');
+    if(lec){ lec.days=[2,4]; lec.start='09:45'; lec.end='11:00'; lec.tEst=false; lec.bldg=lec.bldg||'luddy';
+             say.push('INFO-I 101 lecture moved to Tue/Thu 9:45'); }
+    const lab = (i101.meetings||[]).find(m=>m.type==='LAB');
+    if(lab){ lab.disputed=true; lab.tEst=true; lab.bldg=lab.bldg||'luddy'; }
+  }
+  S.courses.forEach(c=>(c.meetings||[]).forEach(m=>{
+    if(m.bldg==null) m.bldg = /^(CSCI|INFO)/.test(c.code) ? 'luddy' : (c.code.indexOf('PSY')===0 ? 'psych' : '');
+  }));
+  if(!S.courses.some(c=>c.code==='BUS-X 101')){
+    S.courses.push({id:'c5', code:'BUS-X 101', credits:1.5, instructor:'', diff:0.8,
+                    online:true, meetings:[], grades:[], notes:''});
+    say.push('BUS-X 101 added');
+  }
+  if(S.dining.priceSem==null){ S.dining.priceSem = 2000; say.push('meal plan price set to $2,000'); }
+  if(S.dining.comboPerWeek==null){ S.dining.comboPerWeek = 5; say.push('combo meals set to 5/week'); }
+  S.walk = S.walk || {};
+  if(S.plan.mealAt.lunch==='12:30'){ S.plan.mealAt.lunch='13:30'; S.plan.mealMin.lunch=30;
+    say.push('lunch moved to 1:30 (12:30 collided with INFO-T 100)'); }
+  if(S.plan.mealAt.dinner==='18:15'){ S.plan.mealAt.dinner='19:10';
+    say.push('dinner moved to 7:10 (6:15 collided with the INFO-I 101 lab)'); }
+  S.v = 2;
+  save();
+  if(say.length) setTimeout(()=>toast('Updated your saved data: '+say.join('; ')+'.','good'), 900);
+}
+
 function deepMerge(base, over){
   if(Array.isArray(base)) return Array.isArray(over) ? over : base;
   if(base && typeof base==='object' && over && typeof over==='object'){
@@ -1382,9 +1456,49 @@ function derive(){
   d.courses.forEach(c=> c.meets.forEach(mt=> d.byDay[mt.dow].push({...mt, course:c})));
   d.byDay.forEach(arr=> arr.sort((x,y)=> x.a-y.a));
 
+  /* --- transitions: every walk the week actually requires -------------- */
+  d.transitions = [];
+  const seen = {};
+  for(let dow=0; dow<7; dow++){
+    const list = d.byDay[dow];
+    if(!list.length) continue;
+    /* the walk from home to the first class, and from the last class home */
+    const legs = [];
+    legs.push({from:'mcnutt', to:list[0].m.bldg||'', gap:null, kind:'out', dow, at:list[0].a, course:list[0].course.code});
+    for(let i=1;i<list.length;i++){
+      legs.push({from:list[i-1].m.bldg||'', to:list[i].m.bldg||'', gap:list[i].a - list[i-1].b, kind:'between',
+                 dow, at:list[i].a, from_c:list[i-1].course.code+' '+list[i-1].m.type,
+                 to_c:list[i].course.code+' '+list[i].m.type, endPrev:list[i-1].b});
+    }
+    legs.push({from:list[list.length-1].m.bldg||'', to:'mcnutt', gap:null, kind:'home', dow,
+               at:list[list.length-1].b, course:list[list.length-1].course.code});
+    legs.forEach(l=>{
+      /* A walk is the same walk in both directions, so the key is order-free.
+         That turns five routes into three and halves what you have to measure. */
+      const key = [l.from, l.to].sort().join('|');
+      l.key = key;
+      l.same = l.from && l.from===l.to;
+      l.walk = l.same ? 0 : ((S.walk||{})[key]==null ? null : +S.walk[key]);
+      l.slack = (l.gap!=null && l.walk!=null) ? l.gap - l.walk : null;
+      d.transitions.push(l);
+      if(!seen[key]) seen[key] = {key, from:key.split('|')[0], to:key.split('|')[1],
+                                   same:l.same, walk:l.walk, count:0, kinds:{}};
+      seen[key].count++; seen[key].kinds[l.kind]=true;
+    });
+  }
+  d.walkPairs = Object.values(seen).filter(p=>p.from && p.to && !p.same);
+  d.walkKnown = d.walkPairs.filter(p=>p.walk!=null).length;
+  d.tight = d.transitions.filter(t=>t.slack!=null && t.slack < 5);
+
   /* --- commute: one trip out + one back per day with any class -------- */
   d.classDays = d.byDay.filter(a=>a.length>0).length;
-  d.commuteWeek = d.classDays * 2 * (p.commuteMinPerTrip/60);
+  /* If the home legs have been measured, use those minute-for-minute instead
+     of multiplying one flat guess across the week. */
+  const homeLegs = d.transitions.filter(t=>(t.kind==='out'||t.kind==='home') && t.walk!=null);
+  d.commuteMeasured = homeLegs.length>0 && homeLegs.length === d.transitions.filter(t=>t.kind==='out'||t.kind==='home').length;
+  d.commuteWeek = d.commuteMeasured
+    ? homeLegs.reduce((s2,t)=>s2+t.walk,0)/60
+    : d.classDays * 2 * (p.commuteMinPerTrip/60);
 
   /* --- fixed time budget --------------------------------------------- */
   const mealHrs = (p.mealMin.breakfast + p.mealMin.lunch + p.mealMin.dinner)/60 * 7;
@@ -1423,6 +1537,7 @@ function derive(){
   d.weeksTotal= Math.ceil(d.termDays/7);
 
   /* --- dining ---------------------------------------------------------- */
+  d.mealFit = fitMealWindows(d);
   d.dining = deriveDining(d);
 
   /* --- deals ----------------------------------------------------------- */
@@ -1543,6 +1658,42 @@ function buildStudyPlan(d){
   blocks.unplaced = need.reduce((s,n)=>s+Math.max(0,n.left),0);
   blocks.meals = meals;
   return blocks;
+}
+
+/* For each meal, the earliest window of the needed length inside its natural
+   band that is free on EVERY day you have class. Returns null when no such
+   window exists — which is itself the answer, and is said out loud. */
+function commonFreeWindows(d, minLen){
+  const days=[1,2,3,4,5].filter(dw=>(d.byDay[dw]||[]).length>0);
+  if(!days.length) return [];
+  const busy=[]; days.forEach(dw=>(d.byDay[dw]||[]).forEach(m=>busy.push({a:m.a,b:m.b})));
+  busy.sort((x,y)=>x.a-y.a);
+  const merged=[]; busy.forEach(w=>{ const l=merged[merged.length-1];
+    if(l && w.a<=l.b) l.b=Math.max(l.b,w.b); else merged.push({...w}); });
+  const wake=toMin(S.plan.wake), bed=toMin(S.plan.bed);
+  const out=[]; let cur=wake;
+  merged.forEach(w=>{ if(w.a-cur>=minLen) out.push({a:cur,b:w.a}); cur=Math.max(cur,w.b); });
+  if(bed-cur>=minLen) out.push({a:cur,b:bed});
+  return out;
+}
+
+function fitMealWindows(d){
+  const bands = {breakfast:[toMin('06:30'), toMin('10:30')],
+                 lunch:    [toMin('11:00'), toMin('15:00')],
+                 dinner:   [toMin('17:00'), toMin('21:00')]};
+  const days = [1,2,3,4,5].filter(dw=>(d.byDay[dw]||[]).length>0);
+  const out = {};
+  Object.keys(bands).forEach(meal=>{
+    const need = S.plan.mealMin[meal];
+    const [lo,hi] = bands[meal];
+    let found = null;
+    for(let start=lo; start+need<=hi; start+=5){
+      const clash = days.some(dw => (d.byDay[dw]||[]).some(m => m.a < start+need && m.b > start));
+      if(!clash){ found = {start, end:start+need}; break; }
+    }
+    out[meal] = found;
+  });
+  return out;
 }
 
 /* ------------------------------------------------------- dining derive */
@@ -2176,9 +2327,19 @@ function renderSignals(){
   const push=(tone,from,title,body)=> out.push('<div class="note '+tone+'"><b>'+esc(title)+'</b><br>'+body
     +'<div style="margin-top:5px"><span class="pill" style="font-size:10.5px">from '+esc(from)+'</span></div></div>');
 
-  if(d.courses.some(c=>c.tEst))
-    push('warn','Courses','Meeting times are unconfirmed',
-      'Times were read off your schedule screenshot by measuring pixels, so they may be off by a slot. Every hour figure on this site is built on them — confirm them on the Courses tab and this warning clears.');
+  if(d.courses.some(c=>(c.meetings||[]).some(m=>m.disputed)))
+    push('crit','Courses','The INFO-I 101 lab is unresolved',
+      'You said the lab times were wrong but not what they should be, so nothing was guessed. It is currently sitting on both Tuesday and Thursday at 5:45pm, which is where your screenshot put it. Three one-click fixes are at the top of the Courses tab. Until it is settled, your Tuesday and Thursday evening hours are unreliable.');
+  if(d.courses.some(c=>(c.meetings||[]).some(m=>m.tEst && !m.disputed)))
+    push('warn','Courses','Some meeting times are still estimates',
+      'PSY-P 101, INFO-T 100 and the CSCI-C 212 meetings were read off your screenshot by measuring pixels. INFO-I 101\u2019s lecture is confirmed from what you told me. Confirm the rest on the Courses tab and this clears.');
+  if((d.walkPairs||[]).length && d.walkKnown < d.walkPairs.length)
+    push('warn','Dining & Map', (d.walkPairs.length-d.walkKnown)+' walking route'+(d.walkPairs.length-d.walkKnown===1?'':'s')+' unmeasured',
+      'Your week needs '+d.walkPairs.length+' distinct walk'+(d.walkPairs.length===1?'':'s')+'. Each one has a Google Maps link on the Dining &amp; Map tab — measure them once and the commute line stops being a flat guess.');
+  if((d.tight||[]).length)
+    push('crit','Dining & Map','A passing period does not fit',
+      d.tight.map(t=>DAYS[t.dow]+' '+esc(t.from_c)+' → '+esc(t.to_c)+' leaves '+t.slack+' min after the walk').join('; ')
+      +'. Either the walk time is wrong or one of those enrolments is not physically possible.');
   if(d.creditsUnset)
     push('warn','Courses','A course has no credit value',
       'INFO-T 100 is listed in the bulletin as 1–3 variable credit. Until you set yours, its study requirement is excluded from every total here.');
@@ -2240,10 +2401,33 @@ function renderCourses(){
     {k:'Reads from Plan controls', v:'Sleep window, block length and weekend share decide where blocks go'}
   ]);
 
-  const unconfirmed = d.courses.some(c=>c.tEst);
-  $('confirmBanner').innerHTML = unconfirmed
-    ? '<b>Confirm your meeting times before you trust any number on this site.</b> Course codes, section numbers, class numbers and days were read cleanly off your schedule. Start and end times were <em>measured off a pixel grid</em>, which is not the same as knowing them — the ones below are best estimates and are marked <span class="prov unverified">Unverified</span> until you confirm. Open your Student Center or the Course Browser, fix anything that is off, then press <b>Confirm all times</b>. <div class="row" style="margin-top:11px"><button class="btn primary sm" id="btnConfirmTimes">Confirm all times</button><a class="btn sm" href="https://one.iu.edu/task/iub/view-my-class-schedule" target="_blank" rel="noopener">Open my class schedule</a><a class="btn sm" href="https://utilities.registrar.indiana.edu/course-browser/" target="_blank" rel="noopener">Course Browser</a></div>'
-    : '<b>Meeting times confirmed.</b> Everything downstream — the time charts, the study plan, the strain model — is now running on times you verified rather than on my reading of a screenshot. <div class="row" style="margin-top:9px"><button class="btn sm" id="btnUnconfirm">Mark unconfirmed again</button></div>';
+  const disputed = d.courses.some(c=>(c.meetings||[]).some(m=>m.disputed));
+  const unconfirmed = d.courses.some(c=>(c.meetings||[]).some(m=>m.tEst && !m.disputed));
+
+  let banner = '';
+  if(disputed){
+    const lab = (d.courses.find(c=>c.code==='INFO-I 101')||{meetings:[]}).meetings.find(m=>m.disputed) || {days:[]};
+    banner += '<b>One meeting is still unresolved: the INFO-I 101 lab.</b> You told me the lecture is Tue/Thu 9:45 and that the lab times were wrong, but not what they should be — so I have not guessed. It currently sits where your screenshot put it, '
+      + esc((lab.days||[]).map(x=>DAYS[x]).join(' and ')) + ' at ' + esc(fmtRange(toMin(lab.start), toMin(lab.end)))
+      + ', and it is the only meeting still marked <span class="prov unverified">Unresolved</span>. Labs usually meet once a week, so the two-day reading is the part most likely to be wrong. Pick one:'
+      + '<div class="row" style="margin-top:11px"><button class="btn primary sm" id="btnLabOneDay">Thursday only</button>'
+      + '<button class="btn sm" id="btnLabTue">Tuesday only</button>'
+      + '<button class="btn sm" id="btnLabBoth">Both days, times are right</button>'
+      + '<span class="hint" style="margin:0">Or just edit the row on the card below.</span></div>';
+  }
+  if(unconfirmed){
+    banner += (disputed?'<div class="divider"></div>':'')
+      + '<b>Other meeting times are still estimates.</b> Codes, sections, class numbers and days came off your schedule cleanly. Start and end times for PSY-P 101, INFO-T 100 and the CSCI-C 212 meetings were <em>measured off a pixel grid</em>, which is not the same as knowing them. INFO-I 101\u2019s lecture is now confirmed from what you told me. '
+      + '<div class="row" style="margin-top:11px"><button class="btn primary sm" id="btnConfirmTimes">Confirm the estimated times</button>'
+      + '<a class="btn sm" href="https://one.iu.edu/task/iub/view-my-class-schedule" target="_blank" rel="noopener">Open my class schedule</a>'
+      + '<a class="btn sm" href="https://utilities.registrar.indiana.edu/course-browser/" target="_blank" rel="noopener">Course Browser</a></div>';
+  }
+  if(!banner){
+    banner = '<b>Every meeting confirmed.</b> The time charts, the study plan, the walking analysis and the strain model are all running on times you verified rather than on my reading of a screenshot.'
+      + '<div class="row" style="margin-top:9px"><button class="btn sm" id="btnUnconfirm">Mark unconfirmed again</button></div>';
+  }
+  $('confirmBanner').innerHTML = banner;
+  $('confirmBanner').style.display = '';
 
   $('courseList').innerHTML = d.courses.map(courseCard).join('');
   renderProfTools();
@@ -2262,8 +2446,12 @@ function courseCard(c){
       +'<td>'+esc(days||'—')+'</td>'
       +'<td><input type="time" value="'+esc(m.start)+'" data-mt="start" data-c="'+c.id+'" data-i="'+mi+'" style="padding:4px 6px;font-size:12.5px"></td>'
       +'<td><input type="time" value="'+esc(m.end)+'" data-mt="end" data-c="'+c.id+'" data-i="'+mi+'" style="padding:4px 6px;font-size:12.5px"></td>'
-      +'<td><input value="'+esc(m.loc||'')+'" data-mt="loc" data-c="'+c.id+'" data-i="'+mi+'" placeholder="room" style="padding:4px 6px;font-size:12.5px;min-width:96px"></td>'
-      +'<td>'+(m.tEst?chip('unverified','Est.'):chip('mine','Confirmed'))+'</td>'
+      +'<td><select data-mt="bldg" data-c="'+c.id+'" data-i="'+mi+'" style="padding:4px 6px;font-size:12.5px;min-width:130px">'
+        +'<option value="">— set building —</option>'
+        + PLACES.filter(p=>p.id!=='mcnutt').map(p=>'<option value="'+p.id+'"'+(m.bldg===p.id?' selected':'')+'>'+esc(p.name)+'</option>').join('')
+        +'</select></td>'
+      +'<td><input value="'+esc(m.loc||'')+'" data-mt="loc" data-c="'+c.id+'" data-i="'+mi+'" placeholder="room" style="padding:4px 6px;font-size:12.5px;min-width:84px"></td>'
+      +'<td>'+(m.disputed?chip('unverified','Unresolved'):(m.tEst?chip('unverified','Est.'):chip('mine','Confirmed')))+'</td>'
       +'</tr>';
   }).join('');
 
@@ -2291,7 +2479,9 @@ function courseCard(c){
          +'<span class="code">'+esc(c.code)+'</span>'
          +(c.credits!=null?'<span class="pill">'+c.credits+' cr '+(cat&&cat.creditsVerified?chip('verified'):chip('mine'))+'</span>'
                           :'<span class="pill" style="border-color:var(--warn);color:var(--warn)">credits not set</span>')
-         +(c.tEst?'<span class="pill" style="border-color:rgba(250,178,25,.4)">times estimated</span>':'')
+         +(c.online?'<span class="pill" style="border-color:rgba(144,133,233,.45);color:#b3aaf2">online · async</span>':'')
+         +((c.meetings||[]).some(m=>m.disputed)?'<span class="pill" style="border-color:rgba(208,59,59,.5);color:#e2645f">lab unresolved</span>':'')
+         +((c.meetings||[]).some(m=>m.tEst&&!m.disputed)?'<span class="pill" style="border-color:rgba(250,178,25,.4)">times estimated</span>':'')
        +'</div>'
        +'<div class="ttl">'+esc(c.title||'—')+'</div>'
      +'</div>'
@@ -2317,8 +2507,11 @@ function courseCard(c){
        +'</div>'
      +'</div>'
      +'<div class="divider"></div>'
-     +'<div class="sect-lbl">Meetings <span style="font-weight:400;text-transform:none;letter-spacing:0">edit times here</span></div>'
-     +'<div class="scroll"><table><thead><tr><th>Type</th><th>Sect</th><th class="num">Class #</th><th>Days</th><th>Start</th><th>End</th><th>Room</th><th>Times</th></tr></thead><tbody>'+meetings+'</tbody></table></div>'
+     +'<div class="sect-lbl">Meetings <span style="font-weight:400;text-transform:none;letter-spacing:0">'+(c.online?'fully online':'edit times here')+'</span></div>'
+     +(c.online
+        ? '<div class="note acc"><b>100% online, asynchronous.</b> No fixed meeting, no commute, no walk. Its '+(c.studyPlan==null?'—':rnd(c.studyPlan,1))+'h a week is placed as protected self-paced blocks in the plan below, because an async course with no scheduled slot is the one that quietly slips.</div>'
+        : '')
+     +'<div class="scroll"'+(c.online?' style="display:none"':'')+'><table><thead><tr><th>Type</th><th>Sect</th><th class="num">Class #</th><th>Days</th><th>Start</th><th>End</th><th>Building</th><th>Room</th><th>Times</th></tr></thead><tbody>'+meetings+'</tbody></table></div>'
      +'<div class="divider"></div>'
      +'<div class="grid g4">'
        +'<div><label class="f">Credit hours</label><input type="number" step="0.5" min="0" max="12" value="'+(c.credits==null?'':c.credits)+'" data-cf="credits" data-c="'+c.id+'" placeholder="'+(cat&&!cat.creditsVerified?'1–3, variable':'')+'"></div>'
@@ -2463,8 +2656,8 @@ function renderDining(){
   feed('dFeed',[
     {k:'Feeds the study plan', v:'Your three meal windows are hard-excluded from every study block'},
     {k:'Feeds the General tab', v:'Meal minutes are '+rnd(d.mealWeek,1)+'h of the 168-hour split'},
-    {k:'Reads from Courses', v:'Meal-window conflicts are checked against your real class times'},
-    {k:'Feeds the Tracker', v:'Skipped meals and low energy both show up in the strain recovery term'}
+    {k:'Reads from Courses', v:'Meal windows and every walking route come from your real class times'},
+    {k:'Walks measured', v:'<b>'+(D.walkKnown||0)+'</b> of <b>'+((D.walkPairs||[]).length)+'</b> routes'+((D.tight||[]).length?' · <b style="color:#e2645f">'+D.tight.length+' tight</b>':'')}
   ]);
 
   /* plan picker */
@@ -2475,7 +2668,7 @@ function renderDining(){
       +'<div style="font-family:var(--display);font-size:17px;font-weight:600;letter-spacing:.02em;color:var(--ink)">'+esc(p.name)+'</div>'
       +'<div class="n" style="margin-top:5px">'+esc(p.scans)+'</div>'
       +'<div class="n">Dining Dollars <b style="font-family:var(--mono);color:var(--ink)">$'+p.dollars+'</b>/semester</div>'
-      +'<div class="n">'+(p.combo!=null?'Combo meals <b style="font-family:var(--mono);color:var(--ink)">'+p.combo+'</b>/week'+(p.comboUncertain?' <span style="color:var(--warn)">·&nbsp;disputed</span>':''):'Combo meals not stated in the contract text I could read')+'</div>'
+      +'<div class="n">'+(p.combo!=null?'Combo meals <b style="font-family:var(--mono);color:var(--ink)">'+p.combo+'</b>/week'+(p.comboConfirmed?' <span style="color:#4fc24f">·&nbsp;you confirmed</span>':''):'Combo meals not stated in the contract text I could read')+'</div>'
       +'</button>';
   }).join('');
 
@@ -2624,21 +2817,86 @@ function renderMap(){
     'SOLID OUTLINE = VERIFIED STREET ADDRESS.   DASHED = LOCATED ONLY TO THE QUAD.'));
   const m=$('campusMap'); m.innerHTML=''; m.appendChild(s2);
   renderPlaceList();
+  renderWalks();
+}
+
+/* ---------------------------------------------- walking times -------- */
+/* I cannot fetch these. Every routing and geocoding service is blocked from
+   the environment this page was built in, and a published page cannot call
+   Google's Distance Matrix without a key. So the page does the next best
+   thing honestly: it works out exactly which walks your week requires,
+   builds the Google Maps directions link for each one, and holds the number
+   you read back. Nothing is estimated from the diagram. */
+function placeById(id){ return PLACES.find(p=>p.id===id) || null; }
+function placeName(id){ const p=placeById(id); return p?p.name:'(building not set)'; }
+function placeAddr(id){ const p=placeById(id); return p?p.addr:''; }
+
+function renderWalks(){
+  const d=D, pairs=d.walkPairs;
+  if(!pairs.length){
+    $('walkMatrix').innerHTML='<div class="empty">No walks to measure — set a building on each meeting on the Courses tab first.</div>';
+    $('transTable').innerHTML=''; $('walkSrc').innerHTML=''; return;
+  }
+  $('walkMatrix').innerHTML =
+    '<div class="grid g2">'+pairs.map(pr=>{
+      const known = pr.walk!=null;
+      return '<div style="border:1px solid '+(known?'rgba(12,163,12,.3)':'var(--line)')+';border-radius:var(--r);padding:13px;background:var(--surface-2)">'
+      +'<div class="row spread" style="align-items:baseline;gap:8px">'
+        +'<b style="font-size:13.5px">'+esc(placeName(pr.from))+' <span style="color:var(--ink-3)">↔</span> '+esc(placeName(pr.to))+'</b>'
+        +(known?chip('mine','Measured'):chip('unverified','Not measured'))+'</div>'
+      +'<div style="font-family:var(--mono);font-size:11px;color:var(--ink-3);margin-top:4px">'+esc(placeAddr(pr.from))+'</div>'
+      +'<div style="font-family:var(--mono);font-size:11px;color:var(--ink-3)">'+esc(placeAddr(pr.to))+'</div>'
+      +'<div class="row" style="margin-top:10px;gap:8px">'
+        +'<a class="btn sm primary" href="'+esc(mapsUrl(placeAddr(pr.from), placeAddr(pr.to)))+'" target="_blank" rel="noopener">Measure on Google Maps ↗</a>'
+        +'<input type="number" min="0" max="90" step="1" value="'+(known?pr.walk:'')+'" data-walkpair="'+esc(pr.key)+'" placeholder="min" style="width:78px;padding:6px 8px;text-align:right" aria-label="Walking minutes from '+esc(placeName(pr.from))+' to '+esc(placeName(pr.to))+'">'
+        +'<span class="pill">walked '+pr.count+'× a week</span>'
+        +'<span class="pill" style="border:0;color:var(--ink-3)">both directions</span>'
+      +'</div></div>';
+    }).join('')+'</div>';
+
+  /* day-by-day passing periods */
+  const rows = d.transitions.filter(t=>t.kind==='between');
+  $('transTable').innerHTML = rows.length
+    ? '<table><thead><tr><th>Day</th><th>From</th><th>To</th><th class="num">Gap</th><th class="num">Walk</th><th class="num">Slack</th><th>Verdict</th></tr></thead><tbody>'
+      + rows.map(t=>{
+        const verdict = t.same ? ['Same building — no walk','var(--ink-2)']
+          : t.walk==null ? ['Measure it above','var(--ink-3)']
+          : t.slack<0 ? ['Impossible — you arrive '+Math.abs(t.slack)+' min late','#e2645f']
+          : t.slack<5 ? ['Tight — '+t.slack+' min to spare','var(--warn)']
+          : ['Comfortable','#4fc24f'];
+        return '<tr><td>'+DAYS[t.dow]+'</td>'
+          +'<td>'+esc(t.from_c)+' <span style="color:var(--ink-3)">· '+esc(placeName(t.from))+'</span></td>'
+          +'<td>'+esc(t.to_c)+' <span style="color:var(--ink-3)">· '+esc(placeName(t.to))+'</span></td>'
+          +'<td class="num">'+t.gap+' min</td>'
+          +'<td class="num">'+(t.same?'0':(t.walk==null?'—':t.walk+' min'))+'</td>'
+          +'<td class="num" style="color:'+verdict[1]+'">'+(t.slack==null?'—':(t.slack>=0?'+':'')+t.slack+' min')+'</td>'
+          +'<td style="color:'+verdict[1]+'">'+esc(verdict[0])+'</td></tr>';
+      }).join('')+'</tbody></table>'
+    : '<div class="empty">No back-to-back classes in your week — every class is the only one that day, or separated by hours.</div>';
+
+  const homeOut = d.transitions.filter(t=>t.kind==='out');
+  const unmeasured = pairs.filter(p=>p.walk==null).length;
+  $('walkSrc').innerHTML =
+    '<div class="note '+(unmeasured?'warn':'good')+'" style="margin-top:12px"><b>'
+    + (unmeasured
+        ? unmeasured+' of '+pairs.length+' route'+(pairs.length===1?'':'s')+' still unmeasured.'
+        : 'All '+pairs.length+' routes measured.')
+    + '</b> ' + (d.commuteMeasured
+        ? 'Your commute total is now the sum of your measured home legs — <b>'+rnd(d.commuteWeek,1)+'h a week</b> — rather than one flat guess multiplied across '+d.classDays+' class days.'
+        : 'Once every home leg is measured, the commute line in the 168-hour chart switches from the flat '+S.plan.commuteMinPerTrip+'-minute estimate to the real sum. Currently estimated at '+rnd(d.commuteWeek,1)+'h a week.')
+    + '</div>'
+    + '<div class="note" style="margin-top:9px"><b>Why the numbers are not already filled in.</b> This page cannot fetch them. Every routing and geocoding service is blocked from the environment it was built in, and a published web page cannot query Google\u2019s Distance Matrix without an API key. What it can do is work out precisely which walks your timetable requires — '+pairs.length+' distinct route'+(pairs.length===1?'':'s')+', not a grid of every building against every other — and hand you the exact Google Maps link for each. The number you read there is Google\u2019s, which is what you asked for; I am just not in a position to read it for you.</div>';
 }
 
 function renderPlaceList(){
   const groups={};
   PLACES.forEach(p=>{ (groups[p.kind]=groups[p.kind]||[]).push(p); });
-  const walk=S.walk||{};
-  const classWalks = PLACES.filter(p=>p.kind==='class' && walk[p.id]).map(p=>+walk[p.id]);
-  const avg = classWalks.length ? classWalks.reduce((a,b)=>a+b,0)/classWalks.length : null;
 
   $('mapList').innerHTML =
-    '<div style="grid-column:1/-1" class="note acc"><b>Turn this into real numbers.</b> Walk one of these routes, put the minutes in, and the class-building average becomes your commute setting — which then flows into the 168-hour chart, the day-by-day bars and the strain index. '
-    + (avg!=null
-        ? 'Your class buildings currently average <b>'+rnd(avg,0)+' min</b> one way, against the '+S.plan.commuteMinPerTrip+' min the plan is using. <button class="btn sm primary" id="btnUseWalk" style="margin-left:8px">Use '+rnd(avg,0)+' min</button>'
-        : 'Nothing measured yet.')
-    + '</div>'
+    '<div style="grid-column:1/-1" class="note acc"><b>Measuring goes in the panel below.</b> '
+    + 'Rather than asking you to time a walk to all twelve of these, the next panel works out the '
+    + ((D.walkPairs||[]).length) + ' route'+((D.walkPairs||[]).length===1?'':'s')
+    + ' your timetable actually requires and asks only for those. The links here are for everything else.</div>'
     + Object.keys(PLACE_KIND).filter(k=>groups[k]).map(k=>{
     const kd=PLACE_KIND[k];
     return '<div>'
@@ -2646,8 +2904,7 @@ function renderPlaceList(){
       + groups[k].map(p=>'<div style="padding:10px 0;border-bottom:1px solid var(--line-soft)">'
         +'<div class="row spread" style="align-items:baseline;gap:8px"><b style="font-size:13.5px">'+esc(p.name)+'</b>'
         +(p.id!=='mcnutt'
-          ? '<span class="row" style="gap:6px"><input type="number" min="0" max="90" step="1" value="'+(walk[p.id]==null?'':walk[p.id])+'" data-walk="'+p.id+'" placeholder="min" style="width:66px;padding:4px 6px;font-size:12px;text-align:right" aria-label="Your walk time to '+esc(p.name)+' in minutes">'
-            +'<a class="btn sm ghost" href="'+esc(mapsUrl(S.meta.dormAddr, p.addr))+'" target="_blank" rel="noopener">Walk ↗</a></span>'
+          ? '<a class="btn sm ghost" href="'+esc(mapsUrl(S.meta.dormAddr, p.addr))+'" target="_blank" rel="noopener">Walk ↗</a>'
           : '<span class="pill">home</span>')+'</div>'
         +'<div style="font-family:var(--mono);font-size:11.5px;color:var(--ink-3);margin-top:3px">'+esc(p.addr)+' '
           + (p.posUnverified ? chip('unverified','Quad-level only') : chip('verified')) +'</div>'
@@ -2656,9 +2913,78 @@ function renderPlaceList(){
         +'</div>').join('')
       +'</div>';
   }).join('')
-  + '<div style="grid-column:1/-1"><div class="note warn"><b>Why no walk times are printed here.</b> I have verified street addresses for six of these buildings and only quad-level locations for the rest. Inventing "seven minutes" from that would be exactly the made-up precision you asked me to avoid, so every route sends you to Google instead — and once you have walked it, the box next to it is where the real number lives.</div>'
+  + '<div style="grid-column:1/-1">'
   + citeLine('diningmap','Official dining map with true positions:') + citeLine('nutrislice','Live menus by hall:') + '</div>';
 }
+
+/* ---------------------------------------------- walking times -------- */
+/* I cannot fetch these. Every routing and geocoding service is blocked from
+   the environment this page was built in, and a published page cannot call
+   Google's Distance Matrix without a key. So the page does the next best
+   thing honestly: it works out exactly which walks your week requires,
+   builds the Google Maps directions link for each one, and holds the number
+   you read back. Nothing is estimated from the diagram. */
+function placeById(id){ return PLACES.find(p=>p.id===id) || null; }
+function placeName(id){ const p=placeById(id); return p?p.name:'(building not set)'; }
+function placeAddr(id){ const p=placeById(id); return p?p.addr:''; }
+
+function renderWalks(){
+  const d=D, pairs=d.walkPairs;
+  if(!pairs.length){
+    $('walkMatrix').innerHTML='<div class="empty">No walks to measure — set a building on each meeting on the Courses tab first.</div>';
+    $('transTable').innerHTML=''; $('walkSrc').innerHTML=''; return;
+  }
+  $('walkMatrix').innerHTML =
+    '<div class="grid g2">'+pairs.map(pr=>{
+      const known = pr.walk!=null;
+      return '<div style="border:1px solid '+(known?'rgba(12,163,12,.3)':'var(--line)')+';border-radius:var(--r);padding:13px;background:var(--surface-2)">'
+      +'<div class="row spread" style="align-items:baseline;gap:8px">'
+        +'<b style="font-size:13.5px">'+esc(placeName(pr.from))+' <span style="color:var(--ink-3)">↔</span> '+esc(placeName(pr.to))+'</b>'
+        +(known?chip('mine','Measured'):chip('unverified','Not measured'))+'</div>'
+      +'<div style="font-family:var(--mono);font-size:11px;color:var(--ink-3);margin-top:4px">'+esc(placeAddr(pr.from))+'</div>'
+      +'<div style="font-family:var(--mono);font-size:11px;color:var(--ink-3)">'+esc(placeAddr(pr.to))+'</div>'
+      +'<div class="row" style="margin-top:10px;gap:8px">'
+        +'<a class="btn sm primary" href="'+esc(mapsUrl(placeAddr(pr.from), placeAddr(pr.to)))+'" target="_blank" rel="noopener">Measure on Google Maps ↗</a>'
+        +'<input type="number" min="0" max="90" step="1" value="'+(known?pr.walk:'')+'" data-walkpair="'+esc(pr.key)+'" placeholder="min" style="width:78px;padding:6px 8px;text-align:right" aria-label="Walking minutes from '+esc(placeName(pr.from))+' to '+esc(placeName(pr.to))+'">'
+        +'<span class="pill">walked '+pr.count+'× a week</span>'
+        +'<span class="pill" style="border:0;color:var(--ink-3)">both directions</span>'
+      +'</div></div>';
+    }).join('')+'</div>';
+
+  /* day-by-day passing periods */
+  const rows = d.transitions.filter(t=>t.kind==='between');
+  $('transTable').innerHTML = rows.length
+    ? '<table><thead><tr><th>Day</th><th>From</th><th>To</th><th class="num">Gap</th><th class="num">Walk</th><th class="num">Slack</th><th>Verdict</th></tr></thead><tbody>'
+      + rows.map(t=>{
+        const verdict = t.same ? ['Same building — no walk','var(--ink-2)']
+          : t.walk==null ? ['Measure it above','var(--ink-3)']
+          : t.slack<0 ? ['Impossible — you arrive '+Math.abs(t.slack)+' min late','#e2645f']
+          : t.slack<5 ? ['Tight — '+t.slack+' min to spare','var(--warn)']
+          : ['Comfortable','#4fc24f'];
+        return '<tr><td>'+DAYS[t.dow]+'</td>'
+          +'<td>'+esc(t.from_c)+' <span style="color:var(--ink-3)">· '+esc(placeName(t.from))+'</span></td>'
+          +'<td>'+esc(t.to_c)+' <span style="color:var(--ink-3)">· '+esc(placeName(t.to))+'</span></td>'
+          +'<td class="num">'+t.gap+' min</td>'
+          +'<td class="num">'+(t.same?'0':(t.walk==null?'—':t.walk+' min'))+'</td>'
+          +'<td class="num" style="color:'+verdict[1]+'">'+(t.slack==null?'—':(t.slack>=0?'+':'')+t.slack+' min')+'</td>'
+          +'<td style="color:'+verdict[1]+'">'+esc(verdict[0])+'</td></tr>';
+      }).join('')+'</tbody></table>'
+    : '<div class="empty">No back-to-back classes in your week — every class is the only one that day, or separated by hours.</div>';
+
+  const homeOut = d.transitions.filter(t=>t.kind==='out');
+  const unmeasured = pairs.filter(p=>p.walk==null).length;
+  $('walkSrc').innerHTML =
+    '<div class="note '+(unmeasured?'warn':'good')+'" style="margin-top:12px"><b>'
+    + (unmeasured
+        ? unmeasured+' of '+pairs.length+' route'+(pairs.length===1?'':'s')+' still unmeasured.'
+        : 'All '+pairs.length+' routes measured.')
+    + '</b> ' + (d.commuteMeasured
+        ? 'Your commute total is now the sum of your measured home legs — <b>'+rnd(d.commuteWeek,1)+'h a week</b> — rather than one flat guess multiplied across '+d.classDays+' class days.'
+        : 'Once every home leg is measured, the commute line in the 168-hour chart switches from the flat '+S.plan.commuteMinPerTrip+'-minute estimate to the real sum. Currently estimated at '+rnd(d.commuteWeek,1)+'h a week.')
+    + '</div>'
+    + '<div class="note" style="margin-top:9px"><b>Why the numbers are not already filled in.</b> This page cannot fetch them. Every routing and geocoding service is blocked from the environment it was built in, and a published web page cannot query Google\u2019s Distance Matrix without an API key. What it can do is work out precisely which walks your timetable requires — '+pairs.length+' distinct route'+(pairs.length===1?'':'s')+', not a grid of every building against every other — and hand you the exact Google Maps link for each. The number you read there is Google\u2019s, which is what you asked for; I am just not in a position to read it for you.</div>';
+}
+
 
 /* ------------------------------------------------------------- diet */
 function renderDiet(){
@@ -2689,13 +3015,26 @@ function renderDiet(){
       (D.byDay[dw]||[]).forEach(m=>{ if(m.a<b && m.b>a) conflicts.push({k, dw, code:m.course.code, r:fmtRange(m.a,m.b)}); });
     }
   });
+  const fit = D.mealFit || {};
+  const fitLine = k => fit[k] ? fmtRange(fit[k].start, fit[k].end) : 'no window of that length is free on every class day';
   if(conflicts.length){
     const byMeal={}; conflicts.forEach(c=>{ (byMeal[c.k]=byMeal[c.k]||[]).push(DAYS[c.dw]+' '+c.code); });
     out.push('<div class="note crit"><b>Your meal windows collide with class.</b> '
       + Object.keys(byMeal).map(k=>'<b>'+k+'</b> overlaps '+byMeal[k].join(', ')).join('; ')
-      + '. Move the window on the Courses tab, or those meals will be skipped in practice — and skipped meals show up in the strain model whether or not you log them.</div>');
+      + '. Skipped meals show up in the strain model whether or not you log them.'
+      + '<div style="margin-top:9px">The earliest slot free on <em>every</em> day you have class: '
+      + ['breakfast','lunch','dinner'].map(k=>'<b>'+k+'</b> '+fitLine(k)).join(' · ')
+      + '</div><div class="row" style="margin-top:10px"><button class="btn sm primary" id="btnFitMeals">Move my windows there</button></div></div>');
   } else {
-    out.push('<div class="note good"><b>No meal window collides with a class.</b> All three sit in genuinely free time on every weekday.</div>');
+    const wins = commonFreeWindows(D, 30);
+    const midday = wins.filter(w=>w.a>=toMin('10:30') && w.b<=toMin('18:00'));
+    out.push('<div class="note good"><b>No meal window collides with a class.</b> All three sit in free time on every day you have class. '
+      + (midday.length
+          ? 'Between your first and last class the only stretches of 30 minutes or more that are free every weekday are '
+            + midday.map(w=>'<b>'+fmtRange(w.a,w.b)+'</b>').join(', ')
+            + '. Lunch is parked in one of them; everything else has to go before your first class or after your last.'
+          : 'Your midday is fully booked on at least one day, so lunch sits outside the teaching block.')
+      + '</div>');
   }
 
   out.push('<div class="note acc"><b>Breakfast is your free lunch.</b> You live in McNutt and the dining hall is in the Center Building, ground floor — a zero-commute all-you-care-to-eat meal. On an unlimited plan the marginal cost of eating it is nothing, and it is the meal most first-years drop first. '+chip('verified')+'</div>');
@@ -3219,10 +3558,12 @@ function renderCitations(){
    +'<li><b>Combo meals per week on the Expanded plan.</b> Sources disagree — one IU Dining contract summary gives five per week, an older Indiana Daily Student guide says four. Only the Classic plan\'s three per week is stated unambiguously. Your own contract settles it.</li>'
    +'<li><b>Dining hall opening hours.</b> The IU Dining fall-hours page exists but I could not read it, so no hours are printed here. The page is linked wherever hours matter.</li>'
    +'<li><b>Your instructors.</b> Your schedule screenshot does not name them, and I will not guess. The Courses tab gives you the four real sources instead.</li>'
-   +'<li><b>Your meeting times.</b> Read off a pixel grid, not from a data source. Marked unverified until you confirm them.</li>'
+   +'<li><b>Your meeting times.</b> Read off a pixel grid, not from a data source. Marked unverified until you confirm them. INFO-I 101\u2019s Tue/Thu 9:45 lecture is the exception — you stated it, so it counts as confirmed.</li>'
+   +'<li><b>The INFO-I 101 lab.</b> You said its times were wrong but not what they should be, so it is still marked unresolved rather than quietly changed to something plausible.</li>'
    +'<li><b>INFO-T 100 credit hours.</b> The bulletin says 1–3, variable by section. Left blank.</li>'
+   +'<li><b>BUS-X 101 as a course code, and its 1.5 credits.</b> Your figures. I could not find BUS-X 101 in a bulletin I could reach. What I could verify is Kelley\u2019s GenAI 101 content — and that the free IU Expand version of it explicitly does <em>not</em> carry degree credit, which means your for-credit section is a different offering and your syllabus governs it.</li>'
+   +'<li><b>Walking times.</b> Not fetched. Every routing and geocoding service is blocked from the environment this was built in, and a published page cannot query Google\u2019s Distance Matrix without a key. The page instead derives exactly which routes your timetable needs and hands you the Google Maps link for each.</li>'
    +'<li><b>Retail prices behind the estimated deal values.</b> Where a source stated only a student price and not a standard one, the saving is left blank for you rather than inferred.</li>'
-   +'<li><b>Walking times.</b> Addresses are verified; distances are not. Every map pin links to live directions instead of printing a number I cannot stand behind.</li>'
    +'</ul>';
 }
 
@@ -3290,7 +3631,8 @@ document.addEventListener('input', e=>{
     const c=S.courses.find(x=>x.id===t.dataset.c); if(!c) return;
     const m=c.meetings[+t.dataset.i]; if(!m) return;
     m[t.dataset.mt]=t.value;
-    if(t.dataset.mt!=='loc') m.tEst=false;
+    if(t.dataset.mt==='start' || t.dataset.mt==='end'){ m.tEst=false; m.disputed=false; }
+    if(t.dataset.mt==='bldg'){ save(); derive(); renderWalks(); renderGeneral(); return; }
   }
   else if(t.dataset.dining!==undefined){
     const f=t.dataset.dining;
@@ -3309,10 +3651,11 @@ document.addEventListener('input', e=>{
     clearTimeout(window.__gt); window.__gt=setTimeout(()=>{ renderTracker(); }, 700);
     return;
   }
-  else if(t.dataset.walk!==undefined){
+  else if(t.dataset.walkpair!==undefined){
     S.walk=S.walk||{};
-    if(t.value==='') delete S.walk[t.dataset.walk]; else S.walk[t.dataset.walk]=+t.value;
-    save(); clearTimeout(window.__wk); window.__wk=setTimeout(renderPlaceList, 500); return;
+    if(t.value==='') delete S.walk[t.dataset.walkpair]; else S.walk[t.dataset.walkpair]=+t.value;
+    save(); clearTimeout(window.__wp); window.__wp=setTimeout(()=>{ derive(); renderWalks(); renderGeneral(); }, 550);
+    return;
   }
   else if(t.dataset.ci!==undefined){
     const lab=t.previousElementSibling;
@@ -3376,16 +3719,49 @@ document.addEventListener('click', e=>{
 
   switch(id){
     case 'btnConfirmTimes':
-      S.courses.forEach(c=>(c.meetings||[]).forEach(m=>m.tEst=false));
-      save(); renderAll(); toast('Times confirmed. Every downstream number now runs on your data.','good'); break;
+      /* leaves the disputed lab alone — a blanket confirm should not quietly
+         resolve the one thing I flagged as genuinely unknown */
+      S.courses.forEach(c=>(c.meetings||[]).forEach(m=>{ if(!m.disputed) m.tEst=false; }));
+      save(); renderAll();
+      toast(D.courses.some(c=>(c.meetings||[]).some(m=>m.disputed))
+        ? 'Estimated times confirmed. The INFO-I 101 lab is still unresolved — settle it with the buttons above.'
+        : 'Times confirmed. Every downstream number now runs on your data.','good'); break;
     case 'btnUnconfirm':
-      S.courses.forEach(c=>(c.meetings||[]).forEach(m=>m.tEst=true));
+      S.courses.forEach(c=>(c.meetings||[]).forEach(m=>{ m.tEst=true; }));
       save(); renderAll(); toast('Marked unconfirmed.','warn'); break;
-    case 'btnUseWalk': {
-      const cw=PLACES.filter(p=>p.kind==='class'&&(S.walk||{})[p.id]).map(p=>+S.walk[p.id]);
-      if(!cw.length){ toast('Measure a class building first.','warn'); break; }
-      S.plan.commuteMinPerTrip = Math.round(cw.reduce((a,b)=>a+b,0)/cw.length);
-      save(); renderAll(); toast('Commute set to '+S.plan.commuteMinPerTrip+' min each way. Every hour total just updated.','good'); break; }
+    case 'btnFitMeals': {
+      const f=D.mealFit||{}; const moved=[];
+      ['breakfast','lunch','dinner'].forEach(k=>{
+        if(f[k]){ S.plan.mealAt[k]=toHHMM(f[k].start); S.plan.mealMin[k]=f[k].end-f[k].start; moved.push(k); }
+      });
+      if(!moved.length){ toast('No window of the length you asked for is free on every class day. Shorten a meal first.','bad'); break; }
+      save(); renderAll();
+      toast('Moved '+moved.join(', ')+' into slots free on every class day.','good'); break; }
+    case 'btnOpenAllWalks': {
+      const todo=(D.walkPairs||[]).filter(pr=>pr.walk==null);
+      if(!todo.length){ toast('Every route is already measured.','good'); break; }
+      todo.slice(0,6).forEach((pr,i)=> setTimeout(()=>window.open(
+        mapsUrl(placeAddr(pr.from), placeAddr(pr.to)),'_blank','noopener'), i*250));
+      toast('Opening '+Math.min(6,todo.length)+' route'+(todo.length===1?'':'s')+' in new tabs. Your browser may ask to allow pop-ups.','warn');
+      break; }
+    case 'btnLabOneDay': {
+      const c=S.courses.find(x=>x.code==='INFO-I 101');
+      const m2=c && (c.meetings||[]).find(x=>x.type==='LAB');
+      if(m2){ m2.days=[4]; m2.tEst=false; m2.disputed=false;
+        save(); renderAll(); toast('Lab set to Thursday only and marked confirmed.','good'); }
+      break; }
+    case 'btnLabTue': {
+      const c=S.courses.find(x=>x.code==='INFO-I 101');
+      const m2=c && (c.meetings||[]).find(x=>x.type==='LAB');
+      if(m2){ m2.days=[2]; m2.tEst=false; m2.disputed=false;
+        save(); renderAll(); toast('Lab set to Tuesday only and marked confirmed.','good'); }
+      break; }
+    case 'btnLabBoth': {
+      const c=S.courses.find(x=>x.code==='INFO-I 101');
+      const m2=c && (c.meetings||[]).find(x=>x.type==='LAB');
+      if(m2){ m2.days=[2,4]; m2.tEst=false; m2.disputed=false;
+        save(); renderAll(); toast('Lab confirmed as Tuesday and Thursday.','good'); }
+      break; }
     case 'btnRegen': derive(); renderWeekGrid(); renderGeneral(); toast('Plan rebuilt from your current settings.','good'); break;
     case 'btnAddCourse': addCourseDialog(); break;
     case 'btnAddAsg': addAsgDialog(); break;
