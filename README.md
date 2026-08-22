@@ -83,9 +83,40 @@ else* (blank) or *start my semester over* (reloads the shipped Fall 2026 data),
 see exactly what is about to go with live counts, get pushed to export a copy,
 then type `RESET`. Nothing fires on a stray click.
 
+## The Trine build
+
+`trine.html` is the same planner rebuilt for **Trine University** in Angola,
+Indiana. The engine is byte-identical; what changes is the campus data layer,
+the branding and the import route:
+
+| | IU build | Trine build |
+|---|---|---|
+| Palette | warm limestone + crimson | navy + Vegas gold |
+| Storage key | `iu.crimsonCommand.v1` | `trine.thunderCommand.v1` |
+| Boots with | the owner's five courses | nothing — you add your own |
+| LMS import | Canvas JSON API | Moodle grade report (HTML) |
+| Dining | five AYCTE halls, swipes + Dining Dollars | Whitney Commons, The Depot and two coffee shops; a 10 or 19-meal Bon Appétit plan |
+| Athletics | Big Ten, pre-loaded football schedule | MIAA Division III, nothing pre-loaded |
+
+The two keys differ deliberately, so both builds can run in one browser without
+overwriting each other.
+
+`make-trine.py` generates it from `index.html` by swapping ~150 named sections.
+`index.html` is opened read-only and the script asserts it is unchanged, so the
+IU build cannot drift as a side effect:
+
+```
+python3 make-trine.py
+```
+
+Because it is a transform rather than a fork, an engine fix in `index.html`
+reaches the Trine build on the next run. Only the data and copy are duplicated.
+
 ## Files
 
 - `index.html` — the standalone app, boots with the owner's Fall 2026 data.
+- `trine.html` — the Trine University build. Generated.
+- `make-trine.py` — regenerates `trine.html` from `index.html`.
 - `crimson-command-share.html` — the same app with `BOOT_PROFILE = 'blank'`, so
   it opens empty. This is the copy to send someone. Generated.
 - `artifact.html` — body only, for publishing as an Artifact. Generated.
