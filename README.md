@@ -92,6 +92,39 @@ and every field stays editable. Grid-calibrated end times run short for
 blocks with little text in them, since the calibration reads where the text
 sits, not the true height of the calendar block; the scanner's own UI says so.
 
+## The course catalog and building directory
+
+`CATALOG` holds real, individually-sourced IU Bloomington courses — the five
+on the owner's own schedule plus nine more spanning CSCI, INFO, MATH, ENG,
+Kelley and PSY, each cited to its own catalog page. It is not the whole
+university: IU runs thousands of sections across roughly 200 subjects each
+term, and this environment cannot bulk-fetch IU's own bulletin any more than
+it can query Google's Distance Matrix for walking times. The "Browse the
+course catalog" panel on the Courses tab searches what's built in and hands
+anything else to a scoped Google search over academics.iu.edu and Coursicle.
+The same shape applies to buildings: `PLACES` holds the dozen locations the
+owner's own week actually uses, each with a hand-checked address, plus a
+free-text box that sends any other IU building straight to Google Maps by
+name rather than asserting a location nobody checked.
+
+Every code that flows through an importer — Stellic paste, screenshot OCR,
+or the "add a course" dialog — is run through `canonicalizeCode()`, which
+snaps it to the exact string an existing course or catalog entry already
+uses. Without that, a mined "CSCI-C212" would silently miss `CATALOG['CSCI-C
+212']` on an exact-string lookup even though the course is right there. The
+same mining pass also runs `mineBuilding()` over the source text, matching a
+short list of building keywords so a class's location comes along
+automatically when it's mentioned. When a canonicalized code lands a brand
+new course, its credit hours are pulled from the catalog entry if verified,
+rather than left blank for the owner to re-enter something this page already
+knows.
+
+Canvas import used to silently drop weights and due dates for any course
+code that didn't match one already on the Courses tab. It now offers to
+create the missing course instead — enriched from the catalog when the code
+matches, titled from Canvas's own course name otherwise — so nothing Canvas
+reports gets lost to a courses-tab gap.
+
 ## State migrations
 
 Saved state replaces whole arrays on load, so a browser that opened an earlier

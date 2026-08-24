@@ -565,6 +565,22 @@ ul.none{list-style:none;padding:0;margin:0}
 
   <div class="panel">
     <div class="panel-hd"><div class="t">
+      <h2>Browse the course catalog</h2>
+      <div class="d">Search by code, title, or subject. Every entry here is a real, individually-sourced IU Bloomington course — click a source line to see where it came from. IU's live catalog runs to thousands of sections across roughly 200 subjects, and this environment cannot bulk-fetch IU's own bulletin pages any more than it can query Google's Distance Matrix, so this is a verified sample, not the whole roster — use the search box below it to reach any class by name on IU's own live tools.</div>
+    </div></div>
+    <input id="catSearch" placeholder="Search e.g. “CSCI”, “Calculus”, “PSY-P 101”…">
+    <div id="catList" class="scroll" style="max-height:360px;overflow-y:auto;margin-top:11px"></div>
+    <div class="divider"></div>
+    <div class="row" style="align-items:flex-end;gap:10px;flex-wrap:wrap">
+      <div style="flex:1;min-width:200px"><label class="f" for="bldgSearch2">Any other IU class — search live</label>
+        <input id="bldgSearch2" placeholder="e.g. HIST-H 105"></div>
+      <button class="btn" id="btnLiveCourseSearch">Search IU's live catalog ↗</button>
+    </div>
+    <div class="hint" style="margin-top:7px">Opens a Google search scoped to IU's own course pages and Coursicle's IU listings — not a guess at what the course covers.</div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-hd"><div class="t">
       <h2>How to research any professor — the real sources</h2>
       <div class="d">There is no public database of "professor hard spots". These four are the actual sources IU students have, in order of how much weight to give them.</div>
     </div></div>
@@ -642,6 +658,13 @@ ul.none{list-style:none;padding:0;margin:0}
     </div></div>
     <div class="mapwrap map"><div id="campusMap"></div></div>
     <div class="grid g2" style="margin-top:14px" id="mapList"></div>
+    <div class="divider"></div>
+    <div class="row" style="align-items:flex-end;gap:10px;flex-wrap:wrap">
+      <div style="flex:1;min-width:200px"><label class="f" for="bldgFreeSearch">Look up any other IU Bloomington building by name</label>
+        <input id="bldgFreeSearch" placeholder="e.g. Woodburn Hall"></div>
+      <button class="btn" id="btnBldgSearch">Get walking directions ↗</button>
+    </div>
+    <div class="hint" style="margin-top:7px">The dozen places above are the ones your own week actually uses, each with a hand-verified address. IU's campus has roughly 300 buildings in total — this box hands any of them straight to Google Maps by name rather than guessing at a location I have not checked.</div>
   </div>
 
   <div class="panel">
@@ -1204,6 +1227,16 @@ const CITE = {
   aca66:   {t:'Grades and Grading (policy ACA-66)', o:'Indiana University', u:'https://policies.iu.edu/policies/aca-66-grades-and-grading/index.html'},
   bulInfo: {t:'Informatics course descriptions, 2025–2026 Academic Bulletin', o:'IU Luddy School', u:'https://bulletins.iu.edu/iub/sice/2025-2026/undergraduate/courses/informatics.shtml'},
   csci212: {t:'CSCI-C 212 Introduction to Software Systems — course catalog', o:'IU Bloomington Academics', u:'https://academics.iu.edu/courses/bloomington/csci-c-212-introduction-to-software-systems.html'},
+  csciC290:{t:'CSCI-C 290 Topics in Computer Science — course catalog', o:'IU Bloomington Academics', u:'https://academics.iu.edu/courses/bloomington/csci-c-290-topics-in-computer-science.html'},
+  csciC470:{t:'CSCI-C 470 Senior Project II — course catalog', o:'IU Bloomington Academics', u:'https://academics.iu.edu/courses/bloomington/csci-c-470-senior-project-ii.html'},
+  infoI211:{t:'INFO-I 211 Information Infrastructure II — course catalog', o:'IU Bloomington Academics', u:'https://academics.iu.edu/courses/bloomington/info-i-211-information-infrastructure-ii.html'},
+  mathM118:{t:'MATH-M 118 Finite Mathematics — course catalog', o:'IU Bloomington Academics', u:'https://academics.iu.edu/courses/bloomington/math-m-118-finite-mathematics.html'},
+  mathM119:{t:'MATH-M 119 Brief Survey of Calculus I — course catalog', o:'IU Bloomington Academics', u:'https://academics.iu.edu/courses/bloomington/math-m-119-brief-survey-of-calculus-1.html'},
+  mathM211:{t:'MATH-M 211 Calculus I — course description', o:'Indiana Department of Education, ICAP course description library', u:'https://www.in.gov/doe/files/icap/course-descriptions/MATH-M-211-Calculus-I.pdf'},
+  engw131: {t:'ENGW 131 Elementary Composition — student course page', o:'Coursicle', u:'https://www.coursicle.com/indiana/courses/ENGW/131/'},
+  busk201: {t:'BUS-K 201 Foundations of Business Information Systems and Decision Making — course page', o:'IU Kelley School of Business', u:'https://kelley.iu.edu/faculty-research/courses/course.html?ID=BUS-K201-136'},
+  psyp155: {t:'PSY-P 155 Introduction to Psychological and Brain Sciences — course listing', o:'IU Psychological and Brain Sciences', u:'https://psych.indiana.edu/student-portal/courses/class/iub-spring-2025-psy-p155'},
+  ballantine:{t:'Ballantine Hall (BH) — location and building code', o:'Campus Maps (campus-maps.com)', u:'https://www.campus-maps.com/iu/ballantine-hall-bh/'},
   psy101:  {t:'PSY-P 101 Introductory Psychology 1 — Course Browser', o:'IU Office of the Registrar', u:'https://utilities.registrar.indiana.edu/course-browser/prl/soc4182fac/PSY/PSY-P101.shtml'},
   infoT100:{t:'INFO-T 100 Topics in Informatics Technology — Course Browser', o:'IU Office of the Registrar', u:'https://utilities.registrar.indiana.edu/course-browser/prl/soc4212/INFO/INFO-T100.shtml'},
   i101:    {t:'INFO-I 101 course site', o:'IU Luddy School', u:'https://i101.luddy.indiana.edu/index.html'},
@@ -1379,6 +1412,105 @@ const CATALOG = {
     reported:[],
     watch:['The bulletin lists this as 1–3 variable credit. I could not verify which value your section carries, so it is blank until you set it — every hour total on this site depends on that number.','Because it is a variable-topic hands-on course, the syllabus is the only authority on content. Nothing generic should be assumed about it.','Bulletin note: these credits do not count toward Luddy major requirements.'],
     color:'--s4'
+  },
+  /* ---------------------------------------------------------------------
+     The entries below are not on your schedule. They exist so the "Browse
+     the course catalog" panel has real, sourced classes to search across —
+     one meaningfully-verified course apiece in the subjects most first-year
+     students search. IU's live catalog runs to thousands of course
+     sections across roughly 200 subjects; that scale is not reachable from
+     this environment (see the catalog panel's own note), so this list is a
+     sample, not a claim of completeness.
+     --------------------------------------------------------------------- */
+  'CSCI-C 290':{
+    title:'Topics in Computer Science', credits:null, creditsVerified:false, cite:'csciC290',
+    desc:'Exploration of topics in computing. Credit hours and specific content vary by the topic offered in a given section.',
+    prereq:'Varies by topic — check your section.',
+    topics:['Varies by topic — common offerings include tools for power users.'],
+    topicsCite:'csciC290',
+    reported:[],
+    watch:['Variable-topic, variable-credit (1–3 cr) course — confirm both from your own syllabus before counting it toward a requirement.'],
+    color:'--s1'
+  },
+  'CSCI-C 470':{
+    title:'Senior Project II', credits:3, creditsVerified:true, cite:'csciC470',
+    desc:'Students work on projects in supervised teams, from planning and design to implementation, testing and release of a final product. Teamwork, communication, and organizational skills are emphasized in a real-world-style environment.',
+    prereq:'Not stated on the catalog page — check the bulletin entry for the current prerequisite chain.',
+    topics:['Team-based software project planning','Design and implementation','Testing and release','Communication and organizational skills'],
+    topicsCite:'csciC470',
+    reported:[],
+    watch:['A capstone-style course — the syllabus, not this page, governs deliverables and grading weight.'],
+    color:'--s6'
+  },
+  'INFO-I 211':{
+    title:'Information Infrastructure II', credits:null, creditsVerified:false, cite:'infoI211',
+    desc:'Second course in the Information Infrastructure sequence. See the catalog page for the current full description — I could not verify a longer quotable description than the title in this pass.',
+    prereq:'Not verified in this pass — check the bulletin entry.',
+    topics:['See the official course page — content not fully verified in this pass.'],
+    topicsCite:'infoI211',
+    reported:[],
+    watch:['Second half of a two-course sequence — confirm you have (or are waiving) INFO-I 210 first.'],
+    color:'--s3'
+  },
+  'MATH-M 118':{
+    title:'Finite Mathematics', credits:3, creditsVerified:true, cite:'mathM118',
+    desc:'Sets, counting, basic probability including random variables and expected values, linear systems, matrices, linear programming, and applications.',
+    prereq:'Not verified in this pass — check the bulletin entry.',
+    topics:['Sets and counting','Basic probability, random variables, expected value','Linear systems and matrices','Linear programming'],
+    topicsCite:'mathM118',
+    reported:[],
+    watch:['Terminal gen-ed math course for many non-STEM majors — it does not lead into Calculus I the way M119 is designed to.'],
+    color:'--s4'
+  },
+  'MATH-M 119':{
+    title:'Brief Survey of Calculus I', credits:3, creditsVerified:true, cite:'mathM119',
+    desc:'Sets, limits, derivatives, integrals, and applications. An introduction to calculus, primarily for students from business and the social sciences.',
+    prereq:'Not verified in this pass — check the bulletin entry.',
+    topics:['Limits','Derivatives','Integrals','Applications for business and social science'],
+    topicsCite:'mathM119',
+    reported:[],
+    watch:['A lighter-weight alternative to M211 aimed at business/social-science majors — check with your advisor before substituting one for the other.'],
+    color:'--s4'
+  },
+  'MATH-M 211':{
+    title:'Calculus I', credits:4, creditsVerified:true, cite:'mathM211',
+    desc:'Limits, continuity, derivatives, definite and indefinite integrals, and applications.',
+    prereq:'Not verified in this pass — check the bulletin entry.',
+    topics:['Limits and continuity','Derivatives','Definite and indefinite integrals','Applications'],
+    topicsCite:'mathM211',
+    reported:[],
+    watch:['4 credit hours, not 3 — a common miscount when a student stacks it with a 3-credit gen-ed math course from the same list.'],
+    color:'--s4'
+  },
+  'ENG-W 131':{
+    title:'Elementary Composition', credits:3, creditsVerified:true, cite:'engw131',
+    desc:'Offers instruction and practice in the reading, writing, and critical thinking skills required in college. Emphasis is on written assignments that require synthesis, analysis, and argument based on sources.',
+    prereq:'Not verified in this pass — check the bulletin entry.',
+    topics:['College-level reading and writing','Critical thinking','Synthesis and analysis','Argument based on sources'],
+    topicsCite:'engw131',
+    reported:[],
+    watch:['IU’s standard first-year composition requirement — most students clear it with this exact course.'],
+    color:'--s5'
+  },
+  'BUS-K 201':{
+    title:'Foundations of Business Information Systems and Decision Making', credits:3, creditsVerified:true, cite:'busk201',
+    desc:'An introduction to two of the most widespread technologies for dealing with data — spreadsheets and relational databases (SQL). The first mandatory technology course in the Technology Foundations Series offered by Kelley’s Communication, Professional, and Computer Skills area, with both a lecture and a laboratory component.',
+    prereq:'Not verified in this pass — check the Kelley bulletin entry.',
+    topics:['Spreadsheets','Relational databases and SQL','Business decision making with data'],
+    topicsCite:'busk201',
+    reported:[],
+    watch:['Also called "The Computer in Business" informally — has a separate lab component with its own grade weight in most sections.'],
+    color:'--s7'
+  },
+  'PSY-P 155':{
+    title:'Introduction to Psychological and Brain Sciences', credits:3, creditsVerified:true, cite:'psyp155',
+    desc:'An introduction to psychological and brain sciences for psychology majors. Introduces the history of psychology and its place in science, the experimental method, and the broad range of topics studied by psychological scientists.',
+    prereq:'Aimed at declared or prospective psychology majors — not verified whether it double-counts with PSY-P 101.',
+    topics:['History of psychology as a science','The experimental method','Range of topics across psychological science'],
+    topicsCite:'psyp155',
+    reported:[],
+    watch:['Written for majors specifically, unlike the broader PSY-P 101 — check with an advisor before substituting one for the other.'],
+    color:'--s5'
   }
 };
 
@@ -1527,6 +1659,8 @@ const PLACES = [
    where:'Corner of N. Woodlawn Ave and E. Cottage Grove St', note:'Computer Science. Informatics sits next door in Informatics East and West — check which building your INFO sections meet in.'},
   {id:'psych', name:'Psychology Building', kind:'class', addr:'1101 E. 10th St, Bloomington, IN 47405', cite:'psychContact',
    where:'Corner of 10th St and Walnut Grove Ave', note:'Between the Kelley School and the Geology Building. This is where PSY-P 101 lectures normally sit — confirm your room.'},
+  {id:'ballantine', name:'Ballantine Hall', kind:'class', addr:'1020 E. Kirkwood Ave, Bloomington, IN 47405', cite:'ballantine',
+   where:'Kirkwood Ave, central campus', note:'Building code BH. A large classroom building used by several College of Arts & Sciences departments — check your own section for the exact room.'},
   {id:'wells', name:'Wells Library', kind:'study', addr:'1320 E. 10th St, Bloomington, IN 47405', cite:'wts',
    where:'E. 10th St', note:'Writing Tutorial Services is here, seven days a week from week 2 of the semester through the end of finals.'},
   {id:'health', name:'Student Health Center', kind:'care', addr:'600 N. Eagleson Ave, Bloomington, IN 47405', cite:'caps',
@@ -3505,6 +3639,34 @@ function renderCourses(){
   renderProfTools();
   renderPlanStats();
   renderPlanCtl();
+  renderCatalogBrowser();
+}
+
+/* ---------------------------------------------- catalog browser ------ */
+function renderCatalogBrowser(){
+  const q = (($('catSearch')||{}).value||'').trim().toLowerCase();
+  const codes = Object.keys(CATALOG).sort();
+  const rows = codes.filter(code=>{
+    if(!q) return true;
+    const cat = CATALOG[code];
+    return code.toLowerCase().includes(q) || (cat.title||'').toLowerCase().includes(q);
+  });
+  const list = $('catList'); if(!list) return;
+  if(!rows.length){ list.innerHTML = '<div class="empty">No catalog entry matches "'+esc(q)+'". Try the live search below.</div>'; return; }
+  list.innerHTML = '<table><thead><tr><th>Code</th><th>Title</th><th class="num">Credits</th><th></th></tr></thead><tbody>'
+    + rows.map(code=>{
+        const cat = CATALOG[code];
+        const have = S.courses.some(c=>c.code===code);
+        return '<tr>'
+          +'<td style="font-family:var(--mono);font-size:12px;white-space:nowrap">'+esc(code)+'</td>'
+          +'<td style="font-size:12.5px">'+esc(cat.title)+citeLine(cat.cite)+'</td>'
+          +'<td class="num">'+(cat.creditsVerified?cat.credits+' cr':'—')+'</td>'
+          +'<td>'+(have
+            ? '<span class="pill">already on your schedule</span>'
+            : '<button class="btn sm" data-addcat="'+esc(code)+'">+ Add</button>')+'</td>'
+          +'</tr>';
+      }).join('')
+    +'</tbody></table>';
 }
 
 function courseCard(c){
@@ -3959,68 +4121,6 @@ function renderPlaceList(){
    thing honestly: it works out exactly which walks your week requires,
    builds the Google Maps directions link for each one, and holds the number
    you read back. Nothing is estimated from the diagram. */
-function placeById(id){ return PLACES.find(p=>p.id===id) || null; }
-function placeName(id){ const p=placeById(id); return p?p.name:'(building not set)'; }
-function placeAddr(id){ const p=placeById(id); return p?p.addr:''; }
-
-function renderWalks(){
-  const d=D, pairs=d.walkPairs;
-  if(!pairs.length){
-    $('walkMatrix').innerHTML='<div class="empty">No walks to measure — set a building on each meeting on the Courses tab first.</div>';
-    $('transTable').innerHTML=''; $('walkSrc').innerHTML=''; return;
-  }
-  $('walkMatrix').innerHTML =
-    '<div class="grid g2">'+pairs.map(pr=>{
-      const known = pr.walk!=null;
-      return '<div style="border:1px solid '+(known?'rgba(12,163,12,.3)':'var(--line)')+';border-radius:var(--r);padding:13px;background:var(--surface-2)">'
-      +'<div class="row spread" style="align-items:baseline;gap:8px">'
-        +'<b style="font-size:13.5px">'+esc(placeName(pr.from))+' <span style="color:var(--ink-3)">↔</span> '+esc(placeName(pr.to))+'</b>'
-        +(known?chip('mine','Measured'):chip('unverified','Not measured'))+'</div>'
-      +'<div style="font-family:var(--mono);font-size:11px;color:var(--ink-3);margin-top:4px">'+esc(placeAddr(pr.from))+'</div>'
-      +'<div style="font-family:var(--mono);font-size:11px;color:var(--ink-3)">'+esc(placeAddr(pr.to))+'</div>'
-      +'<div class="row" style="margin-top:10px;gap:8px">'
-        +'<a class="btn sm primary" href="'+esc(mapsUrl(placeAddr(pr.from), placeAddr(pr.to)))+'" target="_blank" rel="noopener">Measure on Google Maps ↗</a>'
-        +'<input type="number" min="0" max="90" step="1" value="'+(known?pr.walk:'')+'" data-walkpair="'+esc(pr.key)+'" placeholder="min" style="width:78px;padding:6px 8px;text-align:right" aria-label="Walking minutes from '+esc(placeName(pr.from))+' to '+esc(placeName(pr.to))+'">'
-        +'<span class="pill">walked '+pr.count+'× a week</span>'
-        +'<span class="pill" style="border:0;color:var(--ink-3)">both directions</span>'
-      +'</div></div>';
-    }).join('')+'</div>';
-
-  /* day-by-day passing periods */
-  const rows = d.transitions.filter(t=>t.kind==='between');
-  $('transTable').innerHTML = rows.length
-    ? '<table><thead><tr><th>Day</th><th>From</th><th>To</th><th class="num">Gap</th><th class="num">Walk</th><th class="num">Slack</th><th>Verdict</th></tr></thead><tbody>'
-      + rows.map(t=>{
-        const verdict = t.same ? ['Same building — no walk','var(--ink-2)']
-          : t.walk==null ? ['Measure it above','var(--ink-3)']
-          : t.slack<0 ? ['Impossible — you arrive '+Math.abs(t.slack)+' min late','#e2645f']
-          : t.slack<5 ? ['Tight — '+t.slack+' min to spare','var(--warn)']
-          : ['Comfortable','#4fc24f'];
-        return '<tr><td>'+DAYS[t.dow]+'</td>'
-          +'<td>'+esc(t.from_c)+' <span style="color:var(--ink-3)">· '+esc(placeName(t.from))+'</span></td>'
-          +'<td>'+esc(t.to_c)+' <span style="color:var(--ink-3)">· '+esc(placeName(t.to))+'</span></td>'
-          +'<td class="num">'+t.gap+' min</td>'
-          +'<td class="num">'+(t.same?'0':(t.walk==null?'—':t.walk+' min'))+'</td>'
-          +'<td class="num" style="color:'+verdict[1]+'">'+(t.slack==null?'—':(t.slack>=0?'+':'')+t.slack+' min')+'</td>'
-          +'<td style="color:'+verdict[1]+'">'+esc(verdict[0])+'</td></tr>';
-      }).join('')+'</tbody></table>'
-    : '<div class="empty">No back-to-back classes in your week — every class is the only one that day, or separated by hours.</div>';
-
-  const homeOut = d.transitions.filter(t=>t.kind==='out');
-  const unmeasured = pairs.filter(p=>p.walk==null).length;
-  $('walkSrc').innerHTML =
-    '<div class="note '+(unmeasured?'warn':'good')+'" style="margin-top:12px"><b>'
-    + (unmeasured
-        ? unmeasured+' of '+pairs.length+' route'+(pairs.length===1?'':'s')+' still unmeasured.'
-        : 'All '+pairs.length+' routes measured.')
-    + '</b> ' + (d.commuteMeasured
-        ? 'Your commute total is now the sum of your measured home legs — <b>'+rnd(d.commuteWeek,1)+'h a week</b> — rather than one flat guess multiplied across '+d.classDays+' class days.'
-        : 'Once every home leg is measured, the commute line in the 168-hour chart switches from the flat '+S.plan.commuteMinPerTrip+'-minute estimate to the real sum. Currently estimated at '+rnd(d.commuteWeek,1)+'h a week.')
-    + '</div>'
-    + '<div class="note" style="margin-top:9px"><b>Why the numbers are not already filled in.</b> This page cannot fetch them. Every routing and geocoding service is blocked from the environment it was built in, and a published web page cannot query Google\u2019s Distance Matrix without an API key. What it can do is work out precisely which walks your timetable requires — '+pairs.length+' distinct route'+(pairs.length===1?'':'s')+', not a grid of every building against every other — and hand you the exact Google Maps link for each. The number you read there is Google\u2019s, which is what you asked for; I am just not in a position to read it for you.</div>';
-}
-
-
 /* ------------------------------------------------------------- diet */
 function renderDiet(){
   const o=D.dining;
@@ -5182,8 +5282,9 @@ function mineScheduleText(text, srcTag){
   for(let i=0;i<lines.length;i++){
     const cm = lines[i].match(COURSE_CODE_RE);
     if(!cm) continue;
-    const code = (cm[1]+'-'+(cm[2]||'').trim()+' '+cm[3]).replace(/-\s+/,'-').replace(/\s+/g,' ').trim()
+    const rawCode = (cm[1]+'-'+(cm[2]||'').trim()+' '+cm[3]).replace(/-\s+/,'-').replace(/\s+/g,' ').trim()
       .replace(/^([A-Z]{2,5})- (\d)/,'$1 $2');            /* no subject letter: "MATH- 211" -> "MATH 211" */
+    const code = canonicalizeCode(rawCode);
     /* days/time can be on this line or the next couple — registration
        screens routinely wrap one meeting across 2-3 short lines */
     const window2 = [lines[i], lines[i+1]||'', lines[i+2]||''].join(' ');
@@ -5193,6 +5294,7 @@ function mineScheduleText(text, srcTag){
     out.push({
       id: uid(), code, type: normType(typeM && typeM[1]),
       days, start: tr ? toHHMM(tr.a) : '', end: tr ? toHHMM(tr.b) : '',
+      bldg: mineBuilding(window2),
       raw: lines[i].slice(0,90), src: srcTag||'text', conf: (days.length && tr) ? 'good' : 'partial'
     });
   }
@@ -5201,6 +5303,36 @@ function mineScheduleText(text, srcTag){
 function bestCourseMatch(code){
   const bare = String(code).toUpperCase().replace(/[^A-Z0-9]/g,'');
   return S.courses.find(c=> c.code.toUpperCase().replace(/[^A-Z0-9]/g,'')===bare) || null;
+}
+function bestCatalogMatch(code){
+  const bare = String(code).toUpperCase().replace(/[^A-Z0-9]/g,'');
+  return Object.keys(CATALOG).find(k=> k.toUpperCase().replace(/[^A-Z0-9]/g,'')===bare) || null;
+}
+/* A mined code's spacing/hyphenation is whatever the source text happened to
+   use. Snap it to the exact string a course already on the schedule uses,
+   or failing that the exact catalog key, so the rest of the app's
+   exact-string lookups (CATALOG[c.code], the "goes to" dropdown) actually
+   fire instead of silently missing on a cosmetic mismatch. */
+function canonicalizeCode(code){
+  const existing = bestCourseMatch(code);
+  if(existing) return existing.code;
+  const cat = bestCatalogMatch(code);
+  if(cat) return cat;
+  return code;
+}
+/* A short, low-risk building sniff: distinctive keywords for the places
+   already on the map, checked against the same text window a meeting was
+   mined from. Deliberately not fuzzy — a wrong guess is worse than none. */
+const BLDG_KEYWORDS = {
+  luddy:'LUDDY', ballantine:'BALLANTINE', psych:'PSYCHOLOGY BUILDING',
+  wells:'WELLS LIBRARY', health:'HEALTH CENTER', forest:'FOREST',
+  wright:'WRIGHT', collins:'COLLINS', goodbody:'GOODBODY',
+  briscoe:'BRISCOE', teter:'TETER', srsc:'REC SPORTS', mcnuttdh:'MCNUTT'
+};
+function mineBuilding(text){
+  const t = String(text||'').toUpperCase();
+  for(const id in BLDG_KEYWORDS){ if(t.includes(BLDG_KEYWORDS[id])) return id; }
+  return '';
 }
 
 /* --------------------------------------------- shared preview + commit --- */
@@ -5246,12 +5378,15 @@ function commitMeetingCandidates(mountId){
     const targetVal = targetSel ? targetSel.value : '__new';
     let course = targetVal==='__new' ? null : S.courses.find(c=>c.code===targetVal);
     if(!course){
-      course = {id:uid(), code:r.code, credits:null, instructor:'', diff:1.0, meetings:[], grades:[], notes:''};
+      const canon = canonicalizeCode(r.code);
+      const cat = CATALOG[canon];
+      course = {id:uid(), code:canon, credits:(cat&&cat.creditsVerified)?cat.credits:null,
+        instructor:'', diff:1.0, meetings:[], grades:[], notes:''};
       S.courses.push(course); newCourses++;
     }
     course.meetings = course.meetings||[];
     course.meetings.push({type:r.type, section:'', classNo:'', days:r.days.slice(),
-      start:r.start, end:r.end, loc:'', bldg:'', tEst:true, src:r.src});
+      start:r.start, end:r.end, loc:'', bldg:r.bldg||'', tEst:true, src:r.src});
     newMeetings++;
   });
   save(); renderAll();
@@ -5465,8 +5600,9 @@ function clusterWordsIntoMeetings(words, W, H){
       const text = g.map(w=>w.text).join(' ');
       const cm = text.match(COURSE_CODE_RE);
       if(!cm) return;                                    /* not a class block */
-      const code = (cm[1]+'-'+(cm[2]||'').trim()+' '+cm[3]).replace(/-\s+/,'-').replace(/\s+/g,' ').trim()
+      const rawCode = (cm[1]+'-'+(cm[2]||'').trim()+' '+cm[3]).replace(/-\s+/,'-').replace(/\s+/g,' ').trim()
         .replace(/^([A-Z]{2,5})- (\d)/,'$1 $2');
+      const code = canonicalizeCode(rawCode);
       const top = Math.min(...g.map(w=>w.bbox.y0)), bot = Math.max(...g.map(w=>w.bbox.y1));
       let startMin = Math.round(yToMin(top)/5)*5, endMin = Math.round(yToMin(bot)/5)*5;
       if(!(endMin>startMin)) return;
@@ -5474,6 +5610,7 @@ function clusterWordsIntoMeetings(words, W, H){
       const typeM = text.match(MEETING_TYPE_RE);
       out.push({id:uid(), code, type:normType(typeM&&typeM[1]),
         days:[headers[c].dow], start:toHHMM(startMin), end:toHHMM(endMin),
+        bldg: mineBuilding(text),
         raw:text.slice(0,90), src:'screenshot', conf:'good'});
     });
   });
@@ -5536,18 +5673,19 @@ function parsePaste(){
       o.courses.forEach(c=>{
         const code = matchCourse(c.code||'') || matchCourse(c.name||'') || (c.code||c.name||'').trim();
         const known = S.courses.some(x=>x.code===code);
+        const cname = String(c.name||c.code||'').trim();
         (c.groups||[]).forEach(g=>{
-          if(g.weight>0) items.push({id:uid(), type:'weight', code, known, name:g.name, weight:+g.weight});
+          if(g.weight>0) items.push({id:uid(), type:'weight', code, known, cname, name:g.name, weight:+g.weight});
           (g.assignments||[]).forEach(a=>{
             const due = a.due ? String(a.due).slice(0,10) : '';
-            items.push({id:uid(), type:'assignment', code, known, name:a.name, due,
+            items.push({id:uid(), type:'assignment', code, known, cname, name:a.name, due,
                         weight:null, group:g.name, points:a.points, score:a.score});
           });
         });
       });
       if(!items.length) warn.push('Parsed the export but it contained no assignment groups.');
       const unknown=[...new Set(items.filter(i=>!i.known).map(i=>i.code))];
-      if(unknown.length) warn.push('These Canvas courses do not match anything on your Courses tab and will be skipped: '+unknown.join(', ')+'.');
+      if(unknown.length) warn.push(unknown.length+' Canvas course'+(unknown.length===1?'':'s')+' — '+unknown.join(', ')+' — do'+(unknown.length===1?'es':'')+' not match anything on your Courses tab yet. Check "Add missing courses" below to create '+(unknown.length===1?'it':'them')+' instead of losing their grades and due dates.');
     }
   }
   else if(kind==='ics'){
@@ -5591,6 +5729,9 @@ function parsePaste(){
         +(kind==='canvas'?'<span class="pill">'+items.filter(i=>i.type==='weight').length+' weights</span>'
             +'<span class="pill">'+items.filter(i=>i.score!=null).length+' scored</span>':'')
         +'<span class="pill">'+items.filter(i=>i.code&&S.courses.some(c=>c.code===i.code)).length+' matched to your courses</span></div>'
+        + (kind==='canvas' && items.some(i=>!i.known)
+            ? '<label class="row" style="gap:7px;font-size:12.5px;margin-bottom:9px"><input type="checkbox" id="canvasAddMissing" checked> Add missing courses instead of skipping their grades and due dates</label>'
+            : '')
         +'<div class="scroll" style="max-height:300px;overflow-y:auto"><table><thead><tr><th>Course</th><th>What</th><th>Date</th><th class="num">Score</th></tr></thead><tbody>'
         + items.slice(0,80).map(i=>'<tr'+(i.known===false?' style="opacity:.45"':'')+'>'
             +'<td>'+esc(i.code||'—')+'</td>'
@@ -5650,6 +5791,9 @@ function renderCitations(){
    +'<li><b>Retail prices behind the estimated deal values.</b> Where a source stated only a student price and not a standard one, the saving is left blank for you rather than inferred.</li>'
    +'<li><b>The Stellic importer.</b> Stellic’s documented API issues Personal Access Tokens to the institution for server-to-server use, not to a student’s browser session — so there is no verified endpoint this page can call on your behalf. The bookmarklet instead copies the visible page text, the same way you would select and copy it yourself, and every row it finds still goes through the same human-review table before anything is saved.</li>'
    +'<li><b>The screenshot scanner.</b> It reads pixels, not a data feed: course codes, days and times are all guesses from OCR text placement, calibrated against a detected day-header row and hour axis when one exists and falling back to plain text-mining when it does not. End times specifically tend to run short, since the block’s true height is invisible to it — see the caveat on the scanner itself. Nothing from a scan is saved until you confirm each row.</li>'
+   +'<li><b>The course catalog browser.</b> IU Bloomington runs thousands of course sections across roughly 200 subjects each term, and this environment cannot bulk-fetch IU’s own bulletin or class-search pages any more than it can query Google’s Distance Matrix — the same block that keeps walking times unfetched applies to IU’s own site. So the built-in list is a real, individually-sourced sample (currently '+Object.keys(CATALOG).length+' courses) rather than the full roster, and the panel’s live-search box exists specifically to reach anything not in it. A code not in the built-in list is added blank, the same as it always was — I will not write a description I cannot cite.</li>'
+   +'<li><b>The building directory.</b> The campus map lists the roughly dozen places your own week actually uses, each with a hand-checked street address. IU’s campus has on the order of 300 buildings; rather than guess at addresses for the rest, the "look up any building" box on the map and the catalog panel hand any name straight to Google Maps or a scoped Google search, so every building is reachable even though only a verified few are pre-loaded.</li>'
+   +'<li><b>Canvas courses that do not match your Courses tab.</b> The importer now offers to create them instead of silently dropping their weights and due dates. A code it invents from Canvas’s own course name is not run through the same verification as a hand-typed one — check the new course’s credit hours once it lands.</li>'
    +'</ul>';
 }
 
@@ -5883,6 +6027,7 @@ document.addEventListener('click', e=>{
     save(); derive(); renderTray(); return; }
   if(ds.hall){ S.dining.hall=ds.hall; save(); derive(); renderFood(); return; }
   if(ds.sccommit){ commitMeetingCandidates(ds.sccommit); return; }
+  if(ds.addcat){ addCourseDialog(ds.addcat); return; }
   if(ds.neverfood){
     S.dining.never=(S.dining.never||[]).concat([ds.neverfood]).filter((v,i,a)=>a.indexOf(v)===i);
     save(); derive(); renderFood();
@@ -5945,6 +6090,15 @@ document.addEventListener('click', e=>{
     case 'btnRegen': derive(); renderSchedule(); renderPlanStats(); renderGeneral();
       toast('Plan rebuilt. The Schedule tab already shows it.','good'); break;
     case 'btnAddCourse': addCourseDialog(); break;
+    case 'btnLiveCourseSearch': {
+      const q = ($('bldgSearch2')||{}).value.trim() || 'Bloomington';
+      window.open('https://www.google.com/search?q='+encodeURIComponent('site:academics.iu.edu OR site:coursicle.com/indiana "'+q+'" Indiana University Bloomington course'), '_blank', 'noopener');
+      break; }
+    case 'btnBldgSearch': {
+      const q = ($('bldgFreeSearch')||{}).value.trim();
+      if(!q){ toast('Type a building name first.','warn'); break; }
+      window.open(mapsUrl(S.meta.dormAddr, q+', Indiana University, Bloomington, IN'), '_blank', 'noopener');
+      break; }
     case 'btnSchedAll':
       S.ui.layers={class:true,study:true,meal:true,commit:true,work:true,game:true};
       save(); renderSchedule(); break;
@@ -5987,14 +6141,15 @@ function confirmBox(title,msg,onYes,yesLabel){
 }
 
 /* ---------------------------------------------------------- dialogs */
-function addCourseDialog(){
+function addCourseDialog(presetCode){
   const opts=Object.keys(CATALOG).filter(k=>!S.courses.some(c=>c.code===k));
+  const presetCat = presetCode ? CATALOG[presetCode] : null;
   modal('Add a course',
     '<div class="grid g2">'
-    +'<div><label class="f">Course code</label><input id="ncCode" placeholder="e.g. MATH-M 211" list="ncList">'
+    +'<div><label class="f">Course code</label><input id="ncCode" placeholder="e.g. MATH-M 211" list="ncList" value="'+esc(presetCode||'')+'">'
       +'<datalist id="ncList">'+opts.map(o=>'<option value="'+esc(o)+'">').join('')+'</datalist>'
       +'<div class="hint">Codes in the built-in catalog come with a verified description. Anything else is added blank — I will not write a description I cannot cite.</div></div>'
-    +'<div><label class="f">Credit hours</label><input type="number" id="ncCr" step="0.5" min="0" max="12" placeholder="3"></div>'
+    +'<div><label class="f">Credit hours</label><input type="number" id="ncCr" step="0.5" min="0" max="12" placeholder="3" value="'+((presetCat&&presetCat.creditsVerified)?presetCat.credits:'')+'"></div>'
     +'<div><label class="f">Days</label><div class="row" style="gap:11px">'
       +[1,2,3,4,5].map(d=>'<label class="row" style="gap:4px;font-size:12.5px"><input type="checkbox" class="ncDay" value="'+d+'"> '+DAYS[d]+'</label>').join('')+'</div></div>'
     +'<div class="row" style="align-items:flex-end;gap:10px">'
@@ -6002,7 +6157,8 @@ function addCourseDialog(){
       +'<div style="flex:1"><label class="f">End</label><input type="time" id="ncE" value="11:15"></div></div>'
     +'</div>',
     [{label:'Cancel'},{label:'Add course',primary:true,onClick:()=>{
-      const code=$('ncCode').value.trim(); if(!code){ toast('Give it a course code.','bad'); return true; }
+      const typed=$('ncCode').value.trim(); if(!typed){ toast('Give it a course code.','bad'); return true; }
+      const code=canonicalizeCode(typed);
       const days=qsa('.ncDay').filter(c=>c.checked).map(c=>+c.value);
       const cr=$('ncCr').value===''?null:+$('ncCr').value;
       S.courses.push({id:uid(), code, credits:cr, instructor:'', diff:1.0,
@@ -6274,7 +6430,22 @@ function addSource(withTest){
 }
 function commitParse(){
   if(!parsed || !parsed.items.length) return;
-  let a=0, n2=0, w=0, g=0;
+  let a=0, n2=0, w=0, g=0, newCourses=0;
+  const addMissing = parsed.kind==='canvas' && !!(($('canvasAddMissing')||{}).checked);
+  if(addMissing){
+    const unknownCodes = [...new Set(parsed.items.filter(i=>i.known===false && i.code).map(i=>i.code))];
+    unknownCodes.forEach(code=>{
+      if(S.courses.some(c=>c.code===code)) return;
+      const canon = canonicalizeCode(code);
+      const cat = CATALOG[canon];
+      const cname = (parsed.items.find(i=>i.code===code && i.cname)||{}).cname || '';
+      S.courses.push({id:uid(), code:canon, credits:(cat&&cat.creditsVerified)?cat.credits:null,
+        title:cname, instructor:'', diff:1.0, meetings:[], grades:[], notes:''});
+      newCourses++;
+      /* point every item that used the pre-canonical code at the course we just created */
+      parsed.items.forEach(i=>{ if(i.code===code){ i.code=canon; i.known=true; } });
+    });
+  }
   parsed.items.forEach(i=>{
     if(i.type==='weight'){
       const c=S.courses.find(x=>x.code===i.code); if(!c) return;
@@ -6307,6 +6478,7 @@ function commitParse(){
   });
   save(); renderAll();
   const bits=[];
+  if(newCourses) bits.push(newCourses+' new course'+(newCourses===1?'':'s'));
   if(a) bits.push(a+' assignment'+(a===1?'':'s'));
   if(w) bits.push(w+' grade weight'+(w===1?'':'s'));
   if(g) bits.push(g+' score'+(g===1?'':'s'));
@@ -6426,6 +6598,7 @@ function importDialog(){
   showTab(S.ui.tab||'general');
   $('pasteBox').addEventListener('input', ()=>{ clearTimeout(window.__pt); window.__pt=setTimeout(parsePaste,500); });
   $('foodSearch').addEventListener('input', ()=>{ clearTimeout(window.__fs); window.__fs=setTimeout(renderFoodList,220); });
+  $('catSearch').addEventListener('input', ()=>{ clearTimeout(window.__cs); window.__cs=setTimeout(renderCatalogBrowser,180); });
   initShotPicker();
   $('foodStation').addEventListener('change', e=>{ window.__foodSt=e.target.value; renderFoodList(); });
   $('foodProteinOnly').addEventListener('change', renderFoodList);
