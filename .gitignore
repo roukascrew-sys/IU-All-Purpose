@@ -1,0 +1,19 @@
+# Full-fidelity normalized exports. Large (~21MB) and regenerated in seconds
+# from the preserved raw registrar file by tools/ingest_soc.py, so they are
+# build output rather than source. The raw export and the compact projection
+# the app actually embeds ARE committed.
+data/courses.json
+data/sections.json
+data/meetings.json
+data/instructors.json
+
+# Any future authenticated-collector state. Never commit browser profiles,
+# cookies, tokens or session storage.
+.auth/
+*.session.json
+storage-state.json
+playwright-profile/
+
+# Scratch
+*.png
+!docs/**/*.png

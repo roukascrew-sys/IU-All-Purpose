@@ -92,7 +92,47 @@ and every field stays editable. Grid-calibrated end times run short for
 blocks with little text in them, since the calibration reads where the text
 sits, not the true height of the calendar block; the scanner's own UI says so.
 
-## The course catalog and building directory
+## The Fall 2026 Schedule of Classes
+
+`tools/ingest_soc.py` turns the IU Office of the Registrar's own Schedule of
+Classes export (`soc4268`, Fall 2026 Bloomington) into a normalized
+course/section/meeting/instructor dataset. That export is the registrar's
+authoritative section-level record for the term, so it needs no
+authentication and can be reprocessed at any time from the preserved raw
+file in `data/`.
+
+```
+python3 tools/ingest_soc.py     # parse -> normalize -> validate -> report
+python3 tools/embed_soc.py      # embed the result into index.html
+python3 build-artifact.py       # regenerate the derived builds
+```
+
+The pipeline is `RawSource -> Parser -> Normalizer -> Validator ->
+Repository/Reporter`, and the source is swappable: anything that yields the
+same raw section records can feed the rest of the chain untouched.
+
+Current run: **4,875 courses, 11,886 sections, 11,887 meetings, 3,668
+instructors, 100 subjects, 76 buildings — 0 validation errors.** Full
+per-run statistics land in `data/reports/<run-id>.json`; exports are
+`courses.json`, `sections.json`, `meetings.json`, `instructors.json`,
+`schedule-data.json` (the compact projection the app embeds) plus
+`courses.csv` and `sections.csv`.
+
+Every field is tagged `EXACT` (printed in the export), `DERIVED` (computed
+by a documented rule) or `UNKNOWN` (absent — stored null, never guessed).
+The export carries no descriptions, prerequisites, corequisites or GenEd
+attributes, so those stay null. One value is `DERIVED` and flagged as such:
+64 sections print the day code `D`, conventionally "daily", which expands to
+Monday–Friday while `days_raw` keeps the literal `D`.
+
+A course is not a section. IU issues a separate class number to each
+component, so a lecture and its discussion are two independently
+registerable sections; the catalog panel lists both and each carries its own
+meetings. Conflict detection runs over every meeting of every added section
+through the existing `d.fixedBlocks` / `dayBlocks()` model, so a Friday lab
+clashing with a Friday lecture is caught the same way any other overlap is.
+
+## Hand-cited catalog and the building directory
 
 `CATALOG` holds real, individually-sourced IU Bloomington courses — the five
 on the owner's own schedule plus nine more spanning CSCI, INFO, MATH, ENG,
