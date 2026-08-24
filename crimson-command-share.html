@@ -1017,6 +1017,44 @@ ul.none{list-style:none;padding:0;margin:0}
 
   <div class="panel">
     <div class="panel-hd"><div class="t">
+      <h2>Import your schedule from Stellic</h2>
+      <div class="d">Stellic replaced the Student Center for registration, so this is where your real meeting times live now. There is no student-accessible API to call, so this reads the page the same way you would copy it yourself.</div>
+    </div></div>
+    <div id="stellicBox"></div>
+    <div class="divider"></div>
+    <label class="f" for="stellicPaste">Paste the copied text here</label>
+    <textarea id="stellicPaste" style="min-height:130px" placeholder="Paste what the bookmarklet copied, or any block of text listing your courses, days and times…"></textarea>
+    <div class="row" style="margin-top:11px"><button class="btn primary" id="btnScanStellic">Scan text</button>
+      <span class="hint" id="stellicMsg" style="margin:0"></span></div>
+    <div id="stellicResults" style="margin-top:14px"></div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-hd"><div class="t">
+      <h2>Screenshot schedule scanner</h2>
+      <div class="d">Drop in a screenshot of your weekly schedule and this reads it with an in-browser OCR engine — nothing is uploaded anywhere, the image never leaves this tab. It looks for a day-header row and an hour axis to work out real times; when it cannot find either, it falls back to mining whatever text it read, same as the Stellic box above.</div>
+    </div></div>
+    <div id="shotDrop" class="empty" style="cursor:pointer;padding:34px 18px">
+      <div>Click to choose an image, or drag one here.</div>
+      <div class="hint" style="margin-top:6px">A clean screenshot of the weekly grid works best — the one you\u2019d get from One.IU\u2019s class schedule view.</div>
+    </div>
+    <input type="file" id="shotFile" accept="image/*" style="display:none">
+    <div class="row" style="margin-top:12px;display:none" id="shotPreviewRow">
+      <canvas id="shotCanvas" style="max-width:340px;max-height:240px;border:1px solid var(--line);border-radius:8px"></canvas>
+      <div style="flex:1;min-width:220px">
+        <div class="row"><button class="btn primary" id="btnScanShot">Scan image</button>
+          <button class="btn" id="btnShotClear">Choose a different image</button></div>
+        <div id="shotProgress" class="hint" style="margin-top:9px"></div>
+      </div>
+    </div>
+    <div id="shotResults" style="margin-top:14px"></div>
+    <div class="divider"></div>
+    <div class="note warn"><b>What this can and cannot do.</b> The OCR engine (Tesseract.js) loads from a public CDN the first time you scan — that needs internet access, which the hosted preview of this page does not allow; it works when you run the downloaded <code>index.html</code> file yourself. Reading a photo of a screen is harder than a clean screenshot: expect to fix a few rows by hand, and treat every result as unconfirmed until you have checked it, same as everything else this page reads off a picture instead of a real data source. <b>End times specifically run short:</b> a real schedule app draws each class as a colored block, but this only sees the text sitting inside it — a short course name in a long block leaves empty space this can't see, so the guessed end time is often earlier than the real one. Double-check every end time before saving.</div>
+    <div class="srcline"><strong>Tesseract.js project</strong> — In-browser OCR engine <a href="https://github.com/naptha/tesseract.js" target="_blank" rel="noopener">open</a></div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-hd"><div class="t">
       <h2>Paste data in</h2>
       <div class="d">The path that always works. Paste an .ics calendar feed, a Canvas assignment list, or plain lines and this parses them into real courses, assignments and announcements.</div>
     </div></div>
@@ -1244,7 +1282,13 @@ const CITE = {
   wsAgency:{t:'Work-Study information for agencies — IU minimum wage for student employment', o:'IU Office of the University Controller', u:'https://controller.iu.edu/services/payroll-processors/work-study/information-for-agencies'},
   wageZip:{t:'IU student hourly pay in Bloomington, IN', o:'ZipRecruiter', u:'https://www.ziprecruiter.com/Jobs/Iu-Student/-in-Bloomington,IN'},
   canvasAG:{t:'Assignment Groups — REST API (group_weight, include[]=assignments, include[]=submission)', o:'Instructure', u:'https://canvas.instructure.com/doc/api/assignment_groups.html'},
-  canvasCourses:{t:'Courses — REST API', o:'Instructure', u:'https://canvas.instructure.com/doc/api/courses.html'}
+  canvasCourses:{t:'Courses — REST API', o:'Instructure', u:'https://canvas.instructure.com/doc/api/courses.html'},
+  stellicIU:{t:'Stellic: Student Success Tool', o:'IU Student Success', u:'https://studentsuccess.iu.edu/stellic/index.html'},
+  stellicNews:{t:'Student success tool Stellic now available across all campuses', o:'IU Today', u:'https://today.iu.edu/live/news/47668-student-success-tool-stellic-now-available-across'},
+  stellicReg:{t:'Stellic continues implementation with IU-wide course registration', o:'IU Today', u:'https://today.iu.edu/live/news/49197-stellic-continues-implementation-with-iu-wide'},
+  stellicIDS:{t:'How IU students are navigating the Stellic degree planning transition', o:'Indiana Daily Student', u:'https://www.idsnews.com/article/2026/03/iu-students-campus-stellic-schedule-classes-course-igps-academic-advisor'},
+  stellicDocs:{t:'Stellic for Developers — partner API requires an institution-issued Personal Access Token, not a student session', o:'Stellic', u:'https://docs.stellic.com/'},
+  tesseract:{t:'Tesseract.js — in-browser OCR engine', o:'Tesseract.js project', u:'https://github.com/naptha/tesseract.js'}
 };
 function citeLine(id, extra){
   const c = CITE[id]; if(!c) return '';
@@ -4923,6 +4967,7 @@ function renderData(){
   $('pasteKind').innerHTML = PASTE_KINDS.map(k=>'<option value="'+k.id+'">'+esc(k.n)+'</option>').join('');
   renderSourceList();
   renderBookmarklet();
+  renderStellicBookmarklet();
   $('howto').innerHTML = SRC_KINDS.filter(k=>k.how && k.id!=='other').map(k=>
     '<div style="border:1px solid var(--line);border-radius:var(--r);padding:13px;background:var(--surface-2)">'
     +'<b style="font-size:13.5px">'+esc(k.n)+'</b>'
@@ -5061,7 +5106,416 @@ function renderBookmarklet(){
     +'<div class="note warn"><b>On reading a screen recording instead.</b> You asked whether that could work. It cannot, and I would rather say so than ship something that half-works: there is no OCR engine that can be bundled into a single HTML file at a sane size, video frames of a grade table decode into text with errors that are invisible until your GPA is wrong, and the whole approach is strictly worse than an API that returns exact numbers. The bookmarklet above is the same one click and the data is exact.</div>';
 }
 
-/* --- paste parsing ------------------------------------------------------ */
+/* ======================================================================
+   SHARED SCHEDULE MINER — used by the Stellic importer and the screenshot
+   scanner alike. Both hand it text (typed, copied, or OCR'd) and get back
+   candidate MEETINGS: a course code, a type, days, a start/end time, and
+   the raw fragment it came from. Nothing here is trusted on its own —
+   every candidate is rendered into an editable table and nothing is added
+   to a course until the user presses the commit button.
+   ====================================================================== */
+const DAY_TOKENS = [
+  [/\bmonday\b/gi, 1], [/\btuesday\b/gi, 2], [/\bwednesday\b/gi, 3], [/\bthursday\b/gi, 4],
+  [/\bfriday\b/gi, 5], [/\bsaturday\b/gi, 6], [/\bsunday\b/gi, 0],
+  [/\bmon\b/gi, 1], [/\btues?\b/gi, 2], [/\bwed\b/gi, 3], [/\bthu(rs)?\b/gi, 4], [/\bfri\b/gi, 5],
+  [/\bsat\b/gi, 6], [/\bsun\b/gi, 0]
+];
+/* Compact strings like "MWF" or "TR" or "TuTh" are the common case on a
+   registration screen. Longest tokens first so "Th" wins over a lone "T". */
+/* Two-letter forms checked before one-letter ones so "Tu"/"Th" win over a
+   lone T. Standard registrar shorthand: M T W R F for the weekdays (R, not
+   Th, is the conventional single-letter Thursday) plus U for Sunday — S is
+   deliberately not used alone, since Sat vs Sun is exactly the ambiguity
+   that convention exists to avoid. */
+const DAY_COMPACT = [
+  ['Th',4], ['Tu',2], ['Su',0], ['Sa',6],
+  ['M',1], ['T',2], ['W',3], ['R',4], ['F',5], ['U',0]
+];
+/* A candidate word counts only if it decomposes ENTIRELY into day tokens
+   with nothing left over — "MWF" passes, "Future" does not (the trailing
+   letters never resolve), which is what keeps this out of ordinary prose. */
+function decomposeDayWord(word){
+  let i=0; const days=[];
+  while(i<word.length){
+    const hit = DAY_COMPACT.find(([tok])=> word.slice(i,i+tok.length).toLowerCase()===tok.toLowerCase());
+    if(!hit) return null;
+    days.push(hit[1]); i+=hit[0].length;
+  }
+  return days.length ? days : null;
+}
+function mineDays(str){
+  const found = new Set();
+  DAY_TOKENS.forEach(([re,dow])=>{ if(re.test(str)) found.add(dow); });
+  (str.match(/\b[A-Za-z]{1,7}\b/g)||[]).forEach(w=>{
+    const d = decomposeDayWord(w);
+    if(d) d.forEach(x=>found.add(x));
+  });
+  return [...found].sort((a,b)=>a-b);
+}
+const TIME_RANGE_RE = /(\d{1,2})(?::(\d{2}))?\s?([ap]\.?m\.?)?\s*[-–—to]{1,3}\s*(\d{1,2})(?::(\d{2}))?\s?([ap]\.?m\.?)?/i;
+function mineTimeRange(str){
+  const m = str.match(TIME_RANGE_RE);
+  if(!m) return null;
+  let [,h1,m1,ap1,h2,m2,ap2] = m;
+  ap2 = (ap2||'').toLowerCase().replace(/\./g,'');
+  ap1 = (ap1||'').toLowerCase().replace(/\./g,'');
+  if(!ap1 && ap2) ap1 = ap2;               /* "9-10:30am" shares the meridiem */
+  if(!ap1 && !ap2) return null;             /* no am/pm anywhere: too ambiguous to guess */
+  const to24 = (h,ap)=>{ h=+h; if(ap==='pm' && h!==12) h+=12; if(ap==='am' && h===12) h=0; return h; };
+  const a = to24(h1,ap1)*60 + (+(m1||0));
+  const b = to24(h2,ap2||ap1)*60 + (+(m2||0));
+  if(!(b>a) || b-a>360) return null;        /* a class over 6h is more likely a bad parse than real */
+  return {a, b};
+}
+/* A course code, generously: 2-5 letters, optional dash, optional single
+   trailing subject letter, then a 3-4 digit number. Matches "CSCI-C 212",
+   "MATH 211", "BUS-X101". */
+const COURSE_CODE_RE = /\b(?!(?:LEC|LAB|DIS|REC|SEM|STD|SEC|SECTION|CLASS|ROOM|BLDG|BUILDING|HALL|FLOOR)\b)([A-Z]{2,5})[-\s]?([A-Z]\s?)?(\d{3,4}[A-Z]?)\b/;
+const MEETING_TYPE_RE = /\b(LEC|LECTURE|LAB|LABORATORY|DIS|DISC|DISCUSSION|REC|RECITATION|SEM|SEMINAR|STD|STUDIO)\b/i;
+const TYPE_NORMALISE = {LECTURE:'LEC',DIS:'DIS',DISC:'DIS',DISCUSSION:'DIS',REC:'REC',RECITATION:'REC',
+  LABORATORY:'LAB',SEM:'SEM',SEMINAR:'SEM',STD:'STD',STUDIO:'STD'};
+function normType(t){ if(!t) return 'LEC'; const u=t.toUpperCase(); return TYPE_NORMALISE[u]||u; }
+
+function mineScheduleText(text, srcTag){
+  const lines = String(text||'').split(/\r?\n/).map(l=>l.trim()).filter(Boolean);
+  const out = [];
+  for(let i=0;i<lines.length;i++){
+    const cm = lines[i].match(COURSE_CODE_RE);
+    if(!cm) continue;
+    const code = (cm[1]+'-'+(cm[2]||'').trim()+' '+cm[3]).replace(/-\s+/,'-').replace(/\s+/g,' ').trim()
+      .replace(/^([A-Z]{2,5})- (\d)/,'$1 $2');            /* no subject letter: "MATH- 211" -> "MATH 211" */
+    /* days/time can be on this line or the next couple — registration
+       screens routinely wrap one meeting across 2-3 short lines */
+    const window2 = [lines[i], lines[i+1]||'', lines[i+2]||''].join(' ');
+    const days = mineDays(window2);
+    const tr = mineTimeRange(window2);
+    const typeM = window2.match(MEETING_TYPE_RE);
+    out.push({
+      id: uid(), code, type: normType(typeM && typeM[1]),
+      days, start: tr ? toHHMM(tr.a) : '', end: tr ? toHHMM(tr.b) : '',
+      raw: lines[i].slice(0,90), src: srcTag||'text', conf: (days.length && tr) ? 'good' : 'partial'
+    });
+  }
+  return out;
+}
+function bestCourseMatch(code){
+  const bare = String(code).toUpperCase().replace(/[^A-Z0-9]/g,'');
+  return S.courses.find(c=> c.code.toUpperCase().replace(/[^A-Z0-9]/g,'')===bare) || null;
+}
+
+/* --------------------------------------------- shared preview + commit --- */
+function renderMeetingCandidates(mountId, rows, opts){
+  window.__schedRows = rows;
+  const m=$(mountId); if(!m) return;
+  if(!rows.length){ m.innerHTML='<div class="empty">'+(opts&&opts.emptyMsg||'Nothing recognisable found.')+'</div>'; return; }
+  const known = S.courses.map(c=>c.code);
+  m.innerHTML = '<div class="scroll"><table><thead><tr><th></th><th>Course</th><th>Goes to</th><th>Type</th><th>Days</th>'
+    +'<th>Start</th><th>End</th><th>Read from</th></tr></thead><tbody>'
+    + rows.map((r,i)=>{
+      const match = bestCourseMatch(r.code);
+      return '<tr data-schedrow="'+i+'" style="'+(r.conf==='partial'?'opacity:.72':'')+'">'
+        +'<td><input type="checkbox" data-scinc="'+i+'" checked aria-label="Include this meeting"></td>'
+        +'<td><input value="'+esc(r.code)+'" data-scf="code" data-i="'+i+'" style="width:118px;padding:4px 6px;font-size:12.5px"></td>'
+        +'<td><select data-scf="target" data-i="'+i+'" style="padding:4px 6px;font-size:12.5px">'
+          +'<option value="__new"'+(match?'':' selected')+'>+ new course</option>'
+          + known.map(k=>'<option value="'+esc(k)+'"'+(match&&match.code===k?' selected':'')+'>'+esc(k)+'</option>').join('')
+          +'</select></td>'
+        +'<td><select data-scf="type" data-i="'+i+'" style="padding:4px 6px;font-size:12.5px">'
+          + ['LEC','LAB','DIS','REC','SEM','STD'].map(t=>'<option'+(r.type===t?' selected':'')+'>'+t+'</option>').join('')+'</select></td>'
+        +'<td><div class="row" style="gap:3px;flex-wrap:nowrap">'+[1,2,3,4,5,6,0].map(dw=>
+          '<label style="font-size:10.5px;display:flex;flex-direction:column;align-items:center;gap:1px"><input type="checkbox" data-scday="'+i+':'+dw+'"'+(r.days.indexOf(dw)>=0?' checked':'')+'>'+DAYS[dw][0]+'</label>').join('')+'</div></td>'
+        +'<td><input type="time" value="'+esc(r.start)+'" data-scf="start" data-i="'+i+'" style="padding:4px 6px;font-size:12.5px;width:100px"></td>'
+        +'<td><input type="time" value="'+esc(r.end)+'" data-scf="end" data-i="'+i+'" style="padding:4px 6px;font-size:12.5px;width:100px"></td>'
+        +'<td style="max-width:220px;font-size:11px;color:var(--ink-3);font-family:var(--mono)" title="'+esc(r.raw)+'">'+esc(r.raw)+'</td>'
+        +'</tr>';
+    }).join('')+'</tbody></table></div>'
+    +'<div class="row" style="margin-top:12px;gap:10px">'
+      +'<button class="btn primary" data-sccommit="'+mountId+'">Add checked rows to my courses</button>'
+      +'<span class="hint" style="margin:0">'+rows.filter(r=>r.conf==='partial').length+' row(s) are dimmed because a day or time could not be read \u2014 check those by hand before adding.</span>'
+    +'</div>';
+}
+function commitMeetingCandidates(mountId){
+  const rows = window.__schedRows||[];
+  const included = qsa('[data-scinc]', $(mountId)).filter(c=>c.checked).map(c=>+c.dataset.scinc);
+  if(!included.length){ toast('Nothing is checked.','warn'); return; }
+  let newCourses=0, newMeetings=0, skipped=0;
+  included.forEach(i=>{
+    const r = rows[i];
+    if(!r.days.length || !r.start || !r.end){ skipped++; return; }
+    const targetSel = qs('select[data-scf="target"][data-i="'+i+'"]', $(mountId));
+    const targetVal = targetSel ? targetSel.value : '__new';
+    let course = targetVal==='__new' ? null : S.courses.find(c=>c.code===targetVal);
+    if(!course){
+      course = {id:uid(), code:r.code, credits:null, instructor:'', diff:1.0, meetings:[], grades:[], notes:''};
+      S.courses.push(course); newCourses++;
+    }
+    course.meetings = course.meetings||[];
+    course.meetings.push({type:r.type, section:'', classNo:'', days:r.days.slice(),
+      start:r.start, end:r.end, loc:'', bldg:'', tEst:true, src:r.src});
+    newMeetings++;
+  });
+  save(); renderAll();
+  toast('Added '+newMeetings+' meeting'+(newMeetings===1?'':'s')
+    + (newCourses?' across '+newCourses+' new course'+(newCourses===1?'':'s'):'')
+    + (skipped?'. Skipped '+skipped+' row'+(skipped===1?'':'s')+' missing a day or time.':'.')
+    + ' Every one is marked unconfirmed \u2014 check it on the Courses tab.', 'good');
+}
+
+/* Runs the shared miner over whatever is in the Stellic paste box. */
+function scanStellicText(){
+  const raw = $('stellicPaste').value.trim();
+  if(!raw){ $('stellicMsg').innerHTML='<span style="color:#e2645f">Paste something first.</span>'; return; }
+  let text = raw;
+  try{
+    const o = JSON.parse(raw);
+    if(o && o.source==='stellic-text' && typeof o.text==='string') text = o.text;
+  }catch(e){ /* plain text is fine too */ }
+  const rows = mineScheduleText(text, 'stellic');
+  $('stellicMsg').innerHTML = rows.length
+    ? '<span style="color:#4fc24f">Found '+rows.length+' possible meeting'+(rows.length===1?'':'s')+'.</span>'
+    : '<span style="color:var(--warn)">No course code + day/time pattern found. Paste a wider block, or add the course by hand on the Courses tab.</span>';
+  renderMeetingCandidates('stellicResults', rows, {emptyMsg:'Nothing recognisable in that text.'});
+}
+
+/* ------------------------------------------------------- Stellic import ---
+   Stellic's documented API (docs.stellic.com) issues Personal Access Tokens
+   to institutions for server-to-server integration — it is not something a
+   student's browser session can call, unlike Canvas's student-scoped API.
+   So this does the honest equivalent of a copy-paste: it grabs the visible
+   text of the Stellic tab you are on (or just your selection, if you made
+   one) and hands it to the same miner the paste box uses. It is not reading
+   any private endpoint, and it says so. */
+function stellicBookmarkletSource(){
+  return "(()=>{" +
+    "try{" +
+      "var sel=window.getSelection?String(window.getSelection()):'';" +
+      "var text=(sel&&sel.trim().length>40)?sel:document.body.innerText;" +
+      "var out={source:'stellic-text',host:location.host,at:new Date().toISOString(),text:text};" +
+      "var t=JSON.stringify(out);" +
+      "navigator.clipboard.writeText(t).then(function(){" +
+        "alert('Crimson Command: copied the visible text of this page. Paste it into Data & Sources.');" +
+      "}).catch(function(){" +
+        "var w=window.open('','_blank');" +
+        "w.document.write('<textarea style=\"width:99%;height:90vh\">'+t.replace(/</g,'&lt;')+'</textarea>');" +
+        "alert('Clipboard blocked - copy the text in the new tab instead.');" +
+      "});" +
+    "}catch(e){alert('Crimson Command: '+e.message);}" +
+  "})()";
+}
+function renderStellicBookmarklet(){
+  const box = $('stellicBox'); if(!box) return;
+  const href = 'javascript:' + encodeURIComponent(stellicBookmarkletSource());
+  box.innerHTML =
+    '<div class="row" style="gap:14px;align-items:center;flex-wrap:wrap">'
+      +'<a class="btn primary" draggable="true" href="'+href.replace(/"/g,'&quot;')+'" '
+      +'onclick="return false" style="cursor:grab;font-size:14px;padding:11px 20px">⇱ Copy from Stellic</a>'
+      +'<span class="hint" style="margin:0;max-width:52ch">Drag onto your bookmarks bar. On the Stellic tab showing your schedule, optionally select just that area first, then click it.</span>'
+    +'</div>'
+    +'<div class="grid g2" style="margin-top:16px">'
+      +'<div><div class="sect-lbl">How to use it</div><ol class="tight" style="padding-left:19px">'
+        +'<li>Open <b>stellic.iu.edu</b> (or find Stellic in One.IU) and sign in.</li>'
+        +'<li>Go to <b>Schedule Term</b> — the tab that shows your sections and meeting times.</li>'
+        +'<li>Optional: click-drag to select just the schedule area. A cleaner selection means fewer rows to fix.</li>'
+        +'<li>Click the bookmarklet, then paste below and press Scan text.</li>'
+      +'</ol></div>'
+      +'<div><div class="sect-lbl">What it actually does</div><ul class="tight">'
+        +'<li><b>This is not a Stellic API call.</b> Stellic\u2019s documented API issues access tokens to institutions for server integration, not to a signed-in student\u2019s browser \u2014 so nothing here pretends to know a private endpoint. It reads the same text you could select and copy yourself.</li>'
+        +'<li>Read-only. It never types, clicks, or submits anything on the Stellic page.</li>'
+        +'<li>Because it is reading rendered text rather than structured data, the miner below is a best-effort regex pass \u2014 every row it finds is editable and nothing is added until you press the commit button.</li>'
+      +'</ul>'
+      + citeLine('stellicIU') + citeLine('stellicReg','Schedule Term / registration rollout:')
+      +'</div>'
+    +'</div>';
+}
+
+/* ======================================================================
+   SCREENSHOT SCHEDULE SCANNER
+   Tesseract.js loaded from a CDN at first use (never bundled — this file
+   stays a single HTML document). The image never leaves the browser: OCR
+   runs client-side, nothing is uploaded. Grid calibration (day headers +
+   hour axis) turns word positions into real meetings; when calibration
+   fails, it falls back to the same text miner the Stellic box uses.
+   ====================================================================== */
+let __tesseractLoad = null;
+function loadTesseractLib(){
+  if(window.Tesseract) return Promise.resolve(window.Tesseract);
+  if(__tesseractLoad) return __tesseractLoad;
+  __tesseractLoad = new Promise((resolve, reject)=>{
+    const s2 = document.createElement('script');
+    s2.src = 'https://cdn.jsdelivr.net/npm/tesseract.js@4/dist/tesseract.min.js';
+    s2.crossOrigin = 'anonymous';
+    const t = setTimeout(()=>reject(new Error('timed out loading the OCR engine')), 15000);
+    s2.onload = ()=>{ clearTimeout(t); window.Tesseract ? resolve(window.Tesseract) : reject(new Error('OCR engine loaded but did not attach')); };
+    s2.onerror = ()=>{ clearTimeout(t); reject(new Error('could not reach the CDN — no internet, or this preview blocks it')); };
+    document.head.appendChild(s2);
+  });
+  return __tesseractLoad;
+}
+
+let __shotImg = null;   /* the currently-loaded image, drawn to #shotCanvas */
+function initShotPicker(){
+  const drop = $('shotDrop'), file = $('shotFile');
+  if(!drop || !file) return;
+  drop.addEventListener('click', ()=> file.click());
+  drop.addEventListener('dragover', e=>{ e.preventDefault(); drop.style.borderColor='var(--crimson)'; });
+  drop.addEventListener('dragleave', ()=>{ drop.style.borderColor=''; });
+  drop.addEventListener('drop', e=>{
+    e.preventDefault(); drop.style.borderColor='';
+    if(e.dataTransfer.files && e.dataTransfer.files[0]) loadShotFile(e.dataTransfer.files[0]);
+  });
+  file.addEventListener('change', ()=>{ if(file.files[0]) loadShotFile(file.files[0]); });
+}
+function loadShotFile(file){
+  if(!/^image\//.test(file.type)){ toast('That is not an image.','bad'); return; }
+  const img = new Image();
+  img.onload = ()=>{
+    __shotImg = img;
+    const cv = $('shotCanvas');
+    /* upscale small screenshots, cap huge ones — both help OCR and keep it fast */
+    let w = img.naturalWidth, h = img.naturalHeight;
+    const scale = w < 900 ? Math.min(2, 1600/w) : Math.min(1, 2200/w);
+    w = Math.round(w*scale); h = Math.round(h*scale);
+    cv.width = w; cv.height = h;
+    cv.getContext('2d').drawImage(img, 0, 0, w, h);
+    $('shotPreviewRow').style.display = 'flex';
+    $('shotDrop').style.display = 'none';
+    $('shotResults').innerHTML = '';
+    $('shotProgress').textContent = '';
+  };
+  img.onerror = ()=> toast('Could not read that file as an image.','bad');
+  img.src = URL.createObjectURL(file);
+}
+function resetShotPicker(){
+  __shotImg = null;
+  $('shotPreviewRow').style.display = 'none';
+  $('shotDrop').style.display = '';
+  $('shotFile').value = '';
+  $('shotResults').innerHTML = '';
+  $('shotProgress').textContent = '';
+}
+
+/* "9:45am", "9 am", "9:45 a.m." -> minutes since midnight, or null */
+function parseClockLabel(text){
+  const m = String(text).trim().match(/^(\d{1,2})(?::(\d{2}))?\s?([ap])\.?m?\.?$/i);
+  if(!m) return null;
+  let h = +m[1]; const mins = +(m[2]||0); const ap = m[3].toLowerCase();
+  if(h>12) return null;
+  if(ap==='p' && h!==12) h+=12; if(ap==='a' && h===12) h=0;
+  return h*60+mins;
+}
+const DAY_HEAD_RE = /^(sun|mon|tue|tues|wed|thu|thur|thurs|fri|sat)/i;
+const DAY_HEAD_DOW = {sun:0,mon:1,tue:2,tues:2,wed:3,thu:4,thur:4,thurs:4,fri:5,sat:6};
+
+function clusterWordsIntoMeetings(words, W, H){
+  const clean = words.filter(w=> w.text && w.text.trim());
+  const headers = clean.filter(w=> w.bbox.y0 < H*0.18 && DAY_HEAD_RE.test(w.text.trim()))
+    .map(w=>{
+      const mm = w.text.trim().toLowerCase().match(DAY_HEAD_RE);
+      return {dow: mm ? DAY_HEAD_DOW[mm[0]] : null, x:(w.bbox.x0+w.bbox.x1)/2};
+    })
+    .filter(h=>h.dow!=null)
+    .sort((a,b)=>a.x-b.x);
+  const axis = clean.filter(w=> w.bbox.x0 < W*0.12)
+    .map(w=>({min:parseClockLabel(w.text), y:(w.bbox.y0+w.bbox.y1)/2}))
+    .filter(a=>a.min!=null)
+    .sort((a,b)=>a.y-b.y);
+
+  if(headers.length<2 || axis.length<2) return null;   /* not enough to calibrate */
+
+  /* least-squares line through the axis points: minutes = m*y + b */
+  const n=axis.length, sy=axis.reduce((s,a)=>s+a.y,0), smin=axis.reduce((s,a)=>s+a.min,0);
+  const syy=axis.reduce((s,a)=>s+a.y*a.y,0), symin=axis.reduce((s,a)=>s+a.y*a.min,0);
+  const denom = n*syy - sy*sy;
+  const slope = denom ? (n*symin - sy*smin)/denom : 0;
+  const intercept = (smin - slope*sy)/n;
+  const yToMin = y => slope*y + intercept;
+
+  /* column boundaries: midpoints between headers, extrapolated at both ends */
+  const bounds=[];
+  bounds.push(headers[0].x - (headers[1].x-headers[0].x)/2);
+  for(let i=0;i<headers.length-1;i++) bounds.push((headers[i].x+headers[i+1].x)/2);
+  bounds.push(headers[headers.length-1].x + (headers[headers.length-1].x-headers[headers.length-2].x)/2);
+
+  const used = new Set();
+  clean.forEach((w,i)=>{
+    if(w.bbox.y0 < H*0.18 && DAY_HEAD_RE.test(w.text.trim())) used.add(i);
+    if(w.bbox.x0 < W*0.12 && parseClockLabel(w.text)!=null) used.add(i);
+  });
+
+  const byCol = headers.map(()=>[]);
+  clean.forEach((w,i)=>{
+    if(used.has(i)) return;
+    const cx=(w.bbox.x0+w.bbox.x1)/2;
+    for(let c=0;c<headers.length;c++){ if(cx>=bounds[c] && cx<bounds[c+1]){ byCol[c].push(w); break; } }
+  });
+
+  const out=[];
+  byCol.forEach((colWords, c)=>{
+    if(!colWords.length) return;
+    colWords.sort((a,b)=> a.bbox.y0-b.bbox.y0 || a.bbox.x0-b.bbox.x0);
+    const heights = colWords.map(w=>w.bbox.y1-w.bbox.y0).sort((a,b)=>a-b);
+    const medH = heights[Math.floor(heights.length/2)] || 14;
+    const groups=[]; let cur=[colWords[0]];
+    for(let i=1;i<colWords.length;i++){
+      const gap = colWords[i].bbox.y0 - Math.max(...cur.map(w=>w.bbox.y1));
+      if(gap > medH*1.6){ groups.push(cur); cur=[colWords[i]]; } else cur.push(colWords[i]);
+    }
+    groups.push(cur);
+    groups.forEach(g=>{
+      const text = g.map(w=>w.text).join(' ');
+      const cm = text.match(COURSE_CODE_RE);
+      if(!cm) return;                                    /* not a class block */
+      const code = (cm[1]+'-'+(cm[2]||'').trim()+' '+cm[3]).replace(/-\s+/,'-').replace(/\s+/g,' ').trim()
+        .replace(/^([A-Z]{2,5})- (\d)/,'$1 $2');
+      const top = Math.min(...g.map(w=>w.bbox.y0)), bot = Math.max(...g.map(w=>w.bbox.y1));
+      let startMin = Math.round(yToMin(top)/5)*5, endMin = Math.round(yToMin(bot)/5)*5;
+      if(!(endMin>startMin)) return;
+      if(endMin-startMin > 240) endMin = startMin+75;      /* a mis-grouped tail shouldn't yield a 5h class */
+      const typeM = text.match(MEETING_TYPE_RE);
+      out.push({id:uid(), code, type:normType(typeM&&typeM[1]),
+        days:[headers[c].dow], start:toHHMM(startMin), end:toHHMM(endMin),
+        raw:text.slice(0,90), src:'screenshot', conf:'good'});
+    });
+  });
+  return out;
+}
+
+async function runScreenshotScan(){
+  if(!__shotImg){ toast('Choose an image first.','bad'); return; }
+  const prog = $('shotProgress');
+  prog.textContent = 'Loading the OCR engine…';
+  let Tesseract;
+  try{ Tesseract = await loadTesseractLib(); }
+  catch(e){
+    prog.innerHTML = '<span style="color:#e2645f">Could not load the OCR engine: '+esc(e.message)+'.</span>';
+    toast('OCR unavailable here — open the downloaded index.html with internet access, or type the schedule in by hand.','bad');
+    return;
+  }
+  prog.textContent = 'Reading the image… this can take a few seconds.';
+  let data;
+  try{
+    const res = await Tesseract.recognize($('shotCanvas'), 'eng', {
+      logger: m2 => { if(m2.status==='recognizing text') prog.textContent = 'Reading the image… '+Math.round((m2.progress||0)*100)+'%'; }
+    });
+    data = res.data;
+  }catch(e){
+    prog.innerHTML = '<span style="color:#e2645f">OCR failed: '+esc(e.message)+'.</span>';
+    return;
+  }
+  prog.textContent = '';
+  const words = Array.isArray(data.words) ? data.words : [];
+  let rows = words.length ? clusterWordsIntoMeetings(words, $('shotCanvas').width, $('shotCanvas').height) : null;
+  let mode = 'grid';
+  if(!rows || !rows.length){
+    mode = 'text';
+    rows = mineScheduleText(data.text||'', 'screenshot');
+  }
+  $('shotProgress').innerHTML = mode==='grid'
+    ? '<span style="color:#4fc24f">Found a day header row and an hour axis — times below are calibrated from the image.</span>'
+    : '<span style="color:var(--warn)">Could not find a clear day-header row and hour axis, so this fell back to reading the text alone. Days and times are far less reliable — check every row.</span>';
+  renderMeetingCandidates('shotResults', rows||[], {emptyMsg:'No course codes recognised in this image. Try a clearer screenshot, or add courses by hand.'});
+}
+
 let parsed=null;
 function parsePaste(){
   const raw=$('pasteBox').value.trim();
@@ -5194,6 +5648,8 @@ function renderCitations(){
    +'<li><b>Intramural and club schedules.</b> Set per league on IMLeagues once you are rostered, so nothing could be pre-loaded. The league formats — three games plus playoffs for competitive, five without for recreational — are verified.</li>'
    +'<li><b>Walking times.</b> Not fetched. Every routing and geocoding service is blocked from the environment this was built in, and a published page cannot query Google\u2019s Distance Matrix without a key. The page instead derives exactly which routes your timetable needs and hands you the Google Maps link for each.</li>'
    +'<li><b>Retail prices behind the estimated deal values.</b> Where a source stated only a student price and not a standard one, the saving is left blank for you rather than inferred.</li>'
+   +'<li><b>The Stellic importer.</b> Stellic’s documented API issues Personal Access Tokens to the institution for server-to-server use, not to a student’s browser session — so there is no verified endpoint this page can call on your behalf. The bookmarklet instead copies the visible page text, the same way you would select and copy it yourself, and every row it finds still goes through the same human-review table before anything is saved.</li>'
+   +'<li><b>The screenshot scanner.</b> It reads pixels, not a data feed: course codes, days and times are all guesses from OCR text placement, calibrated against a detected day-header row and hour axis when one exists and falling back to plain text-mining when it does not. End times specifically tend to run short, since the block’s true height is invisible to it — see the caveat on the scanner itself. Nothing from a scan is saved until you confirm each row.</li>'
    +'</ul>';
 }
 
@@ -5297,6 +5753,14 @@ document.addEventListener('input', e=>{
     S.tripMins = Math.max(0, +t.value||0);
     save(); clearTimeout(window.__tm); window.__tm=setTimeout(()=>{ derive(); renderTrips(); }, 450); return;
   }
+  else if(t.dataset.scf!==undefined){
+    const i=+t.dataset.i, r=(window.__schedRows||[])[i]; if(!r) return;
+    if(t.dataset.scf==='code') r.code=t.value;
+    else if(t.dataset.scf==='start') r.start=t.value;
+    else if(t.dataset.scf==='end') r.end=t.value;
+    else if(t.dataset.scf==='type') r.type=t.value;
+    return;
+  }
   else if(t.dataset.walkpair!==undefined){
     S.walk=S.walk||{};
     if(t.value==='') delete S.walk[t.dataset.walkpair]; else S.walk[t.dataset.walkpair]=+t.value;
@@ -5327,6 +5791,13 @@ document.addEventListener('change', e=>{
     S.dining.halls[h]=S.dining.halls[h]||{};
     S.dining.halls[h][t.dataset.hallst]=t.checked;
     save(); derive(); renderFood(); return;
+  }
+  if(t.dataset.scday!==undefined){
+    const [i,dw]=t.dataset.scday.split(':').map(Number);
+    const r=(window.__schedRows||[])[i]; if(!r) return;
+    if(t.checked){ if(r.days.indexOf(dw)<0){ r.days.push(dw); r.days.sort((a,b)=>a-b); } }
+    else r.days = r.days.filter(x=>x!==dw);
+    return;
   }
   if(t.dataset.avoid!==undefined){
     const a=t.dataset.avoid, arr=S.dining.avoid||[];
@@ -5411,6 +5882,7 @@ document.addEventListener('click', e=>{
     S.dining.tray[k]=(S.dining.tray[k]||[]).filter(x=>x.id!==ds.deltray);
     save(); derive(); renderTray(); return; }
   if(ds.hall){ S.dining.hall=ds.hall; save(); derive(); renderFood(); return; }
+  if(ds.sccommit){ commitMeetingCandidates(ds.sccommit); return; }
   if(ds.neverfood){
     S.dining.never=(S.dining.never||[]).concat([ds.neverfood]).filter((v,i,a)=>a.indexOf(v)===i);
     save(); derive(); renderFood();
@@ -5499,6 +5971,9 @@ document.addEventListener('click', e=>{
     case 'btnSaveNoTest': addSource(false); break;
     case 'btnRetestAll': (S.sources||[]).forEach(s=>testSource(s)); break;
     case 'btnParse': parsePaste(); break;
+    case 'btnScanStellic': scanStellicText(); break;
+    case 'btnScanShot': runScreenshotScan(); break;
+    case 'btnShotClear': resetShotPicker(); break;
     case 'btnCommit': commitParse(); break;
     case 'btnExport': case 'btnExport2': exportData(); break;
     case 'btnImport': case 'btnImport2': importDialog(); break;
@@ -5951,6 +6426,7 @@ function importDialog(){
   showTab(S.ui.tab||'general');
   $('pasteBox').addEventListener('input', ()=>{ clearTimeout(window.__pt); window.__pt=setTimeout(parsePaste,500); });
   $('foodSearch').addEventListener('input', ()=>{ clearTimeout(window.__fs); window.__fs=setTimeout(renderFoodList,220); });
+  initShotPicker();
   $('foodStation').addEventListener('change', e=>{ window.__foodSt=e.target.value; renderFoodList(); });
   $('foodProteinOnly').addEventListener('change', renderFoodList);
   if(!had){

@@ -19,7 +19,7 @@ leaves the machine.
 | 06 | Work | Job comparison scored on pay, flexibility, benefits, student experience and schedule fit against the real week. A job marked as held becomes shifts on the schedule. |
 | 07 | Deals | 36 student deals with a source link on every card and a savings tracker split by how well each figure is evidenced. |
 | 08 | Academics | Grades and GPA on IU's scale, deadlines, a transparent strain index, daily check-ins, and the support your fees already cover. |
-| 09 | Data | A one-click Canvas bookmarklet, link testing, paste import, storage tools, the reset flow, and the works-cited list. |
+| 09 | Data | A one-click Canvas bookmarklet, a Stellic schedule importer, a screenshot scanner, link testing, paste import, storage tools, the reset flow, and the works-cited list. |
 
 ## One schedule, not nine
 
@@ -68,6 +68,29 @@ so one click returns assignment-group weights, every assignment with its due
 date and points, and your score on each. Read-only, three GETs, clipboard out.
 The parser folds weights into the grade table and due dates into the deadline
 table together.
+
+## Stellic import and the screenshot scanner
+
+Stellic replaced the Student Center for registration, but unlike Canvas it has
+no student-session-authenticated API — its documented API issues Personal
+Access Tokens to the institution for server-to-server use, not to a student's
+browser. So the Stellic bookmarklet does not call an endpoint; it copies the
+visible page text the same way you would select and copy it yourself, and
+that text is fed into a shared miner (`mineScheduleText()`) that regexes out
+course codes, meeting types, day letters and time ranges.
+
+The screenshot scanner reuses the same miner as a fallback. It loads
+Tesseract.js from a CDN on first use (works in the downloaded file with
+internet access; blocked by the hosted Artifact preview's CSP), OCRs the
+image, and tries to calibrate a grid from a detected day-header row and hour
+axis so it can place each course under the right day and time. When it can't
+find both, it falls back to running the raw OCR text through the same text
+miner the Stellic box uses. Either way, results land in one shared
+preview-and-confirm table (`renderMeetingCandidates()` /
+`commitMeetingCandidates()`) — nothing is saved until you approve each row,
+and every field stays editable. Grid-calibrated end times run short for
+blocks with little text in them, since the calibration reads where the text
+sits, not the true height of the calendar block; the scanner's own UI says so.
 
 ## State migrations
 
