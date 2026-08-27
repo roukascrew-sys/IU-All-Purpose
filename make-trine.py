@@ -962,6 +962,127 @@ swap(r"  const m=t.match(/\b([A-Z]{3,4})[-\s]?([A-Z])?\s?(\d{3})\b/);",
 
 
 
+
+# ── IU course and campus names leaking into Trine-facing copy ────────────
+# Several of these fire for a real Trine user: the credits-unset signal
+# named INFO-T 100, the dining-strategy note listed IU's five halls, the
+# social note quoted IU's SRSC fee, and the low-energy recommendation gave
+# IU's CAPS address and phone number. Found by reading the built file end
+# to end rather than by grepping for "IU".
+
+swap_re(r"push\('crit','Courses','The INFO-I 101 lab is unresolved',[\s\S]*?\);",
+  "push('crit','Courses','A meeting is marked unresolved',\n"
+  "      'One of your meetings is flagged as unresolved rather than estimated. Open the Courses tab and set its days and times from myPortal.');",
+  'signal: unresolved meeting')
+
+swap_re(r"push\('warn','Courses','Some meeting times are still estimates',[\s\S]*?\);",
+  "push('warn','Courses','Some meeting times are still estimates',\n"
+  "      'Meetings brought in by the screenshot scanner or the myPortal importer are marked estimated until you confirm them. Check them against myPortal on the Courses tab and this clears.');",
+  'signal: estimated times')
+
+swap_re(r"push\('warn','Courses','A course has no credit value',[\s\S]*?\);",
+  "push('warn','Courses','A course has no credit value',\n"
+  "      d.creditsUnset+' course'+(d.creditsUnset===1?' has':'s have')+' no credit hours set. Until you set them from the catalog, their study requirement is excluded from every total here.');",
+  'signal: credits unset')
+
+# the Courses-tab banner names IU courses and links IU tools
+swap_re(r"    const lab = \(d\.courses\.find\(c=>c\.code==='INFO-I 101'\)[\s\S]*?\+ '<span class=\"hint\" style=\"margin:0\">Or just edit the row on the card below\.</span></div>';",
+  "    banner += '<b>A meeting is marked unresolved.</b> Its days or times could not be read confidently, so nothing was guessed. Edit the row on the card below and it clears.';",
+  'banner: unresolved')
+
+
+# dining strategy listed IU's halls
+swap_re(r"out\.push\('<div class=\"note\"><b>Where to actually eat\.</b>[\s\S]*?citeLine\('tDining'\)\+'</div>'\);",
+  "out.push('<div class=\"note\"><b>Where to actually eat.</b> Whitney Commons is the main dining location; The Depot does grill and take-out, and Storm\\u2019s A-Brewing and The Bean Counter are the two coffee shops. Hours are not published anywhere I could reach, so check them before relying on a late meal. '+chip('verified')+citeLine('tDining')+'</div>');",
+  'dining: where to eat')
+
+# social note quoted IU's rec-centre fee
+swap_re(r"out\.push\('<div class=\"note\"><b>No gym time is blocked out\.</b>[\s\S]*?</div>'\);",
+  "out.push('<div class=\"note\"><b>No gym time is blocked out.</b> The ARC and Thunder Ice Arena are on campus; whether student access is included was not published anywhere I could reach, so check before assuming. Gym time counts 30% toward the social floor here either way.</div>');",
+  'social: gym note')
+
+# the low-energy recommendation gave IU's counselling address and phone
+swap_re(r"if\(avg<=2\.4\) rec\('crit','Your energy has been low for a week',[\s\S]*?'check-in history'\);",
+  "if(avg<=2.4) rec('crit','Your energy has been low for a week',\n"
+  "      'Average '+rnd(avg,1)+'/5 across your last '+ci.length+' check-ins. That is the pattern the recovery term is meant to catch. Trine\\u2019s Counseling Services are free and confidential \\u2014 three licensed clinicians, details on the Academics tab.',\n"
+  "      'check-in history');",
+  'rec: low energy')
+
+# the deals recommendation listed IU's campus offers
+swap_re(r"rec\('good','About '\+money0\(d\.deals\.left\)\+' of value is still on the table',[\s\S]*?'deals checklist'\);",
+  "rec('good','About '+money0(d.deals.left)+' of value is still on the table',\n"
+  "      'The on-campus group \\u2014 free coffee in the LINK, the Academic Success Center, the Writing Center, Counseling \\u2014 is the highest-confidence part of the list and costs nothing but the walk.',\n"
+  "      'deals checklist');",
+  'rec: deals')
+
+for _o, _n in [
+  # IU place id used to filter the building dropdown and to default the hall
+  ("PLACES.filter(p=>p.id!=='mcnutt')", "PLACES.filter(p=>p.id!=='campus')"),
+  ("const h=S.dining.hall||'mcnuttdh';", "const h=S.dining.hall||'whitney';"),
+  # boot toast describes a pre-loaded IU schedule this build does not have
+  ("'<div class=\"empty\">Nothing logged. Paste Canvas announcements on the Data tab, or add one by hand.</div>'",
+   "'<div class=\"empty\">Nothing logged. Paste Moodle announcements on the Data tab, or add one by hand.</div>'"),
+  ("out.msg.push('This looks like a Canvas calendar feed and contains a private token. Do not share it.');",
+   "out.msg.push('This looks like a calendar feed and may contain a private token. Do not share it.');"),
+  ("Private Canvas feeds commonly fail here", "Private Moodle feeds commonly fail here"),
+  # WAGE.min is null in this build, so the placeholder rendered as "null minimum"
+  ("placeholder=\"'+WAGE.min+' minimum\"", "placeholder=\"what you were offered\""),
+  # the confirm-times toast still names an IU course
+]:
+    if _o in out:
+        out = out.replace(_o, _n); LOG.append('leak')
+    else:
+        MISSES.append('leak: ' + _o[:44])
+
+# the three INFO-I 101 lab buttons only exist for the IU build's seeded lab
+for _btn in ['btnLabOneDay', 'btnLabTue', 'btnLabBoth']:
+    swap_re(r"    case '" + _btn + r"': \{[\s\S]*?break; \}\n", "", 'drop ' + _btn)
+
+
+
+# mineBuilding() was still matching IU building names, so an imported Trine
+# meeting could never get a location and an IU name would wrongly match one.
+swap_re(r"const BLDG_KEYWORDS = \{[\s\S]*?\};",
+  "const BLDG_KEYWORDS = {\n"
+  "  fawick:'FAWICK', best:'BEST HALL', juc:'JAMES', link:'LINK',\n"
+  "  whitney:'WHITNEY', depot:'DEPOT', storms:'A-BREWING', bean:'BEAN COUNTER',\n"
+  "  arc:'ARC', ice:'THUNDER ICE', health:'QUEST', asc:'SUCCESS CENTER'\n"
+  "};",
+  'building keywords')
+
+swap_re(r'placeholder="Search e\.g\.[^"]*"', 'placeholder="Search e.g. “CS”, “Calculus”, “MA 16500”…"', 'catalog placeholder')
+swap_re(r'placeholder="Paste \.ics text, or one item per line:[^"]*"',
+        'placeholder="Paste .ics text, or one item per line:&#10;CS 24000 | Lab 4 | 2026-09-18 | 5&#10;MA 16500 | Quiz 2 | 2026-09-21 | 3"',
+        'paste placeholder')
+swap_re(r"note:'Counts 30% toward your social floor — the SRSC is where a lot of people actually see each other\.'",
+        "note:'Counts 30% toward your social floor \\u2014 the ARC is where a lot of people actually see each other.'",
+        'gym kind note')
+swap_re(r"d\.creditsUnset\? 'INFO-T 100 is variable credit — set it on Courses' : 'Full-time is 12\+'",
+        "d.creditsUnset? d.creditsUnset+' course'+(d.creditsUnset===1?'':'s')+' with no credits set \\u2014 set them on Courses' : 'Full-time is 12+'",
+        'credits tile note')
+
+# the estimated-times banner, matched loosely because of its mixed escapes
+swap_re(r"\+ '<b>Other meeting times are still estimates\.</b>[\s\S]*?</div>';",
+  "+ '<b>Some meeting times are still estimates.</b> Anything brought in by the screenshot scanner or the myPortal importer stays marked estimated until you confirm it. '\n"
+  "      + '<div class=\"row\" style=\"margin-top:11px\"><button class=\"btn primary sm\" id=\"btnConfirmTimes\">Confirm the estimated times</button>'\n"
+  "      + '<a class=\"btn sm\" href=\"https://myportal.trine.edu/ICS\" target=\"_blank\" rel=\"noopener\">Open myPortal</a></div>';",
+  'banner estimated (retry)')
+
+# two recommendations keyed to IU course codes that cannot exist here
+swap_re(r"  /\* front-load against the known mid-semester step-up in C 212 \*/\n[\s\S]*?'week '\+d\.weekNo\+' \+ student-reported difficulty curve'\);\n", "", 'drop c212 rec')
+swap_re(r"  const i101lab=d\.courses\.find\(c=>c\.code==='INFO-I 101'\);\n[\s\S]*?'course meeting times \+ dining rules'\);\n", "", 'drop i101 rec')
+
+swap_re(r"\? 'Estimated times confirmed\. The INFO-I 101 lab is still unresolved[^']*'",
+        "? 'Estimated times confirmed. One meeting is still marked unresolved \\u2014 set it from the card below.'",
+        'confirm toast (retry)')
+swap_re(r"toast\('Loaded your four Fall 2026 courses[^']*','warn'\)",
+        "toast('Empty planner ready. Add your courses on the Courses tab, or import them from Moodle or myPortal on the Data tab.','good')",
+        'boot toast (retry)')
+swap_re(r"a Canvas calendar feed URL normally does", "a Moodle calendar feed URL normally does", 'ics hint (retry)')
+swap_re(r'trailing subject letter, then a 3-4 digit number\. Matches "CSCI-C 212",',
+        'trailing subject letter, then a 3-5 digit number. Matches "CS 24000",', 'regex comment')
+
+
 pathlib.Path('trine.html').write_text(out)
 assert pathlib.Path('index.html').read_text() == before, 'index.html was modified!'
 print(f'wrote trine.html — {len(LOG)} sections swapped')

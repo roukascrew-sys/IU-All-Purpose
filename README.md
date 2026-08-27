@@ -226,6 +226,30 @@ python3 build-artifact.py
 
 Only `index.html` is edited by hand. The other two are always rebuilt.
 
+## Keeping the two builds honest
+
+`make-trine.py` regenerates `trine.html` from `index.html` on every run, so
+an engine fix in the IU build carries over. The risk that creates is the
+opposite one: IU's *content* carrying over too. Reading the built Trine file
+end to end surfaced a set of leaks that grepping for "IU" would not have
+caught, because they name IU things without naming IU:
+
+- the credits-unset signal told a Trine student about "INFO-T 100"
+- the dining-strategy note listed IU's five dining halls
+- the social note quoted IU's SRSC fee of $84.68 a semester
+- the low-energy recommendation gave IU's CAPS address and phone number
+- `mineBuilding()` matched IU building names, so no Trine location could
+  ever be detected
+- the boot toast announced "your four Fall 2026 courses" in a build that
+  ships empty
+- the building dropdown filtered on IU's `mcnutt` place id
+
+Several of those fire for a real user, not just in principle. They are all
+fixed, and the build now ends with a leak scan asserting that none of
+`IU Bloomington`, `One.IU`, `Stellic`, `mcnutt`, `SRSC`, IU course codes or
+the embedded registrar dataset appear in the output. The only surviving
+`Stellic` strings are internal function and element names, never rendered.
+
 ## The Moodle importer
 
 Trine runs Moodle, and the first version of this importer scraped

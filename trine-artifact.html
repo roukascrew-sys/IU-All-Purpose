@@ -565,7 +565,7 @@ ul.none{list-style:none;padding:0;margin:0}
       <h2>Browse the course catalog</h2>
       <div class="d">Trine publishes its catalog through SmartCatalog as web pages, not as a downloadable export, so unlike the IU build this one ships with no course list embedded — there was nothing to embed that I could reach without inventing it. Add your courses above and this planner holds what you enter; the search below opens Trine’s own catalog, which is the authority on what runs this term.</div>
     </div></div>
-    <input id="catSearch" placeholder="Search e.g. “CSCI”, “Calculus”, “PSY-P 101”…">
+    <input id="catSearch" placeholder="Search e.g. “CS”, “Calculus”, “MA 16500”…">
     <div id="catList" class="scroll" style="max-height:360px;overflow-y:auto;margin-top:11px"></div>
     <div class="divider"></div>
     <div class="row" style="align-items:flex-end;gap:10px;flex-wrap:wrap">
@@ -1083,7 +1083,7 @@ ul.none{list-style:none;padding:0;margin:0}
         <label class="f" for="pasteKind">Treat this as</label>
         <select id="pasteKind"></select>
         <label class="f" style="margin-top:12px" for="pasteBox">Paste here</label>
-        <textarea id="pasteBox" style="min-height:190px" placeholder="Paste .ics text, or one item per line:&#10;CSCI-C 212 | Lab 4 | 2026-09-18 | 5&#10;INFO-I 101 | Reading quiz 2 | 2026-09-21 | 3"></textarea>
+        <textarea id="pasteBox" style="min-height:190px" placeholder="Paste .ics text, or one item per line:&#10;CS 24000 | Lab 4 | 2026-09-18 | 5&#10;MA 16500 | Quiz 2 | 2026-09-21 | 3"></textarea>
         <div class="row" style="margin-top:11px">
           <button class="btn primary" id="btnParse">Parse preview</button>
           <button class="btn" id="btnCommit" disabled>Import</button>
@@ -1279,7 +1279,7 @@ function citeLine(id, extra){
 
 /* --- commitment kinds ------------------------------------------------- */
 const CKIND = {
-  gym:   {label:'Gym',        c:'--s4', icon:'▲', social:0.3, note:'Counts 30% toward your social floor — the SRSC is where a lot of people actually see each other.'},
+  gym:   {label:'Gym',        c:'--s4', icon:'▲', social:0.3, note:'Counts 30% toward your social floor \u2014 the ARC is where a lot of people actually see each other.'},
   im:    {label:'Intramural', c:'--s6', social:1.0, note:'Counts fully as social time. This is the highest-value hour on your calendar for meeting people.'},
   club:  {label:'Club',       c:'--s7', social:1.0, note:'Counts fully as social time.'},
   job:   {label:'Work shift', c:'--s2', social:0.1, note:'Counts 10% — you meet coworkers, but it is not free time.'},
@@ -2918,7 +2918,7 @@ function renderGeneral(){
   /* tiles */
   const freeDay = d.freeWeek/7;
   $('gTiles').innerHTML = [
-    tile('Enrolled credits', d.creditsKnown + (d.creditsUnset? '<span class="u">+'+d.creditsUnset+' unset</span>':''), '', d.creditsUnset? 'INFO-T 100 is variable credit — set it on Courses' : 'Full-time is 12+', d.creditsUnset?'warn':''),
+    tile('Enrolled credits', d.creditsKnown + (d.creditsUnset? '<span class="u">+'+d.creditsUnset+' unset</span>':''), '', d.creditsUnset? d.creditsUnset+' course'+(d.creditsUnset===1?'':'s')+' with no credits set \u2014 set them on Courses' : 'Full-time is 12+', d.creditsUnset?'warn':''),
     tile('Committed / week', rnd(d.committed,1), 'h', 'Class + study + commute', d.committed>60?'warn':'acc'),
     tile('Genuinely free', rnd(d.freeWeek,1), 'h', rnd(freeDay,1)+' h a day after sleep and meals', freeDay<3?'crit':freeDay<5?'warn':'good'),
     tile('Strain now', d.strain.cur.idx, '', 'Week '+d.weekNo+' · peaks at '+d.strain.peak.idx+' in week '+d.strain.peak.w, d.strain.cur.idx>=85?'crit':d.strain.cur.idx>=65?'warn':'good'),
@@ -2987,11 +2987,11 @@ function renderSignals(){
     +'<div style="margin-top:5px"><span class="pill" style="font-size:10.5px">from '+esc(from)+'</span></div></div>');
 
   if(d.courses.some(c=>(c.meetings||[]).some(m=>m.disputed)))
-    push('crit','Courses','The INFO-I 101 lab is unresolved',
-      'You said the lab times were wrong but not what they should be, so nothing was guessed. It is currently sitting on both Tuesday and Thursday at 5:45pm, which is where your screenshot put it. Three one-click fixes are at the top of the Courses tab. Until it is settled, your Tuesday and Thursday evening hours are unreliable.');
+    push('crit','Courses','A meeting is marked unresolved',
+      'One of your meetings is flagged as unresolved rather than estimated. Open the Courses tab and set its days and times from myPortal.');
   if(d.courses.some(c=>(c.meetings||[]).some(m=>m.tEst && !m.disputed)))
     push('warn','Courses','Some meeting times are still estimates',
-      'PSY-P 101, INFO-T 100 and the CSCI-C 212 meetings were read off your screenshot by measuring pixels. INFO-I 101\u2019s lecture is confirmed from what you told me. Confirm the rest on the Courses tab and this clears.');
+      'Meetings brought in by the screenshot scanner or the myPortal importer are marked estimated until you confirm them. Check them against myPortal on the Courses tab and this clears.');
   if((d.walkPairs||[]).length && d.walkKnown < d.walkPairs.length)
     push('warn','Dining & Map', (d.walkPairs.length-d.walkKnown)+' walking route'+(d.walkPairs.length-d.walkKnown===1?'':'s')+' unmeasured',
       'Your week needs '+d.walkPairs.length+' distinct walk'+(d.walkPairs.length===1?'':'s')+'. Each one has a Google Maps link on the Dining &amp; Map tab — measure them once and the commute line stops being a flat guess.');
@@ -3001,7 +3001,7 @@ function renderSignals(){
       +'. Either the walk time is wrong or one of those enrolments is not physically possible.');
   if(d.creditsUnset)
     push('warn','Courses','A course has no credit value',
-      'INFO-T 100 is listed in the bulletin as 1–3 variable credit. Until you set yours, its study requirement is excluded from every total here.');
+      d.creditsUnset+' course'+(d.creditsUnset===1?' has':'s have')+' no credit hours set. Until you set them from the catalog, their study requirement is excluded from every total here.');
   if(d.overDays)
     push('crit','Courses + Plan controls','Your plan overruns your own ceiling on '+d.overDays+' day'+(d.overDays>1?'s':''),
       DAYSL[d.peakDay.dow]+' reaches <b>'+rnd(d.peakDay.total,1)+'h</b> against a ceiling of '+S.plan.maxDayHours+'h. Either raise the weekend share so weekdays carry less, or lower the difficulty dial on a course you are over-weighting.');
@@ -3274,21 +3274,13 @@ function renderCourses(){
 
   let banner = '';
   if(disputed){
-    const lab = (d.courses.find(c=>c.code==='INFO-I 101')||{meetings:[]}).meetings.find(m=>m.disputed) || {days:[]};
-    banner += '<b>One meeting is still unresolved: the INFO-I 101 lab.</b> You told me the lecture is Tue/Thu 9:45 and that the lab times were wrong, but not what they should be — so I have not guessed. It currently sits where your screenshot put it, '
-      + esc((lab.days||[]).map(x=>DAYS[x]).join(' and ')) + ' at ' + esc(fmtRange(toMin(lab.start), toMin(lab.end)))
-      + ', and it is the only meeting still marked <span class="prov unverified">Unresolved</span>. Labs usually meet once a week, so the two-day reading is the part most likely to be wrong. Pick one:'
-      + '<div class="row" style="margin-top:11px"><button class="btn primary sm" id="btnLabOneDay">Thursday only</button>'
-      + '<button class="btn sm" id="btnLabTue">Tuesday only</button>'
-      + '<button class="btn sm" id="btnLabBoth">Both days, times are right</button>'
-      + '<span class="hint" style="margin:0">Or just edit the row on the card below.</span></div>';
+    banner += '<b>A meeting is marked unresolved.</b> Its days or times could not be read confidently, so nothing was guessed. Edit the row on the card below and it clears.';
   }
   if(unconfirmed){
     banner += (disputed?'<div class="divider"></div>':'')
-      + '<b>Other meeting times are still estimates.</b> Codes, sections, class numbers and days came off your schedule cleanly. Start and end times for PSY-P 101, INFO-T 100 and the CSCI-C 212 meetings were <em>measured off a pixel grid</em>, which is not the same as knowing them. INFO-I 101\u2019s lecture is now confirmed from what you told me. '
+      + '<b>Some meeting times are still estimates.</b> Anything brought in by the screenshot scanner or the myPortal importer stays marked estimated until you confirm it. '
       + '<div class="row" style="margin-top:11px"><button class="btn primary sm" id="btnConfirmTimes">Confirm the estimated times</button>'
-      + '<a class="btn sm" href="https://myportal.trine.edu/ICS" target="_blank" rel="noopener">Open myPortal</a>'
-      + '<a class="btn sm" href="https://trine.smartcatalogiq.com/en/current/fall-2026-trine-course-catalog/" target="_blank" rel="noopener">Course catalog</a></div>';
+      + '<a class="btn sm" href="https://myportal.trine.edu/ICS" target="_blank" rel="noopener">Open myPortal</a></div>';
   }
   if(!banner){
     banner = '<b>Every meeting confirmed.</b> The time charts, the study plan, the walking analysis and the strain model are all running on times you verified rather than on my reading of a screenshot.'
@@ -3527,7 +3519,7 @@ function courseCard(c){
       +'<td><input type="time" value="'+esc(m.end)+'" data-mt="end" data-c="'+c.id+'" data-i="'+mi+'" style="padding:4px 6px;font-size:12.5px"></td>'
       +'<td><select data-mt="bldg" data-c="'+c.id+'" data-i="'+mi+'" style="padding:4px 6px;font-size:12.5px;min-width:130px">'
         +'<option value="">— set building —</option>'
-        + PLACES.filter(p=>p.id!=='mcnutt').map(p=>'<option value="'+p.id+'"'+(m.bldg===p.id?' selected':'')+'>'+esc(p.name)+'</option>').join('')
+        + PLACES.filter(p=>p.id!=='campus').map(p=>'<option value="'+p.id+'"'+(m.bldg===p.id?' selected':'')+'>'+esc(p.name)+'</option>').join('')
         +'</select></td>'
       +'<td><input value="'+esc(m.loc||'')+'" data-mt="loc" data-c="'+c.id+'" data-i="'+mi+'" placeholder="room" style="padding:4px 6px;font-size:12.5px;min-width:84px"></td>'
       +'<td>'+(m.disputed?chip('unverified','Unresolved'):(m.tEst?chip('unverified','Est.'):chip('mine','Confirmed')))+'</td>'
@@ -4024,7 +4016,7 @@ function renderDiet(){
   const lateDays=[1,2,3,4,5].filter(dw=>(D.byDay[dw]||[]).some(m=>m.b>=toMin('18:30')));
   if(lateDays.length) out.push('<div class="note warn"><b>'+lateDays.map(dw=>DAYS[dw]).join(', ')+' run past 6:30 p.m.</b> Dining hall hours vary by day and are not published anywhere I could reach, so check them before you rely on a late dinner — and on those nights a combo meal at a retail location is exactly the case combos exist for. '+chip('verified')+' on the combo rule; '+chip('unverified')+' on the hours.'+citeLine('tDining','Check hours here:')+'</div>');
 
-  out.push('<div class="note"><b>Where to actually eat.</b> The all-you-care-to-eat halls are Collins Eatery, Forest Dining Hall, Goodbody Hall Eatery, McNutt Dining Hall and Wright Dining Hall. Forest doubles as one of the three Academic Support Center tutoring sites, which makes a Sunday-to-Thursday dinner there the single most efficient block on your week: eat and get math help in the same building between 7 and 11 p.m. '+chip('verified')+citeLine('tDining')+'</div>');
+  out.push('<div class="note"><b>Where to actually eat.</b> Whitney Commons is the main dining location; The Depot does grill and take-out, and Storm\u2019s A-Brewing and The Bean Counter are the two coffee shops. Hours are not published anywhere I could reach, so check them before relying on a late meal. '+chip('verified')+citeLine('tDining')+'</div>');
 
   out.push('<div class="note"><b>Protein is the hard part in a dining hall, not calories.</b> The AMDR band above is wide — 10% to 35% of energy — and the low end is easy to hit by accident on a carbohydrate-heavy tray. If you track one number, track that one.</div>');
 
@@ -4298,7 +4290,7 @@ function renderSocialRead(){
     +(freeEve.length?': '+freeEve.map(dw=>DAYSL[dw]).join(', ')+'.':'. Every Monday-to-Friday evening has class, a commitment or a study block on it.')
     +' Weeknights are when most of the unplanned social life at a residential campus actually happens.</div>');
   if(d.commitByKind && d.commitByKind.gym===0)
-    out.push('<div class="note"><b>No gym time is blocked out.</b> You are already paying for the SRSC and the Wildermuth through the student activity fee, stated at $84.68 a semester, whether or not you go. It also counts 30% toward the social floor here, because that is roughly what it is.</div>');
+    out.push('<div class="note"><b>No gym time is blocked out.</b> The ARC and Thunder Ice Arena are on campus; whether student access is included was not published anywhere I could reach, so check before assuming. Gym time counts 30% toward the social floor here either way.</div>');
   $('socialRead').innerHTML = out.join('');
 }
 
@@ -4796,7 +4788,7 @@ function renderAnnouncements(){
       +(x.body?'<div style="font-size:12.5px;color:var(--ink-2);margin-top:4px">'+esc(x.body)+'</div>':'')
       +'<div class="u" style="margin-top:4px">'+esc(x.date||'')+(x.src?' · '+esc(x.src):'')+'</div></div>'
       +'<button class="btn sm ghost" data-delann="'+x.id+'">×</button></div>').join('')+'</div>'
-    : '<div class="empty">Nothing logged. Paste Canvas announcements on the Data tab, or add one by hand.</div>';
+    : '<div class="empty">Nothing logged. Paste Moodle announcements on the Data tab, or add one by hand.</div>';
 
   const feeds=[
     {n:'Trine calendar of events', d:'The university\u2019s public events calendar.', u:CITE.tCalEvents.u, ck:'verified'},
@@ -4816,12 +4808,6 @@ function renderRecs(){
   const rec=(tone,title,body,why)=> out.push('<div class="note '+tone+'"><b>'+esc(title)+'</b><br>'+body
     +'<div style="margin-top:6px"><span class="pill" style="font-size:10.5px">triggered by: '+esc(why)+'</span></div></div>');
 
-  /* front-load against the known mid-semester step-up in C 212 */
-  const c212=d.courses.find(c=>c.code==='CSCI-C 212');
-  if(c212 && d.weekNo<=6)
-    rec('acc','Bank hours in CSCI-C 212 now, not in October',
-      'The most consistent student report about this course is that the first half is comparatively easy and the difficulty steps up sharply afterwards, with the labs carrying the weight. You are in week '+d.weekNo+'. Every hour you spend on it before the step-up is worth more than an hour spent after it — raise its difficulty dial above '+rnd(c212.diff,2)+' if you want the plan to reflect that.',
-      'week '+d.weekNo+' + student-reported difficulty curve');
 
   if(d.strain.crunch.length){
     const first=d.strain.crunch[0];
@@ -4839,11 +4825,6 @@ function renderRecs(){
       'Every Monday-to-Friday evening has either a class or a study block in it. That is not sustainable for fifteen weeks, and the recovery term in the strain model is the thing that suffers first. Shorten one block or push it to Saturday.',
       'weekly plan grid');
 
-  const i101lab=d.courses.find(c=>c.code==='INFO-I 101');
-  if(i101lab && i101lab.meetings.some(m=>m.type==='LAB' && toMin(m.end)>=toMin('18:30')))
-    rec('warn','Your INFO-I 101 lab runs into dinner',
-      'It ends at '+fmt12(toMin(i101lab.meetings.find(m=>m.type==='LAB').end))+' on lab days. Dining hall hours vary and are not published anywhere I could reach — check them, and if a hall is closed by then, that is precisely what a combo meal is for.',
-      'course meeting times + dining rules');
 
   if(d.grades.gpa==null)
     rec('acc','Enter your grade weights in week 1',
@@ -4859,7 +4840,7 @@ function renderRecs(){
   if(ci.length>=3){
     const avg=ci.reduce((s,c)=>s+(+c.energy||3),0)/ci.length;
     if(avg<=2.4) rec('crit','Your energy has been low for a week',
-      'Average '+rnd(avg,1)+'/5 across your last '+ci.length+' check-ins. That is the pattern the recovery term is meant to catch. CAPS is at 600 N. Eagleson Ave, free with the health fee you have already paid, and the intake call is 812-855-5711.',
+      'Average '+rnd(avg,1)+'/5 across your last '+ci.length+' check-ins. That is the pattern the recovery term is meant to catch. Trine\u2019s Counseling Services are free and confidential \u2014 three licensed clinicians, details on the Academics tab.',
       'check-in history');
     const sl=ci.filter(c=>c.sleep!=null);
     if(sl.length>=3){
@@ -4872,7 +4853,7 @@ function renderRecs(){
   }
   if(d.deals.left>50)
     rec('good','About '+money0(d.deals.left)+' of value is still on the table',
-      'The campus group alone — Microsoft 365, Adobe Creative Cloud, three national newspapers, free transit — is claimable in one sitting and is the highest-confidence part of the list.',
+      'The on-campus group \u2014 free coffee in the LINK, the Academic Success Center, the Writing Center, Counseling \u2014 is the highest-confidence part of the list and costs nothing but the walk.',
       'deals checklist');
 
   if(!out.length) rec('good','Nothing to recommend','Every check came back clean. Come back after a few more days of data.','all tabs');
@@ -4960,9 +4941,9 @@ function classifyUrl(url, kindId){
     else out.msg.push('Host '+u.hostname+' is recognised for this source type.');
   }
   if(kindId==='canvas-ics' && !/\.ics(\?|$)/i.test(u.pathname+u.search))
-    out.msg.push('This does not end in .ics — a Canvas calendar feed URL normally does. Check you copied the feed link and not the calendar page.');
+    out.msg.push('This does not end in .ics — a Moodle calendar feed URL normally does. Check you copied the feed link and not the calendar page.');
   if(/\/feeds\/calendars\//.test(u.pathname))
-    out.msg.push('This looks like a Canvas calendar feed and contains a private token. Do not share it.');
+    out.msg.push('This looks like a calendar feed and may contain a private token. Do not share it.');
   return out;
 }
 function probe(url, ms){
@@ -4991,7 +4972,7 @@ async function testSource(s){
   parts.push(cls.known ? 'Host: recognised.' : 'Host: not recognised for this type.');
   if(pr.state==='answered'){ s.status='ok'; parts.push('Reachability: something answered. Note this is an opaque check — it cannot confirm you are authorised or that the content is what you expect.'); }
   else if(pr.state==='blocked'){ s.status='unknown'; parts.push('Reachability: could not be tested. '+pr.why); }
-  else if(pr.state==='timeout'){ s.status='bad'; parts.push('Reachability: timed out. '+pr.why+' Private Canvas feeds commonly fail here while working perfectly in your browser — open it with the button and judge for yourself.'); }
+  else if(pr.state==='timeout'){ s.status='bad'; parts.push('Reachability: timed out. '+pr.why+' Private Moodle feeds commonly fail here while working perfectly in your browser — open it with the button and judge for yourself.'); }
   else { s.status='bad'; parts.push('Reachability: failed. '+pr.why+' A cross-origin block looks identical to a dead link from inside a page, so open it manually before deciding it is broken.'); }
   s.note=parts.concat(cls.msg).join(' ');
   s.checkedAt=new Date().toLocaleString();
@@ -5110,7 +5091,7 @@ function mineTimeRange(str){
   return {a, b};
 }
 /* A course code, generously: 2-5 letters, optional dash, optional single
-   trailing subject letter, then a 3-4 digit number. Matches "CSCI-C 212",
+   trailing subject letter, then a 3-5 digit number. Matches "CS 24000",
    "MATH 211", "BUS-X101". */
 const COURSE_CODE_RE = /\b(?!(?:LEC|LAB|DIS|REC|SEM|STD|SEC|SECTION|CLASS|ROOM|BLDG|BUILDING|HALL|FLOOR)\b)([A-Z]{2,5})[-\s]?([A-Z]\s?)?(\d{3,5}[A-Z]?)\b/;
 const MEETING_TYPE_RE = /\b(LEC|LECTURE|LAB|LABORATORY|DIS|DISC|DISCUSSION|REC|RECITATION|SEM|SEMINAR|STD|STUDIO)\b/i;
@@ -5166,10 +5147,9 @@ function canonicalizeCode(code){
    already on the map, checked against the same text window a meeting was
    mined from. Deliberately not fuzzy — a wrong guess is worse than none. */
 const BLDG_KEYWORDS = {
-  luddy:'LUDDY', ballantine:'BALLANTINE', psych:'PSYCHOLOGY BUILDING',
-  wells:'WELLS LIBRARY', health:'HEALTH CENTER', forest:'FOREST',
-  wright:'WRIGHT', collins:'COLLINS', goodbody:'GOODBODY',
-  briscoe:'BRISCOE', teter:'TETER', srsc:'REC SPORTS', mcnuttdh:'MCNUTT'
+  fawick:'FAWICK', best:'BEST HALL', juc:'JAMES', link:'LINK',
+  whitney:'WHITNEY', depot:'DEPOT', storms:'A-BREWING', bean:'BEAN COUNTER',
+  arc:'ARC', ice:'THUNDER ICE', health:'QUEST', asc:'SUCCESS CENTER'
 };
 function mineBuilding(text){
   const t = String(text||'').toUpperCase();
@@ -5785,7 +5765,7 @@ document.addEventListener('change', e=>{
     if(a){ a.done=t.checked; save(); renderAll(); } return;
   }
   if(t.dataset.hallst!==undefined){
-    const h=S.dining.hall||'mcnuttdh';
+    const h=S.dining.hall||'whitney';
     S.dining.halls[h]=S.dining.halls[h]||{};
     S.dining.halls[h][t.dataset.hallst]=t.checked;
     save(); derive(); renderFood(); return;
@@ -5905,7 +5885,7 @@ document.addEventListener('click', e=>{
       S.courses.forEach(c=>(c.meetings||[]).forEach(m=>{ if(!m.disputed) m.tEst=false; }));
       save(); renderAll();
       toast(D.courses.some(c=>(c.meetings||[]).some(m=>m.disputed))
-        ? 'Estimated times confirmed. The INFO-I 101 lab is still unresolved — settle it with the buttons above.'
+        ? 'Estimated times confirmed. One meeting is still marked unresolved \u2014 set it from the card below.'
         : 'Times confirmed. Every downstream number now runs on your data.','good'); break;
     case 'btnUnconfirm':
       S.courses.forEach(c=>(c.meetings||[]).forEach(m=>{ m.tEst=true; }));
@@ -5924,24 +5904,6 @@ document.addEventListener('click', e=>{
       todo.slice(0,6).forEach((pr,i)=> setTimeout(()=>window.open(
         mapsUrl(placeAddr(pr.from), placeAddr(pr.to)),'_blank','noopener'), i*250));
       toast('Opening '+Math.min(6,todo.length)+' route'+(todo.length===1?'':'s')+' in new tabs. Your browser may ask to allow pop-ups.','warn');
-      break; }
-    case 'btnLabOneDay': {
-      const c=S.courses.find(x=>x.code==='INFO-I 101');
-      const m2=c && (c.meetings||[]).find(x=>x.type==='LAB');
-      if(m2){ m2.days=[4]; m2.tEst=false; m2.disputed=false;
-        save(); renderAll(); toast('Lab set to Thursday only and marked confirmed.','good'); }
-      break; }
-    case 'btnLabTue': {
-      const c=S.courses.find(x=>x.code==='INFO-I 101');
-      const m2=c && (c.meetings||[]).find(x=>x.type==='LAB');
-      if(m2){ m2.days=[2]; m2.tEst=false; m2.disputed=false;
-        save(); renderAll(); toast('Lab set to Tuesday only and marked confirmed.','good'); }
-      break; }
-    case 'btnLabBoth': {
-      const c=S.courses.find(x=>x.code==='INFO-I 101');
-      const m2=c && (c.meetings||[]).find(x=>x.type==='LAB');
-      if(m2){ m2.days=[2,4]; m2.tEst=false; m2.disputed=false;
-        save(); renderAll(); toast('Lab confirmed as Tuesday and Thursday.','good'); }
       break; }
     case 'btnRegen': derive(); renderSchedule(); renderPlanStats(); renderGeneral();
       toast('Plan rebuilt. The Schedule tab already shows it.','good'); break;
@@ -6159,7 +6121,7 @@ function addJobDialog(existing){
     '<div class="grid g2">'
     +'<div><label class="f">Role</label><input id="jbT" value="'+esc(j.title||'')+'" placeholder="Library desk assistant"></div>'
     +'<div><label class="f">Employer</label><input id="jbE" value="'+esc(j.employer||'')+'" placeholder="The LINK"></div>'
-    +'<div><label class="f">Pay per hour</label><input type="number" id="jbP" step="0.25" min="0" value="'+esc(j.pay==null?'':j.pay)+'" placeholder="'+WAGE.min+' minimum"></div>'
+    +'<div><label class="f">Pay per hour</label><input type="number" id="jbP" step="0.25" min="0" value="'+esc(j.pay==null?'':j.pay)+'" placeholder="what you were offered"></div>'
     +'<div><label class="f">Hours a week</label><input type="number" id="jbH" step="0.5" min="0" value="'+esc(j.hours==null?'':j.hours)+'" placeholder="leave blank to use the shift pattern"></div>'
     +'<div style="grid-column:1/-1"><label class="f">Shift days</label>'+dayPicker('jbDay', j.days)+'</div>'
     +'<div><label class="f">Shift start</label><input type="time" id="jbS" value="'+esc(j.start||'16:00')+'"></div>'
@@ -6468,7 +6430,7 @@ function importDialog(){
   $('foodProteinOnly').addEventListener('change', renderFoodList);
   if(!had){
     save();
-    setTimeout(()=>toast('Loaded your four Fall 2026 courses. Confirm the meeting times on the Courses tab — they were read off a screenshot, not a data feed.','warn'), 700);
+    setTimeout(()=>toast('Empty planner ready. Add your courses on the Courses tab, or import them from Moodle or myPortal on the Data tab.','good'), 700);
   }
   window.addEventListener('resize', ()=>{ clearTimeout(window.__wt); window.__wt=setTimeout(()=>{ derive(); renderSchedule(); },250); });
 })();
