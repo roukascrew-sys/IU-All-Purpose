@@ -190,7 +190,9 @@ the branding and the import route:
 | Palette | warm limestone + crimson | navy + Vegas gold |
 | Storage key | `iu.crimsonCommand.v1` | `trine.thunderCommand.v1` |
 | Boots with | the owner's five courses | nothing — you add your own |
-| LMS import | Canvas JSON API | Moodle grade report (HTML) |
+| Course list | all 4,875 Fall 2026 courses, from the registrar export | none — Trine publishes no equivalent export |
+| Course numbers | three digits (`CSCI-C 212`) | five digits (`CS 24000`) |
+| LMS import | Canvas JSON API | Moodle web service + grade report |
 | Dining | five AYCTE halls, swipes + Dining Dollars | Whitney Commons, The Depot and two coffee shops; a 10 or 19-meal Bon Appétit plan |
 | Athletics | Big Ten, pre-loaded football schedule | MIAA Division III, nothing pre-loaded |
 
@@ -223,3 +225,37 @@ python3 build-artifact.py
 ```
 
 Only `index.html` is edited by hand. The other two are always rebuilt.
+
+## The Moodle importer
+
+Trine runs Moodle, and the first version of this importer scraped
+`/my/courses.php` for `course/view.php?id=` links. That works on Moodle 3.x
+and returns **nothing** on Moodle 4.x, which renders the course-overview
+block in the browser — the server HTML has no course links in it at all, so
+the importer always reported "no courses found". Both layouts are covered by
+fixtures in the test suite; the old code was confirmed failing against the
+4.x one before the fix and passing against 3.x, which is why the bug looked
+intermittent rather than total.
+
+It now calls `core_course_get_enrolled_courses_by_timeline_classification`
+through `/lib/ajax/service.php` — the same web service Moodle's own dashboard
+calls, same-origin, authenticated by the session cookie plus the page's
+`sesskey` (read from `M.cfg`, a `sesskey=` link, or a hidden input). That is
+Moodle's real equivalent of the Canvas REST API. Three fallbacks sit behind
+it: a scrape of `/my/courses.php`, `/my/` and `/course/index.php`; then any
+course links on the page you are standing on. The completion alert names
+which route produced the data, and how many courses came back with no
+readable grade table, so a partial read is visible rather than silent.
+
+Grades still come from the rendered grade report, because Moodle exposes no
+student-facing grade JSON without an institution-issued token. Each graded
+item becomes its own weighted grade component, preserving Moodle's weight
+column; the course total row is dropped rather than counted twice. A course
+with nothing posted yet still imports as a course — the enrolment is the
+fact, the assignments are just not there yet, the same standard the IU build
+applies to Canvas.
+
+Trine also numbers courses with five digits (`CS 24000`) where IU uses three
+(`CSCI-C 212`). The shared schedule miner and the LMS code matcher both
+capped at four, so every mined Trine code silently failed to match; both
+regexes are widened in the Trine build.

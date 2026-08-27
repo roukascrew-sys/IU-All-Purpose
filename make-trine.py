@@ -440,7 +440,7 @@ swap_block("function canvasBookmarkletSource(){", "function renderBookmarklet(){
 
 ''', 'moodle bookmarklet')
 
-swap_block("function renderBookmarklet(){", "/* --- paste parsing", '''function renderBookmarklet(){
+swap_block("function renderBookmarklet(){", "\n/* ======================================================================\n   SHARED SCHEDULE MINER", '''function renderBookmarklet(){
   const href = 'javascript:' + encodeURIComponent(canvasBookmarkletSource());
   $('bookmarkletBox').innerHTML =
     '<div class="row" style="gap:14px;align-items:center;flex-wrap:wrap">'
@@ -579,7 +579,8 @@ swap_block("  $('gaps').innerHTML='<ul class=\"tight\" style=\"color:var(--ink-2
    +'<li><b>Food nutrition values.</b> Reference values for standard portions from published USDA-derived charts, not Bon App\\u00e9tit\\u2019s data. Every value is editable and the real menu is linked. The allergy filter is a planning aid and knows nothing about cross-contact.</li>'
    +'<li><b>Athletics schedules and ticket policy.</b> No Trine home schedule was reachable, so none is pre-loaded, and Division III admission practice varies by school \\u2014 I did not verify Trine\\u2019s. Ask Athletics.</li>'
    +'<li><b>Student wages.</b> No Trine minimum for student employment was published anywhere I could reach. The $13.73\\u2013$23.17 band is an aggregator figure covering <em>all</em> Trine jobs including staff and faculty, so it is not a student rate.</li>'
-   +'<li><b>The Moodle importer reads rendered HTML, not an API.</b> Moodle exposes no student-facing JSON endpoint without a token. Themes and versions move the markup, so if a course imports empty, believe the blank rather than the numbers.</li>'
+   +'<li><b>How the Moodle importer finds your courses.</b> It calls the same web service Moodle\u2019s own dashboard calls, authenticated by your signed-in session and the page\u2019s sesskey \u2014 not a scrape. That matters because Moodle 4 builds the dashboard in the browser, so the older approach of reading the page HTML found nothing at all. If the service is unavailable it falls back to reading the page, and the alert tells you which route it used.</li>'
+   +'<li><b>Grades still come from rendered HTML.</b> Moodle exposes no student-facing grade JSON without an institution-issued token, so the grade report itself is parsed. Themes and versions move that markup: if a course imports with no items, believe the blank rather than assuming a zero. Courses with nothing posted yet still import as courses.</li>'
    +'<li><b>Job and instructor ratings.</b> User input by design. At a school of this size there is no public dataset for either, and inventing one was not an option.</li>'
    +'<li><b>Walking times.</b> Not fetched \\u2014 routing services are unreachable from the environment this was built in. The page works out which routes your timetable needs and hands you the Google Maps link for each.</li>'
    +'</ul>';
@@ -685,6 +686,281 @@ for _o,_n in [("accepting less study time than IU\\'s credit-hour minimum implie
         out = out.replace(_o,_n); LOG.append('blanket2')
     else:
         MISSES.append('blanket2: '+_o[:40])
+
+# ═══════════════════════════════════════════════ Phase 7/8 layer
+# The IU build gained a screenshot scanner, a shared schedule miner, a
+# Stellic text importer and the whole Fall 2026 registrar dataset. The
+# engine carries over unchanged; what has to change is every place those
+# name IU, plus the registrar payload itself, which is IU Bloomington data
+# and must never appear in a Trine build.
+
+# ── the embedded registrar dataset: strip it out entirely ────────────────
+# Trine publishes no equivalent machine-readable schedule export that I
+# could reach, so the Trine build ships with an empty dataset and the
+# catalog panel degrades to the "add your own" path it already had.
+_soc = re.search(r'(<script type="application/json" id="socData">)(.*?)(</script>)', out, re.S)
+if not _soc:
+    sys.exit('ERROR: socData block not found — the IU dataset anchor moved')
+_empty = ('{"metadata":{"institution":"Trine University","campus":"Trine — Angola",'
+          '"term":"Fall 2026","course_count":0,"section_count":0,"meeting_count":0,'
+          '"note":"Trine publishes no machine-readable schedule export that this build could reach."},'
+          '"instructors":{},"courses":[]}')
+out = out[:_soc.start(2)] + _empty + out[_soc.end(2):]
+LOG.append('registrar dataset stripped')
+
+# ── the catalog browser + every remaining IU-facing string ──────────────
+# These are matched with literal characters read from index.html rather than
+# escape sequences, because the source mixes real ’/— with JS \u escapes and
+# hand-retyping them is how the earlier anchors rotted.
+VISIBLE = [
+ # (handled by swap_re below)
+
+ 
+ 
+ ("Look up any other IU Bloomington building by name", "Look up any other Trine building by name"),
+
+ # (handled by swap_re below)
+
+ ("A clean screenshot of the weekly grid works best — the one you’d get from One.IU’s class schedule view.",
+  "A clean screenshot of the weekly grid works best — the one you’d get from myPortal’s schedule view."),
+
+ ("Paste what the bookmarklet copied, or any block of text listing your courses, days and times…",
+  "Paste your schedule from myPortal, or any block of text listing your courses, days and times…"),
+
+ ("Open <b>stellic.iu.edu</b> (or find Stellic in One.IU) and sign in.",
+  "Open <b>myportal.trine.edu</b> and sign in."),
+
+ 
+ # source comments — cosmetic, but they should not claim to be IU data
+ ("   SCHEDULE OF CLASSES — the full Fall 2026 IU Bloomington registrar export.",
+  "   SCHEDULE OF CLASSES — empty in this build. Trine publishes no"),
+ ("   SHARED SCHEDULE MINER — used by the Stellic importer and the screenshot",
+  "   SHARED SCHEDULE MINER — used by the myPortal importer and the screenshot"),
+ ("/* Runs the shared miner over whatever is in the Stellic paste box. */",
+  "/* Runs the shared miner over whatever is in the myPortal paste box. */"),
+]
+for _o, _n in VISIBLE:
+    if _o in out:
+        out = out.replace(_o, _n); LOG.append('visible')
+    else:
+        MISSES.append('visible: ' + _o[:44])
+
+def swap_re(pattern, replacement, what):
+    """Replace by regex — for prose whose exact apostrophes/dashes are not
+    worth hand-matching. Fails into MISSES rather than exiting."""
+    global out
+    if not re.search(pattern, out, re.S):
+        MISSES.append('re: ' + what); return
+    out = re.sub(pattern, lambda m: replacement, out, count=1, flags=re.S)
+    LOG.append(what)
+
+swap_re(r'Every class IU Bloomington is running this fall.*?</div>',
+  'Trine publishes its catalog through SmartCatalog as web pages, not as a downloadable export, so unlike the IU build this one ships with no course list embedded \u2014 there was nothing to embed that I could reach without inventing it. Add your courses above and this planner holds what you enter; the search below opens Trine\u2019s own catalog, which is the authority on what runs this term.</div>',
+  'catalog blurb')
+
+swap_re(r'The dozen places above are the ones your own week actually uses.*?</div>',
+  'The places above are the ones your own week actually uses, each with a hand-verified address. This box hands any other Trine building straight to Google Maps by name rather than guessing at a location I have not checked.</div>',
+  'building search hint')
+
+swap_re(r'The table above is the registrar.*?</div>',
+  'Trine is small enough that the catalog is quick to navigate directly — and it, not this planner, is the authority on what runs this term.</div>',
+  'catalog live-search hint')
+
+swap_re(r"The full Schedule of Classes is not embedded in this build.*?</div>",
+  "<b>No course list ships with this build.</b> Trine publishes its catalog as web pages rather than a downloadable export, so there was nothing to embed that I could reach. Add courses from the panel above, or open Trine’s catalog with the search below.</div>",
+  'catalog empty-state')
+
+swap_re(r"'site:academics\.iu\.edu[^\n]*?Indiana University Bloomington course'",
+  "'site:trine.smartcatalogiq.com OR site:trine.edu \\\"'+q+'\\\" Trine University course'",
+  'catalog live search url')
+
+swap_re(r"q\+', Indiana University, Bloomington, IN'",
+  "q+', Trine University, Angola, IN'",
+  'building maps url')
+
+_PORTAL_COMMENT = (
+  '/* ------------------------------------------------------ myPortal import ---\n'
+  '   Trine documents no student-facing API for myPortal, so this does not\n'
+  '   pretend to call one. The bookmarklet copies the visible text of the\n'
+  '   myPortal tab you are on (or just your selection, if you made one) and\n'
+  '   hands it to the shared miner, exactly as if you had copied it yourself. */'
+)
+swap_re(r'/\* -+ Stellic import -+.*?\*/', _PORTAL_COMMENT, 'portal import comment')
+
+for _o, _n in [
+  ('\u21f1 Copy from Stellic', '\u21f1 Copy from myPortal'),
+  ('On the Stellic tab showing your schedule', 'On the myPortal tab showing your schedule'),
+  ('It never types, clicks, or submits anything on the Stellic page.',
+   'It never types, clicks, or submits anything on the myPortal page.'),
+  ('falls back to the same text miner the Stellic box uses.',
+   'falls back to the same text miner the myPortal box uses.'),
+  ('same as the Stellic box above', 'same as the myPortal box above'),
+]:
+    if _o in out:
+        out = out.replace(_o, _n); LOG.append('stellic wording')
+    else:
+        MISSES.append('stellic: ' + _o[:40])
+
+# the "not an API call" bullet, matched loosely because of its \u escapes
+swap_re(r'<b>This is not a Stellic API call\.</b>.*?</li>',
+  "<b>This is not an API call.</b> Trine documents no student API for myPortal, so there is nothing to call on your behalf. This reads the page you are already looking at.</li>",
+  'portal not-an-api bullet')
+
+# ── the schedule importer: myPortal, not Stellic ─────────────────────────
+# The Trine CITE block above replaces IU's wholesale, so the keys the
+# schedule importer cites have to be added rather than swapped.
+_cite_at = out.index('const CITE = {') + len('const CITE = {')
+out = out[:_cite_at] + (
+    "\n  stellicIU:{t:'myPortal \\u2014 schedules, grades and account information', o:'Trine University', u:'https://myportal.trine.edu/ICS'},"
+    "\n  stellicNews:{t:'Registrar \\u2014 registration, transcripts and academic records', o:'Trine University', u:'https://www.trine.edu/about/offices-services/registrar/index.aspx'},"
+    "\n  stellicReg:{t:'Fall 2026 course catalog (SmartCatalog)', o:'Trine University', u:'https://trine.smartcatalogiq.com/en/current/fall-2026-trine-course-catalog/'},"
+    "\n  stellicIDS:{t:'Technology \\u2014 Moodle and myPortal', o:'TrineOnline', u:'https://www.trine.edu/online/about/technology.aspx'},"
+    "\n  stellicDocs:{t:'myPortal sign-in \\u2014 no public student API is documented for it', o:'Trine University', u:'https://myportal.trine.edu/ICS'},"
+) + out[_cite_at:]
+LOG.append('portal citations')
+
+prose('Import your schedule from Stellic', 'Import your schedule from myPortal', 'importer heading')
+prose('Stellic replaced the Student Center for registration, so this is where your real meeting times live now. There is no student-accessible API to call, so this reads the page the same way you would copy it yourself.',
+      'myPortal is where your real meeting times live. Trine documents no student-accessible API for it, so this reads the page the same way you would copy it yourself \\u2014 select your schedule, copy, paste below.',
+      'importer blurb')
+
+# ── Known Gaps: the IU-registrar entries do not apply here ───────────────
+# Gaps entries are one <li> per line; match a short distinctive prefix and
+# replace the whole line, which avoids hand-escaping their long prose.
+def swap_li(prefix, new_line, what):
+    """Replace the whole gaps <li> line whose text starts with prefix."""
+    global out
+    pat = re.compile(r"^ *\+'<li><b>" + re.escape(prefix) + r".*$", re.M)
+    if not pat.search(out):
+        MISSES.append('li: ' + prefix[:36]); return
+    out = pat.sub(lambda m: new_line, out, count=1)
+    LOG.append(what)
+
+
+
+
+
+prose('<a class="btn sm" href="https://one.iu.edu/task/iub/view-my-class-schedule" target="_blank" rel="noopener">Open my class schedule</a>',
+      '<a class="btn sm" href="https://myportal.trine.edu/ICS" target="_blank" rel="noopener">Open myPortal</a>',
+      'confirm banner portal link')
+prose('<a class="btn sm" href="https://utilities.registrar.indiana.edu/course-browser/" target="_blank" rel="noopener">Course Browser</a>',
+      '<a class="btn sm" href="https://trine.smartcatalogiq.com/en/current/fall-2026-trine-course-catalog/" target="_blank" rel="noopener">Course catalog</a>',
+      'confirm banner catalog link')
+
+# ── the corrected screen-recording note names Canvas; here it is Moodle ──
+
+
+
+# ── Moodle importer, fixed ───────────────────────────────────────────────
+# The previous version scraped /my/courses.php for course/view.php links.
+# That works on Moodle 3.x but returns nothing on Moodle 4.x, which renders
+# the course-overview block client-side — the server HTML has no links in
+# it at all, so the importer always reported "no courses found". Verified
+# against both layouts before and after this change.
+#
+# The fix calls the same web service the block itself calls. It is
+# same-origin, authenticated by the session cookie plus the page's sesskey,
+# and is Moodle's real equivalent of the Canvas REST API. Two DOM scrapes
+# remain behind it as fallbacks for older or unusual themes, and the alert
+# now names which route produced the data instead of failing silently.
+_MOODLE_JS = [
+ "(async()=>{",
+ "var root=(window.M&&M.cfg&&M.cfg.wwwroot)||location.origin;",
+ "var sk=(window.M&&M.cfg&&M.cfg.sesskey)||'';",
+ r"if(!sk){var a=document.querySelector('a[href*=\"sesskey=\"]');if(a){var mm=a.href.match(/sesskey=([A-Za-z0-9]+)/);if(mm)sk=mm[1]}}",
+ r"if(!sk){var hi=document.querySelector('input[name=\"sesskey\"]');if(hi)sk=hi.value}",
+ "var P=function(h){return new DOMParser().parseFromString(h,'text/html')};",
+ r"var T=function(e){return e?e.textContent.replace(/\s+/g,' ').trim():''};",
+ r"var num=function(t){var m=String(t).replace(/,/g,'').match(/-?\d+(\.\d+)?/);return m?parseFloat(m[0]):null};",
+ "var courses=[],how='';",
+ "var push=function(id,nm,cd,seen){if(id==='1'||seen[id])return;seen[id]=1;courses.push({id:id,name:nm,code:cd||''})};",
+ "try{",
+   "if(sk){",
+     "var svc=root+'/lib/ajax/service.php?sesskey='+encodeURIComponent(sk)+'&info=core_course_get_enrolled_courses_by_timeline_classification';",
+     "var body=JSON.stringify([{index:0,methodname:'core_course_get_enrolled_courses_by_timeline_classification',"
+       "args:{offset:0,limit:0,classification:'all',sort:'fullname'}}]);",
+     "try{",
+       "var r=await fetch(svc,{method:'POST',credentials:'same-origin',"
+         "headers:{'Content-Type':'application/json'},body:body});",
+       "if(r.ok){var j=await r.json();",
+         "if(j&&j[0]&&!j[0].error&&j[0].data&&j[0].data.courses){var sn={};",
+           "j[0].data.courses.forEach(function(c){push(String(c.id),c.fullname||c.shortname||('Course '+c.id),c.shortname,sn)});",
+           "if(courses.length)how='Moodle web service'}}",
+     "}catch(e){}",
+   "}",
+   "if(!courses.length){",
+     "var pages=['/my/courses.php','/my/','/course/index.php'];",
+     "for(var pi=0;pi<pages.length;pi++){",
+       "var rr=await fetch(root+pages[pi],{credentials:'same-origin'});",
+       "if(!rr.ok)continue;",
+       r"var d=P(await rr.text()),sn2={};",
+       r"Array.prototype.forEach.call(d.querySelectorAll('a[href*=\"course/view.php?id=\"]'),function(a){",
+         r"var m=a.getAttribute('href').match(/id=(\d+)/);if(m)push(m[1],T(a)||('Course '+m[1]),'',sn2)});",
+       "if(courses.length){how='page scrape of '+pages[pi];break}",
+     "}",
+   "}",
+   "if(!courses.length){var sn3={};",
+     r"Array.prototype.forEach.call(document.querySelectorAll('a[href*=\"course/view.php?id=\"]'),function(a){",
+       r"var m=a.getAttribute('href').match(/id=(\d+)/);if(m)push(m[1],T(a)||('Course '+m[1]),'',sn3)});",
+     "if(courses.length)how='links on the page you are on'",
+   "}",
+   "if(!courses.length)throw new Error('Found no enrolled courses. sesskey was '"
+     "+(sk?'found':'NOT found')+'. Open Moodle, sign in, go to Dashboard or My courses, then click this again.');",
+   "var out={source:'moodle',host:location.host,at:new Date().toISOString(),discovery:how,courses:[]};",
+   "var empty=0;",
+   "for(var i2=0;i2<courses.length;i2++){var c=courses[i2],items=[];",
+     "var g=await fetch(root+'/grade/report/user/index.php?id='+c.id,{credentials:'same-origin'});",
+     "if(g.ok){var gd=P(await g.text());",
+       "var tbl=gd.querySelector('table.user-grade')||gd.querySelector('table.generaltable');",
+       "if(tbl){Array.prototype.forEach.call(tbl.querySelectorAll('tr'),function(tr){",
+         "var th=tr.querySelector('th');if(!th)return;",
+         r"var name=T(th);if(!name||/^grade item$/i.test(name))return;",
+         "var tds=tr.querySelectorAll('td');if(!tds.length)return;",
+         "var cl=Array.prototype.map.call(tds,function(td){return{c:(td.className||''),t:T(td)}});",
+         r"var gr=cl.filter(function(x){return /column-grade/.test(x.c)})[0];",
+         r"var rg=cl.filter(function(x){return /column-range/.test(x.c)})[0];",
+         r"var wt=cl.filter(function(x){return /column-weight/.test(x.c)})[0];",
+         r"var max=null;if(rg&&rg.t){var p=rg.t.split(/[–—-]/);if(p.length>1)max=num(p[p.length-1])}",
+         "items.push({name:name,score:gr?num(gr.t):null,points:max,"
+           r"weight:wt?num(wt.t):null,total:/course total/i.test(name)})})}",
+     "}",
+     "if(!items.length)empty++;",
+     "out.courses.push({id:c.id,name:c.name,code:c.code||c.name,items:items})}",
+   "var t=JSON.stringify(out);",
+   r"var msg='Thunder Command: read '+out.courses.length+' course(s) via '+how+'.'"
+     r"+(empty?'\n'+empty+' had no readable grade table - nothing posted yet, or a theme this cannot read. They still import as courses.':'');",
+   r"try{await navigator.clipboard.writeText(t);alert(msg+'\n\nCopied. Paste it into Data & Sources.')}",
+   r"catch(e){var w=window.open('','_blank');w.document.write('<textarea style=\"width:99%;height:90vh\">'"
+     r"+t.replace(/</g,'&lt;')+'</textarea>');alert(msg+'\n\nClipboard blocked - copy the text in the new tab instead.')}",
+ r"}catch(e){alert('Thunder Command: '+e.message)}})()",
+]
+_MOODLE_FN = (
+  'function canvasBookmarkletSource(){\n'
+  '  /* Moodle, not Canvas. This calls the same web service Moodle\'s own\n'
+  '     course-overview block calls, so it works on Moodle 4.x where the\n'
+  '     dashboard is rendered client-side and there is no course link in the\n'
+  '     server HTML to scrape. Two DOM scrapes remain as fallbacks. Grades\n'
+  '     still come from the rendered grade report, which is the only place\n'
+  '     Moodle exposes them without an institution-issued token. */\n'
+  '  return ' + repr(''.join(_MOODLE_JS)).replace('"', '\\"') + ';\n'
+  '}\n'
+)
+# repr() gives a single-quoted Python literal; JS accepts the same quoting.
+swap_re(r'function canvasBookmarkletSource\(\)\{.*?\n\}\n', _MOODLE_FN, 'moodle bookmarklet fixed')
+
+# Trine numbers its courses with five digits (CS 24000, MA 16500) where IU
+# uses three (CSCI-C 212). The shared miner and the Canvas/Moodle code
+# matcher both cap at four, so on this build every mined code silently
+# failed to match. Widen both to 3-5 digits and allow two-letter subjects.
+swap(r"const COURSE_CODE_RE = /\b(?!(?:LEC|LAB|DIS|REC|SEM|STD|SEC|SECTION|CLASS|ROOM|BLDG|BUILDING|HALL|FLOOR)\b)([A-Z]{2,5})[-\s]?([A-Z]\s?)?(\d{3,4}[A-Z]?)\b/;",
+     r"const COURSE_CODE_RE = /\b(?!(?:LEC|LAB|DIS|REC|SEM|STD|SEC|SECTION|CLASS|ROOM|BLDG|BUILDING|HALL|FLOOR)\b)([A-Z]{2,5})[-\s]?([A-Z]\s?)?(\d{3,5}[A-Z]?)\b/;",
+     'course code regex 5-digit')
+swap(r"  const m=t.match(/\b([A-Z]{3,4})[-\s]?([A-Z])?\s?(\d{3})\b/);",
+     r"  const m=t.match(/\b([A-Z]{2,5})[-\s]?([A-Z])?\s?(\d{3,5})\b/);",
+     'matchCourse regex 5-digit')
+
+
+
 
 pathlib.Path('trine.html').write_text(out)
 assert pathlib.Path('index.html').read_text() == before, 'index.html was modified!'

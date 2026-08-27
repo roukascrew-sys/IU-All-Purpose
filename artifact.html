@@ -1051,7 +1051,7 @@ ul.none{list-style:none;padding:0;margin:0}
     </div></div>
     <div id="shotDrop" class="empty" style="cursor:pointer;padding:34px 18px">
       <div>Click to choose an image, or drag one here.</div>
-      <div class="hint" style="margin-top:6px">A clean screenshot of the weekly grid works best — the one you\u2019d get from One.IU\u2019s class schedule view.</div>
+      <div class="hint" style="margin-top:6px">A clean screenshot of the weekly grid works best — the one you’d get from One.IU’s class schedule view.</div>
     </div>
     <input type="file" id="shotFile" accept="image/*" style="display:none">
     <div class="row" style="margin-top:12px;display:none" id="shotPreviewRow">
@@ -5379,7 +5379,7 @@ function renderBookmarklet(){
       +'</div>'
     +'</div>'
     +'<div class="divider"></div>'
-    +'<div class="note warn"><b>On reading a screen recording instead.</b> You asked whether that could work. It cannot, and I would rather say so than ship something that half-works: there is no OCR engine that can be bundled into a single HTML file at a sane size, video frames of a grade table decode into text with errors that are invisible until your GPA is wrong, and the whole approach is strictly worse than an API that returns exact numbers. The bookmarklet above is the same one click and the data is exact.</div>';
+    +'<div class="note warn"><b>On reading a screen recording instead.</b> You asked whether that could work. Half of it can, and the split is worth knowing. Reading a <em>schedule</em> off a picture is now built — the screenshot scanner below runs a real OCR engine in the browser — because a timetable is a coarse grid where a misread is visible at a glance and every row is confirmed by hand before it is saved. Reading a <em>grade table</em> that way is a different proposition: OCR turns 78.9 into 78.3 silently, and you would not notice until your GPA was wrong. So grades still come from the bookmarklet above, which returns exact numbers from the API rather than guesses from pixels.</div>';
 }
 
 /* ======================================================================
