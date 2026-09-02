@@ -205,6 +205,16 @@ swap_block("const CITE = {", "};\nfunction citeLine", '''const CITE = {
   csBioMap:  {t:'Biology MAP sheet \u2014 University Core course choices', o:'BYU Department of Biology', u:'https://biology.byu.edu/00000193-bce7-d282-afbf-ffe738ea0001/biology-standard-map-sheet'},
   csChemMap: {t:'Chemistry BA MAP sheet \u2014 University Core course choices', o:'BYU College of Physical and Mathematical Sciences', u:'https://science.byu.edu/00000183-429f-d026-a7c7-469fef1f0001/chem-ba-map-22-23'},
   csStat121: {t:'STAT 121 course listing', o:'BYU Independent Study', u:'https://indstudy.byu.edu/catalog/STAT-121-301-001'},
+  csDance184:{t:'DANCE 184 course entry', o:'BYU Catalog', u:'https://catalog.byu.edu/courses/04323-007'},
+  bDanceProg:{t:'Ballroom Dance, International Beginning', o:'BYU Undergraduate Catalog', u:'https://catalog.byu.edu/fine-arts-and-communications/dance/ballroom-dance-international-beginning'},
+  csSfl210: {t:'SFL 210 course entry', o:'BYU Catalog', u:'https://catalog.byu.edu/courses/01107-016'},
+  bSflProg: {t:'Human Development', o:'BYU School of Family Life', u:'https://catalog.byu.edu/family-home-and-social-sciences/school-of-family-life/human-development'},
+  csRelA121:{t:'REL A 121 course entry', o:'BYU Catalog', u:'https://catalog.byu.edu/courses/04997-050'},
+  csBio100: {t:'BIO 100 course entry', o:'BYU Catalog', u:'https://catalog.byu.edu/courses/00099-018'},
+  csMusic311R:{t:'MUSIC 311R course entry', o:'BYU Catalog', u:'https://catalog.byu.edu/courses/04014-011'},
+  bChorale: {t:'University Chorale', o:'BYU School of Music', u:'https://catalog.byu.edu/fine-arts-and-communications/school-of-music/university-chorale'},
+  csUniv101:{t:'UNIV 101 course entry', o:'BYU Catalog', u:'https://catalog.byu.edu/courses/09090-004'},
+  bFoundations:{t:'What is First-Year Foundations', o:'BYU General Education', u:'https://ge.byu.edu/what-is-first-year-foundations'},
   amdr:      {t:'Description of the Acceptable Macronutrient Distribution Range', o:'National Academies / NCBI Bookshelf', u:'https://www.ncbi.nlm.nih.gov/books/NBK610333/'},
   amdr2:     {t:'Rethinking the Acceptable Macronutrient Distribution Range for the 21st Century', o:'National Academies', u:'https://www.nationalacademies.org/publications/27957'},
   ghStudent: {t:'GitHub Student Developer Pack', o:'GitHub Education', u:'https://education.github.com/pack'},
@@ -360,7 +370,55 @@ swap_block("const CATALOG = {", "\n/* ==========================================
     topics:['Doctrine and Covenants sections 77 to Official Declaration 2'],
     topicsCite:'csRelBgs', reported:[],
     watch:['Paired with REL C 324; either one alone is 2 credits.'],
-    color:'--s8'}
+    color:'--s8'},
+  'DANCE 184':{
+    title:'Ballroom Dance, International Beginning', credits:1, creditsVerified:true, cite:'csDance184',
+    desc:'Bronze-level International Style Waltz and Quickstep, plus beginning technique in posture, dance position, timing, footwork, weight transfer and partnering.',
+    prereq:'DANCE 180, or consent of instructor.',
+    topics:['International Style Waltz','Quickstep','Posture and dance position','Partnering skills'],
+    topicsCite:'bDanceProg', reported:[],
+    watch:['A lab-format activity course \u2014 the 1 credit is almost entirely dance-floor time, not lecture.'],
+    color:'--s7'},
+  'SFL 210':{
+    title:'Human Development', credits:3, creditsVerified:true, cite:'csSfl210',
+    desc:'The growth and development of human beings from conception until death, including the influences of family, peers, schools and culture.',
+    prereq:'None stated in the catalog entry \u2014 open to all students, and a prerequisite for several other programmes including Nursing.',
+    topics:['Major human-development theories','Biological, cognitive, emotional and social domains','Research methods in human development'],
+    topicsCite:'bSflProg', reported:[],
+    watch:['A required prerequisite for the Nursing programme at BYU \u2014 check your own programme\u2019s MAP sheet for whether it wants this or a different development course.'],
+    color:'--s5'},
+  'REL A 121':{
+    title:'The Book of Mormon', credits:2, creditsVerified:true, cite:'csRelA121',
+    desc:'The narrative, doctrines and precepts of the Book of Mormon, covering 1 Nephi through Alma 29.',
+    prereq:'None stated in the catalog entry.',
+    topics:['Book of Mormon narrative, 1 Nephi through Alma 29','Doctrines and precepts'],
+    topicsCite:'csRelA121', reported:[],
+    watch:['REL A 121 and REL A 122 together satisfy the REL A 275 cornerstone requirement \u2014 check which path your own religion sequence is on.'],
+    color:'--s8'},
+  'BIO 100':{
+    title:'Principles of Biology', credits:3, creditsVerified:true, cite:'csBio100',
+    desc:'An introductory biology course for general-education students, built around how biological principles apply to everyday life rather than around a majors-track sequence.',
+    prereq:'None stated in the catalog entry.',
+    topics:['Biology literacy and vocabulary','Scientific reasoning on public-policy science issues','Stewardship and civic application of biology'],
+    topicsCite:'csBio100', reported:[],
+    watch:['A different course from BIO 130 on this list \u2014 100 is the general-education, no-lab version; check which one your own requirement actually wants before enrolling in either.'],
+    color:'--s6'},
+  'MUSIC 311R':{
+    title:'University Chorale', credits:1, creditsVerified:true, cite:'csMusic311R',
+    desc:'BYU\u2019s non-auditioned choir, open to any student. Repertoire is read, learned, memorized and polished across the semester toward a concert and campus Devotional performances.',
+    prereq:'None \u2014 no audition required.',
+    topics:['Choral literature for the semester\u2019s repertoire','Sight-reading and ensemble technique'],
+    topicsCite:'bChorale', reported:[],
+    watch:['The R marks it repeatable for credit across multiple semesters \u2014 check how many times your own programme lets it count.'],
+    color:'--s7'},
+  'UNIV 101':{
+    title:'BYU Foundations for Student Success', credits:2, creditsVerified:true, cite:'csUniv101',
+    desc:'Required for all incoming first-year (non-transfer) students starting Winter 2024 onward. Covers the mission and aims of a BYU education, the balanced development of the whole person, and the transition to life as a BYU student.',
+    prereq:'None \u2014 first-year, non-transfer students only.',
+    topics:['The mission and aims of a BYU education','Whole-person development','Transition to university life'],
+    topicsCite:'bFoundations', reported:[],
+    watch:['Graded Credit/No Credit, not a letter grade \u2014 it will not touch your GPA, but 100% completion is required to earn the credit.'],
+    color:'--s1'}
 };
 ''', 'catalog')
 
@@ -644,7 +702,7 @@ prose('Check your balance in the CrimsonCard portal, then paste it here.',
 
 # gaps list rewritten for this build
 swap_block("  $('gaps').innerHTML='<ul class=\"tight\" style=\"color:var(--ink-2)\">'", "\n}\n\n/* =======", '''  $('gaps').innerHTML='<ul class="tight" style="color:var(--ink-2)">'
-   +'<li><b>The course catalog is a sample, not the whole catalog.</b> Sixteen BYU courses ship with credit hours and descriptions taken from catalog.byu.edu and from published MAP sheets. BYU publishes no downloadable section export I could reach, so there is no term-by-term schedule of classes embedded here \u2014 use the live search on the Courses tab, which hands your query straight to catalog.byu.edu.</li>'
+   +'<li><b>The course catalog is a sample, not the whole catalog.</b> Twenty-two BYU courses ship with credit hours and descriptions taken from catalog.byu.edu and from published MAP sheets. BYU publishes no downloadable section export I could reach, so there is no term-by-term schedule of classes embedded here \u2014 use the live search on the Courses tab, which hands your query straight to catalog.byu.edu.</li>'
    +'<li><b>Credit-hour and grading conventions.</b> The 2.0 study-hours-per-credit default and the 4.0 grade scale with 97/93/90 cutoffs are common conventions, <em>not</em> verified BYU policy. Check your syllabus and the catalog, and change them if yours differ.</li>'
    +'<li><b>Fall 2026 dates.</b> Classes begin September 2, the last day of instruction is December 10, December 11 is Exam Preparation Day and finals run December 12\u201317, from BYU\u2019s 2026 academic calendar. If the calendar and this page ever disagree, the calendar is right.</li>'
    +'<li><b>Meal plan prices.</b> Open Door and Dining Plus at $2,730 a semester, True Blue at $500 or $800, and EZ Dining at $100/$150/$200 a month all come from secondary write-ups rather than a BYU price page I could reach. The plan <em>structures</em> are from BYU Dining. Enter what you were actually charged.</li>'
@@ -821,7 +879,7 @@ def swap_re(pattern, replacement, what):
     LOG.append(what)
 
 swap_re(r'Every class IU Bloomington is running this fall.*?</div>',
-  'Sixteen BYU courses, each one carrying the credit hours, description, prerequisite and topic list I could quote from catalog.byu.edu or a published MAP sheet. BYU does not publish a downloadable schedule of classes I could reach, so this is a cited sample rather than everything running this term \u2014 for anything not below, the live search opens BYU\u2019s own catalog, which is the authority.</div>',
+  'Twenty-two BYU courses, each one carrying the credit hours, description, prerequisite and topic list I could quote from catalog.byu.edu or a published MAP sheet. BYU does not publish a downloadable schedule of classes I could reach, so this is a cited sample rather than everything running this term \u2014 for anything not below, the live search opens BYU\u2019s own catalog, which is the authority.</div>',
   'catalog blurb')
 
 swap_re(r'The dozen places above are the ones your own week actually uses.*?</div>',
@@ -833,7 +891,7 @@ swap_re(r'The table above is the registrar.*?</div>',
   'catalog live-search hint')
 
 swap_re(r"The full Schedule of Classes is not embedded in this build.*?</div>",
-  "<b>This is a cited sample, not the whole catalog.</b> Sixteen BYU courses ship with credit hours and descriptions from catalog.byu.edu and from published MAP sheets. BYU publishes no downloadable section export I could reach, so there is no term-by-term schedule of classes embedded here — for anything not listed above, the live search below hands your query straight to catalog.byu.edu.</div>",
+  "<b>This is a cited sample, not the whole catalog.</b> Twenty-two BYU courses ship with credit hours and descriptions from catalog.byu.edu and from published MAP sheets. BYU publishes no downloadable section export I could reach, so there is no term-by-term schedule of classes embedded here — for anything not listed above, the live search below hands your query straight to catalog.byu.edu.</div>",
   'catalog empty-state')
 
 swap_re(r"'site:academics\.iu\.edu[^\n]*?Indiana University Bloomington course'",

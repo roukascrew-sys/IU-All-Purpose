@@ -297,7 +297,7 @@ Provo, Utah. Same engine, same transform pattern as Trine:
 | Palette | warm limestone + crimson | navy + Vegas gold | BYU navy + near-white |
 | Storage key | `iu.crimsonCommand.v1` | `trine.thunderCommand.v1` | `byu.cougarCommand.v1` |
 | Boots with | the owner's five courses | nothing | nothing |
-| Course list | all 4,875 Fall 2026 courses, from the registrar export | none | 16 cited courses + live catalog search |
+| Course list | all 4,875 Fall 2026 courses, from the registrar export | none | 22 cited courses + live catalog search |
 | Course codes | `CSCI-C 212` | `CS 24000` | `C S 142`, `REL A 275`, `A HTG 100` |
 | LMS import | Canvas JSON API | Moodle web service | Canvas JSON API |
 | Schedule import | Stellic | myPortal | MyBYU |
@@ -366,9 +366,10 @@ which contain the word "IU":
 
 ### What is verified, and what is not
 
-Sixteen courses ship with credit hours, descriptions, prerequisites and
+Twenty-two courses ship with credit hours, descriptions, prerequisites and
 topic lists quoted from `catalog.byu.edu` or from published MAP sheets, each
-with its own citation. BYU publishes no downloadable schedule of classes
+with its own citation — including DANCE 184, SFL 210, REL A 121, BIO 100,
+MUSIC 311R and UNIV 101, added on request. BYU publishes no downloadable schedule of classes
 that this environment could reach, so there is no term-by-term section data
 embedded — the catalog panel says so, and the live search hands your query
 to `catalog.byu.edu` rather than guessing.
