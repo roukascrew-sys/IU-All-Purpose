@@ -215,6 +215,9 @@ reaches the Trine build on the next run. Only the data and copy are duplicated.
 - `index.html` — the standalone app, boots with the owner's Fall 2026 data.
 - `trine.html` — the Trine University build. Generated.
 - `make-trine.py` — regenerates `trine.html` from `index.html`.
+- `byu.html` — the BYU Provo build. Generated.
+- `make-byu.py` — regenerates `byu.html` from `index.html`.
+- `byu-artifact.html` — body only, for publishing the BYU build. Generated.
 - `crimson-command-share.html` — the same app with `BOOT_PROFILE = 'blank'`, so
   it opens empty. This is the copy to send someone. Generated.
 - `artifact.html` — body only, for publishing as an Artifact. Generated.
@@ -224,7 +227,7 @@ reaches the Trine build on the next run. Only the data and copy are duplicated.
 python3 build-artifact.py
 ```
 
-Only `index.html` is edited by hand. The other two are always rebuilt.
+Only `index.html` is edited by hand. Everything else is always rebuilt.
 
 ## Keeping the two builds honest
 
@@ -283,3 +286,99 @@ Trine also numbers courses with five digits (`CS 24000`) where IU uses three
 (`CSCI-C 212`). The shared schedule miner and the LMS code matcher both
 capped at four, so every mined Trine code silently failed to match; both
 regexes are widened in the Trine build.
+
+## The BYU build
+
+`byu.html` is the same planner rebuilt for **Brigham Young University** in
+Provo, Utah. Same engine, same transform pattern as Trine:
+
+| | IU build | Trine build | BYU build |
+|---|---|---|---|
+| Palette | warm limestone + crimson | navy + Vegas gold | BYU navy + near-white |
+| Storage key | `iu.crimsonCommand.v1` | `trine.thunderCommand.v1` | `byu.cougarCommand.v1` |
+| Boots with | the owner's five courses | nothing | nothing |
+| Course list | all 4,875 Fall 2026 courses, from the registrar export | none | 16 cited courses + live catalog search |
+| Course codes | `CSCI-C 212` | `CS 24000` | `C S 142`, `REL A 275`, `A HTG 100` |
+| LMS import | Canvas JSON API | Moodle web service | Canvas JSON API |
+| Schedule import | Stellic | myPortal | MyBYU |
+| Dining | five AYCTE halls | Whitney Commons + two coffee shops | Cannon Commons, Cougareat, Creamery on Ninth |
+| Meal plans | swipes + Dining Dollars | 10 or 19 meals a week | Open Door, Dining Plus, True Blue, EZ Dining |
+| Athletics | Big Ten, pre-loaded | MIAA D-III, nothing pre-loaded | Big 12, seven 2026 home games pre-loaded |
+
+```
+python3 make-byu.py
+```
+
+BYU runs Canvas, so the IU bookmarklet and its whole parse path carry over
+unchanged — only the host list and the wording differ. What did *not* carry
+over is the parsing, and testing against real BYU rows found five defects
+that would each have broken the importer for every BYU student:
+
+1. **Subject codes contain spaces.** `C S 142`, `REL A 275`, `A HTG 100`.
+   The IU regex demanded a 2–5 letter first token, so it dropped `C S`
+   entirely and read `A HTG 100` as `HTG 100`. The BYU regex takes an
+   optional second token and requires a separator before the number — the
+   separator matters, because without it a room like `JFSB B037` parses as
+   a course.
+2. **BYU writes times as `10:00a – 10:50a`** — a bare a/p with no "m",
+   which the IU meridiem pattern rejected outright.
+3. **The time scanner took the first regex hit only.** On a BYU row that is
+   the section number: `C S 142 - 002` reads as 42–00, which carries no
+   meridiem, so the function bailed and *every* meeting lost its time. It
+   now scans for the first candidate that actually resolves.
+4. **The 3-line read-ahead window.** Registration screens wrap a meeting
+   across short lines, so the miner reads a window. BYU puts a whole
+   section on one line, and reading ahead dragged the next course's days
+   and room into the current row. The line alone now wins whenever it
+   already carries both a day set and a time.
+5. **`matchCourse()` carried its own IU-shaped regex**, so a Canvas course
+   named `REL C 225: Foundations of the Restoration` came back as
+   `REL-C 225` and stopped matching the catalog.
+
+Rooms are matched on both the long building name and the abbreviation, since
+BYU writes them as `TMCB 1170` rather than "Talmage".
+
+One fix landed in `index.html` instead, because it was never BYU-specific: a
+lecture and its lab arrive as two rows with the same course code, and both
+render as "+ new course" because neither existed when the table was drawn.
+`commitMeetingCandidates()` created a duplicate course for the second row.
+All three builds get the fix.
+
+### Reading the built file, again
+
+The same end-to-end read that caught the Trine leaks caught these, none of
+which contain the word "IU":
+
+- the dining tab asserted, as **verified**, that Dining Dollars "carry from
+  fall to spring but expire at the end of the academic year, and can be
+  topped up in $5 increments with a $25 minimum" — that is IU's CrimsonCard
+  rule, and BYU publishes no rollover rule I could reach
+- the support panel opened "You have paid the health fee and the activity
+  fee", while the CAPS card three lines down correctly said no fee was
+  stated anywhere I could reach
+- the professor-research panel described "a school of two thousand", which
+  is Trine's enrolment, not BYU's
+- the catalog panel said "no course list ships with this build" directly
+  above sixteen shipped courses
+- the bookmarklet told you to open `iu.instructure.com`
+- a `\u2014` escape that landed in static HTML, where nothing interprets it,
+  and rendered literally on the page
+
+### What is verified, and what is not
+
+Sixteen courses ship with credit hours, descriptions, prerequisites and
+topic lists quoted from `catalog.byu.edu` or from published MAP sheets, each
+with its own citation. BYU publishes no downloadable schedule of classes
+that this environment could reach, so there is no term-by-term section data
+embedded — the catalog panel says so, and the live search hands your query
+to `catalog.byu.edu` rather than guessing.
+
+Meal-plan *structures* come from BYU Dining; the *prices* come from
+secondary write-ups and are labelled reported, not verified. The $9–$20
+student starting wage is BYU's own published figure; the $14.21 median and
+$13.46–$15.14 band are an aggregator's. All seven 2026 home football games
+come from the published Big 12 schedule, including the Iowa State game moved
+to Friday 9 October — the only weeknight game, and the one most likely to
+eat an evening. Buildings without a street address I could verify are drawn
+with a dashed outline and fall back to a Google Maps name search.
+

@@ -5561,8 +5561,13 @@ function commitMeetingCandidates(mountId){
     const targetSel = qs('select[data-scf="target"][data-i="'+i+'"]', $(mountId));
     const targetVal = targetSel ? targetSel.value : '__new';
     let course = targetVal==='__new' ? null : S.courses.find(c=>c.code===targetVal);
+    const canon = canonicalizeCode(r.code);
+    /* A lecture and its lab arrive as two rows carrying the same code, and
+       both render as "+ new course" because neither existed when the table
+       was drawn. Without this the second row creates a duplicate course
+       instead of adding a second meeting to the first. */
+    if(!course && targetVal==='__new') course = S.courses.find(c=>c.code===canon) || null;
     if(!course){
-      const canon = canonicalizeCode(r.code);
       const cat = CATALOG[canon];
       course = {id:uid(), code:canon, credits:(cat&&cat.creditsVerified)?cat.credits:null,
         instructor:'', diff:1.0, meetings:[], grades:[], notes:''};

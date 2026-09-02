@@ -3,45 +3,45 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Thunder Command</title>
+<title>Cougar Command</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Source+Sans+3:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
 <style>
 /* ===================================================================
-   Thunder Command — Trine University all-purpose planner.
-   Same engine as the IU build, different campus and a different world:
-   Trine's athletic colours are navy, white and Vegas gold, so the ground
-   is a cold navy-black rather than a warm limestone one and the accent
-   is gold. The accent sits only on interactive chrome and identity —
-   every data mark uses the CVD-validated categorical palette, which was
-   re-run against this navy surface and passes all six checks. The gold
-   is deliberately a lighter step than the palette's yellow slot so brand
-   can never be mistaken for a series.
+   Cougar Command — BYU Provo all-purpose planner.
+   Same engine as the IU build on a different campus. BYU is navy and
+   white, so the ground is a cold navy-black and the accent is a near-
+   white rather than a blue: every categorical series already contains a
+   blue (--s1), and an accent in the same hue family would let brand be
+   mistaken for a data series. White cannot be. The accent is spent only
+   on interactive chrome and identity; every data mark uses the
+   CVD-validated categorical palette unchanged.
    =================================================================== */
 :root{
   color-scheme: dark;
-  --plane:#080c12;
-  --ground:#0d141d;
-  --surface:#131c28;
-  --surface-2:#1a2534;
-  --surface-3:#233042;
-  --line:#2b3a4d;
-  --line-soft:#1c2836;
-  --ink:#eef3f8;
-  --ink-2:#9aabbd;
-  --ink-3:#6b7d90;
+  --plane:#060a12;
+  --ground:#0b1220;
+  --surface:#111a2b;
+  --surface-2:#182338;
+  --surface-3:#212f47;
+  --line:#2a3a52;
+  --line-soft:#1a263a;
+  --ink:#eef4fb;
+  --ink-2:#a3b4c9;
+  --ink-3:#6f8299;
 
-  /* Vegas gold, lifted for legibility on navy. Named crimson only so the
-     engine below needs no changes — the value is what matters. */
-  --crimson:#d8a72e;
-  --crimson-lift:#eec158;
-  --crimson-deep:#6d5210;
-  --crimson-wash:rgba(216,167,46,.13);
-  --cream:#e7ecf2;
+  /* Near-white, for legibility and brand on navy. The token is renamed to
+     --brand at the end of this transform; deliberately NOT blue, because
+     the engine below needs no changes — the value is what matters. */
+  --brand:#e8f1fb;
+  --brand-lift:#ffffff;
+  --brand-deep:#20456f;
+  --brand-wash:rgba(232,241,251,.11);
+  --cream:#dce7f4;
 
   /* validated categorical palette (dark steps) — re-run against this
-     navy surface #131c28: all six checks pass, worst adjacent CVD dE 8.4,
+     navy surface #111a2b: all six checks pass, worst adjacent CVD dE 8.4,
      worst adjacent normal-vision dE 19.3 */
   --s1:#3987e5; --s2:#d95926; --s3:#199e70;
   --s4:#c98500; --s5:#d55181; --s6:#008300;
@@ -50,11 +50,11 @@
   /* status — reserved, never reused as a series */
   --good:#0ca30c; --warn:#fab219; --serious:#ec835a; --crit:#d03b3b;
 
-  --grid:#22303f;
-  --axis:#31445a;
+  --grid:#23324a;
+  --axis:#33465f;
 
-  --display:"Barlow Condensed","Arial Narrow",sans-serif;
-  --sans:"Source Sans 3",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --display:"Archivo","Helvetica Neue",Arial,sans-serif;
+  --sans:"Public Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
   --mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;
 
   --r:10px;
@@ -67,24 +67,24 @@ body{
   font:15px/1.55 var(--sans);
   font-feature-settings:"cv05" 1;
 }
-::selection{background:var(--crimson-deep);color:#fff}
+::selection{background:var(--brand-deep);color:#fff}
 
 h1,h2,h3,h4{margin:0;line-height:1.12;text-wrap:balance}
-h1{font-family:var(--display);font-weight:700;font-size:28px;letter-spacing:.01em;text-transform:uppercase}
+h1{font-family:var(--display);font-weight:700;font-size:27px;letter-spacing:.005em;text-transform:uppercase}
 h2{font-family:var(--display);font-weight:500;font-size:20px;letter-spacing:.045em;text-transform:uppercase}
 h3{font-size:15px;font-weight:600;letter-spacing:.01em}
 h4{font-size:13px;font-weight:600}
 p{margin:0 0 .7em}
 p:last-child{margin-bottom:0}
-a{color:var(--crimson-lift);text-decoration:none;border-bottom:1px solid rgba(238,193,88,.32)}
-a:hover{border-bottom-color:var(--crimson-lift)}
+a{color:var(--brand-lift);text-decoration:none;border-bottom:1px solid rgba(255,255,255,.34)}
+a:hover{border-bottom-color:var(--brand-lift)}
 a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,
-[tabindex]:focus-visible{outline:2px solid var(--crimson-lift);outline-offset:2px;border-radius:3px}
+[tabindex]:focus-visible{outline:2px solid var(--brand-lift);outline-offset:2px;border-radius:3px}
 small{font-size:12px}
 
 /* ---------- masthead ---------- */
 .mast{
-  position:sticky;top:0;z-index:40;background:linear-gradient(180deg,var(--ground) 78%,rgba(13,20,29,.9));
+  position:sticky;top:0;z-index:40;background:linear-gradient(180deg,var(--ground) 78%,rgba(11,18,32,.9));
   border-bottom:1px solid var(--line);backdrop-filter:blur(8px);
 }
 .mast-in{max-width:1520px;margin:0 auto;padding:13px 22px;display:flex;gap:20px;align-items:center;flex-wrap:wrap}
@@ -93,7 +93,7 @@ small{font-size:12px}
   font-family:var(--display);font-weight:700;font-size:25px;letter-spacing:.05em;text-transform:uppercase;
   color:var(--ink);white-space:nowrap;
 }
-.brand .mark em{font-style:normal;color:var(--crimson)}
+.brand .mark em{font-style:normal;color:var(--brand)}
 .brand .sub{font-size:11.5px;color:var(--ink-3);letter-spacing:.1em;text-transform:uppercase;white-space:nowrap}
 .mast-strip{margin-left:auto;display:flex;gap:9px;align-items:center;flex-wrap:wrap}
 .livechip{
@@ -117,8 +117,8 @@ small{font-size:12px}
   border:1px solid var(--line);border-radius:3px;padding:1px 5px;transition:.14s;
 }
 .tabbar button:hover{color:var(--ink-2)}
-.tabbar button.on{color:var(--ink);border-bottom-color:var(--crimson)}
-.tabbar button.on .n{background:var(--crimson);border-color:var(--crimson);color:#12181f}
+.tabbar button.on{color:var(--ink);border-bottom-color:var(--brand)}
+.tabbar button.on .n{background:var(--brand);border-color:var(--brand);color:#0b1220}
 
 .wrap{max-width:1520px;margin:0 auto;padding:22px 22px 90px}
 section.tab{display:none;animation:fade .22s ease}
@@ -137,7 +137,7 @@ section.tab.on{display:block}
   font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3);
   display:flex;align-items:center;gap:6px;margin-bottom:3px;
 }
-.feedstrip .lbl::before{content:"";width:10px;height:1px;background:var(--crimson);flex:none}
+.feedstrip .lbl::before{content:"";width:10px;height:1px;background:var(--brand);flex:none}
 .feedstrip .val{font-size:13px;color:var(--ink-2);line-height:1.4}
 .feedstrip .val b{color:var(--ink);font-family:var(--mono);font-weight:600}
 
@@ -172,7 +172,7 @@ section.tab.on{display:block}
 .prov.unverified{color:var(--ink-3);border-color:var(--line);background:var(--surface-2)}
 .srcline{font-size:11.5px;color:var(--ink-3);margin-top:7px;line-height:1.5}
 .srcline a{color:var(--ink-2);border-bottom-color:var(--line)}
-.srcline a:hover{color:var(--crimson-lift)}
+.srcline a:hover{color:var(--brand-lift)}
 
 /* ---------- stat tiles ---------- */
 .tile{
@@ -185,7 +185,7 @@ section.tab.on{display:block}
 .tile .n{font-size:11.5px;color:var(--ink-3);line-height:1.4}
 .tile::after{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--line)}
 .tile.good::after{background:var(--good)} .tile.warn::after{background:var(--warn)}
-.tile.crit::after{background:var(--crit)} .tile.acc::after{background:var(--crimson)}
+.tile.crit::after{background:var(--crit)} .tile.acc::after{background:var(--brand)}
 .tile.good .v{color:#4fc24f} .tile.warn .v{color:var(--warn)} .tile.crit .v{color:#e2645f}
 
 /* ---------- forms ---------- */
@@ -195,7 +195,7 @@ input,select,textarea{
   border:1px solid var(--line);border-radius:6px;
 }
 input::placeholder,textarea::placeholder{color:#5d5450}
-input[type=checkbox],input[type=radio]{width:auto;accent-color:var(--crimson)}
+input[type=checkbox],input[type=radio]{width:auto;accent-color:var(--brand)}
 input[type=number]{font-family:var(--mono)}
 textarea{resize:vertical;min-height:74px;font-family:var(--mono);font-size:12.5px}
 .hint{font-size:11.5px;color:var(--ink-3);margin-top:5px;line-height:1.45}
@@ -206,8 +206,8 @@ textarea{resize:vertical;min-height:74px;font-family:var(--mono);font-size:12.5p
   display:inline-flex;align-items:center;gap:7px;
 }
 .btn:hover{background:var(--surface-3);border-color:#403636}
-.btn.primary{background:var(--crimson);border-color:var(--crimson);color:#12181f}
-.btn.primary:hover{background:#e8b640;border-color:#e8b640}
+.btn.primary{background:var(--brand);border-color:var(--brand);color:#0b1220}
+.btn.primary:hover{background:#ffffff;border-color:#ffffff}
 .btn.ghost{background:none}
 .btn.danger{color:#e2645f;border-color:rgba(208,59,59,.35)}
 .btn.sm{padding:5px 10px;font-size:12px}
@@ -261,11 +261,11 @@ tbody tr:last-child td{border-bottom:0}
 }
 .note.warn{border-left-color:var(--warn)}
 .note.crit{border-left-color:var(--crit)}
-.note.acc{border-left-color:var(--crimson)}
+.note.acc{border-left-color:var(--brand)}
 .note.good{border-left-color:var(--good)}
 .note b{color:var(--ink)}
 .callout{
-  background:var(--crimson-wash);border:1px solid rgba(207,39,64,.3);border-radius:var(--r);
+  background:var(--brand-wash);border:1px solid rgba(207,39,64,.3);border-radius:var(--r);
   padding:13px 16px;font-size:13px;color:var(--ink-2);line-height:1.55;margin-bottom:16px;
 }
 .callout b{color:var(--ink)}
@@ -344,7 +344,7 @@ ul.none{list-style:none;padding:0;margin:0}
 .dmeta{display:flex;gap:7px;flex-wrap:wrap;align-items:center;margin-top:7px}
 .savebar{
   position:sticky;bottom:0;z-index:30;background:linear-gradient(0deg,var(--ground) 82%,rgba(13,20,29,.92));
-  border-top:1px solid var(--crimson-deep);margin:22px -22px -90px;padding:15px 22px 20px;backdrop-filter:blur(8px);
+  border-top:1px solid var(--brand-deep);margin:22px -22px -90px;padding:15px 22px 20px;backdrop-filter:blur(8px);
 }
 .savebar-in{max-width:1476px;margin:0 auto;display:flex;gap:20px;align-items:center;flex-wrap:wrap}
 
@@ -368,12 +368,12 @@ ul.none{list-style:none;padding:0;margin:0}
 .cite .b{min-width:0}
 .cite .t{color:var(--ink);font-weight:500}
 .cite a{font-size:11.5px;word-break:break-all;color:var(--ink-3);border:0}
-.cite a:hover{color:var(--crimson-lift)}
+.cite a:hover{color:var(--brand-lift)}
 
 /* toast + modal */
 #toasts{position:fixed;right:18px;bottom:18px;z-index:80;display:flex;flex-direction:column;gap:9px;max-width:min(400px,calc(100vw - 36px))}
 .toast{
-  background:#060a0f;border:1px solid var(--line);border-left:3px solid var(--crimson);border-radius:8px;
+  background:#060a0f;border:1px solid var(--line);border-left:3px solid var(--brand);border-radius:8px;
   padding:11px 15px;font-size:13px;box-shadow:0 8px 30px rgba(0,0,0,.7);animation:slidein .2s ease;
 }
 .toast.good{border-left-color:var(--good)} .toast.bad{border-left-color:var(--crit)} .toast.warn{border-left-color:var(--warn)}
@@ -412,8 +412,8 @@ ul.none{list-style:none;padding:0;margin:0}
 <header class="mast">
   <div class="mast-in">
     <div class="brand">
-      <span class="mark">Thunder <em>Command</em></span>
-      <span class="sub">Trine University · Fall 2026</span>
+      <span class="mark">Cougar <em>Command</em></span>
+      <span class="sub">BYU Provo · Fall 2026</span>
     </div>
     <div class="mast-strip" id="liveStrip"></div>
   </div>
@@ -462,7 +462,7 @@ ul.none{list-style:none;padding:0;margin:0}
       </div></div>
       <div class="chartwrap"><div id="cWeekBar"></div><div class="tt" id="ttWeekBar"></div></div>
       <div class="legend" id="lWeekBar"></div>
-      <div class="srcline"><span class="prov unverified">Unverified</span> Study hours per credit default to <strong>2.0</strong>, the common accreditation convention of two hours of out-of-class work per contact hour. <strong>This is not a Trine figure</strong> — I could not reach a Trine credit-hour policy, so treat it as a starting dial rather than a rule.</div>
+      <div class="srcline"><span class="prov unverified">Unverified</span> Study hours per credit default to <strong>2.0</strong>, the common accreditation convention of two hours of out-of-class work per contact hour. <strong>This is not a BYU figure</strong> — I could not reach a BYU credit-hour policy, so treat it as a starting dial rather than a rule.</div>
     </div>
     <div class="panel">
       <div class="panel-hd"><div class="t">
@@ -571,23 +571,23 @@ ul.none{list-style:none;padding:0;margin:0}
   <div class="panel">
     <div class="panel-hd"><div class="t">
       <h2>Browse the course catalog</h2>
-      <div class="d">Trine publishes its catalog through SmartCatalog as web pages, not as a downloadable export, so unlike the IU build this one ships with no course list embedded — there was nothing to embed that I could reach without inventing it. Add your courses above and this planner holds what you enter; the search below opens Trine’s own catalog, which is the authority on what runs this term.</div>
+      <div class="d">Sixteen BYU courses, each one carrying the credit hours, description, prerequisite and topic list I could quote from catalog.byu.edu or a published MAP sheet. BYU does not publish a downloadable schedule of classes I could reach, so this is a cited sample rather than everything running this term — for anything not below, the live search opens BYU’s own catalog, which is the authority.</div>
     </div></div>
     <input id="catSearch" placeholder="Search e.g. “CS”, “Calculus”, “MA 16500”…">
     <div id="catList" class="scroll" style="max-height:360px;overflow-y:auto;margin-top:11px"></div>
     <div class="divider"></div>
     <div class="row" style="align-items:flex-end;gap:10px;flex-wrap:wrap">
-      <div style="flex:1;min-width:200px"><label class="f" for="bldgSearch2">Look a course up on IU's live pages</label>
+      <div style="flex:1;min-width:200px"><label class="f" for="bldgSearch2">Look a course up on BYU’s live catalog</label>
         <input id="bldgSearch2" placeholder="e.g. HIST-H 105"></div>
-      <button class="btn" id="btnLiveCourseSearch">Search IU's live catalog ↗</button>
+      <button class="btn" id="btnLiveCourseSearch">Search catalog.byu.edu ↗</button>
     </div>
-    <div class="hint" style="margin-top:7px">Trine is small enough that the catalog is quick to navigate directly — and it, not this planner, is the authority on what runs this term.</div>
+    <div class="hint" style="margin-top:7px">catalog.byu.edu is quick to navigate directly — and it, not this planner, is the authority on what runs this term.</div>
   </div>
 
   <div class="panel">
     <div class="panel-hd"><div class="t">
       <h2>How to research any professor — the real sources</h2>
-      <div class="d">There is no public database of "professor hard spots", and at a school of two thousand there is barely a review site either. These four are what you actually have, in order of how much weight to give them.</div>
+      <div class="d">There is no public database of "professor hard spots" — BYU publishes no grade-distribution query I could reach. These four are what you actually have, in order of how much weight to give them.</div>
     </div></div>
     <div class="grid g2" id="profTools"></div>
   </div>
@@ -623,7 +623,7 @@ ul.none{list-style:none;padding:0;margin:0}
   <div class="panel">
     <div class="panel-hd"><div class="t">
       <h2>Your meal plan</h2>
-      <div class="d">Trine requires every residential student to buy one of two Bon Appétit plans — 10 meals a week or 19 — and the Trine student ID is the meal card. Prices are not published on a page I could reach, so the price is yours to enter; every cost-per-meal number here is computed from what you type, never guessed.</div>
+      <div class="d">BYU Dining runs four plans: Open Door (unlimited at the Cannon Commons plus 200 dining dollars), Dining Plus (15 dining dollars a day, rolling over), True Blue (500 or 800 dollars a semester) and EZ Dining (100, 150 or 200 a month). The prices shown come from secondary write-ups rather than a BYU price page I could reach, so enter what you were actually charged; every cost-per-meal number here is computed from what you type, never guessed.</div>
     </div></div>
     <div class="grid g3" id="planPick"></div>
     <div class="divider"></div>
@@ -659,17 +659,17 @@ ul.none{list-style:none;padding:0;margin:0}
   <div class="panel">
     <div class="panel-hd"><div class="t">
       <h2>Campus map — from campus</h2>
-      <div class="d">Trine is a compact campus, so most of these are a short walk. Each pin carries the address I could verify and links to live walking directions, so the walk time you get is Google's, not mine.</div>
+      <div class="d">BYU Provo is a walkable campus, so most of these are a short walk. Each pin carries the address I could verify — the ones I could not are marked — and links to live walking directions, so the walk time you get is Google's, not mine.</div>
     </div></div>
     <div class="mapwrap map"><div id="campusMap"></div></div>
     <div class="grid g2" style="margin-top:14px" id="mapList"></div>
     <div class="divider"></div>
     <div class="row" style="align-items:flex-end;gap:10px;flex-wrap:wrap">
-      <div style="flex:1;min-width:200px"><label class="f" for="bldgFreeSearch">Look up any other Trine building by name</label>
+      <div style="flex:1;min-width:200px"><label class="f" for="bldgFreeSearch">Look up any other BYU building by name</label>
         <input id="bldgFreeSearch" placeholder="e.g. Woodburn Hall"></div>
       <button class="btn" id="btnBldgSearch">Get walking directions ↗</button>
     </div>
-    <div class="hint" style="margin-top:7px">The places above are the ones your own week actually uses, each with a hand-verified address. This box hands any other Trine building straight to Google Maps by name rather than guessing at a location I have not checked.</div>
+    <div class="hint" style="margin-top:7px">The places above are the ones your own week actually uses, each with a hand-verified address. This box hands any other BYU building straight to Google Maps by name rather than guessing at a location I have not checked.</div>
   </div>
 
   <div class="panel">
@@ -699,7 +699,7 @@ ul.none{list-style:none;padding:0;margin:0}
       <div class="srcline" id="dietSrc"></div>
     </div>
     <div class="panel">
-      <div class="panel-hd"><div class="t"><h2>Dining-hall strategy</h2><div class="d">Built around your actual class schedule and Whitney Commons as home base.</div></div></div>
+      <div class="panel-hd"><div class="t"><h2>Dining-hall strategy</h2><div class="d">Built around your actual class schedule and Cannon Commons as home base.</div></div></div>
       <div class="stack" id="dietPlan"></div>
     </div>
   </div>
@@ -838,7 +838,7 @@ ul.none{list-style:none;padding:0;margin:0}
   <div class="panel">
     <div class="panel-hd"><div class="t">
       <h2>What a student job pays here</h2>
-      <div class="d">The anchors every score on this tab is measured against. Read the provenance on each — only the work-study range is a Trine figure.</div>
+      <div class="d">The anchors every score on this tab is measured against. Read the provenance on each — the $9–$20 starting range is BYU’s own figure; the median and band are an aggregator’s.</div>
     </div></div>
     <div class="grid g4" id="wageTiles"></div>
     <div class="srcline" id="wageSrc"></div>
@@ -877,7 +877,7 @@ ul.none{list-style:none;padding:0;margin:0}
   </div>
 
   <div class="panel">
-    <div class="panel-hd"><div class="t"><h2>Where to look</h2><div class="d">The official routes into student employment at Trine.</div></div></div>
+    <div class="panel-hd"><div class="t"><h2>Where to look</h2><div class="d">The official routes into student employment at BYU.</div></div></div>
     <div class="grid g2" id="jobSources"></div>
   </div>
 </section>
@@ -887,7 +887,7 @@ ul.none{list-style:none;padding:0;margin:0}
   <div class="feedstrip" id="lFeed"></div>
 
   <div class="callout">
-    <b>Read the provenance chip before you count the money.</b> A <span class="prov verified">Verified</span> deal was stated by the operator or by Trine itself and the source link is on the card. A <span class="prov reported">Reported</span> deal came from a secondary roundup — treat the amount as an estimate and confirm before you rely on it. Prices and offers change; the "checked" date on each card is when the source said what it says. Nothing here was invented to pad the total.
+    <b>Read the provenance chip before you count the money.</b> A <span class="prov verified">Verified</span> deal was stated by the operator or by BYU itself and the source link is on the card. A <span class="prov reported">Reported</span> deal came from a secondary roundup — treat the amount as an estimate and confirm before you rely on it. Prices and offers change; the "checked" date on each card is when the source said what it says. Nothing here was invented to pad the total.
   </div>
 
   <div class="panel">
@@ -941,12 +941,12 @@ ul.none{list-style:none;padding:0;margin:0}
   <div class="panel">
     <div class="panel-hd"><div class="t">
       <h2>Grades &amp; GPA</h2>
-      <div class="d">Weights and scores are yours to enter from each syllabus. GPA uses a conventional 4.0 scale — not a verified Trine one, see the note below — and the projection assumes your current average holds on everything ungraded.</div>
+      <div class="d">Weights and scores are yours to enter from each syllabus. GPA uses a conventional 4.0 scale — not a verified BYU one, see the note below — and the projection assumes your current average holds on everything ungraded.</div>
     </div></div>
     <div class="grid g4" id="gpaTiles"></div>
     <div class="divider"></div>
     <div id="gradeBoard"></div>
-    <div class="srcline"><span class="prov unverified">Unverified</span> This uses a conventional 4.0 scale — A=4.0, A−=3.7, B+=3.3 — with the usual 97/93/90 cutoffs. <strong>I could not verify Trine’s own grade-point values or cutoffs</strong>, and schools do differ. Check the catalog.</div>
+    <div class="srcline"><span class="prov unverified">Unverified</span> This uses a conventional 4.0 scale — A=4.0, A−=3.7, B+=3.3 — with the usual 97/93/90 cutoffs. <strong>I could not verify BYU’s own grade-point values or cutoffs</strong>, and schools do differ. Check the catalog.</div>
   </div>
 
   <div class="panel">
@@ -979,8 +979,8 @@ ul.none{list-style:none;padding:0;margin:0}
 
   <div class="panel">
     <div class="panel-hd"><div class="t">
-      <h2>Support that is already paid for</h2>
-      <div class="d">You have paid the health fee and the activity fee. These are the services those fees buy, with hours and addresses as published.</div>
+      <h2>Support that is already there</h2>
+      <div class="d">The services BYU runs for students, with the hours, addresses and phone numbers as published. What each one costs you is on its own card — where a fee was not stated on a page I could reach, the card says so rather than promising you it is free.</div>
     </div></div>
     <div class="grid g2" id="supportList"></div>
   </div>
@@ -1014,9 +1014,9 @@ ul.none{list-style:none;padding:0;margin:0}
       <div class="d">Paste a link, name it, and press Test. The check is honest about what it can and cannot do — read the result carefully before trusting a green light.</div>
     </div></div>
     <div class="grid g3">
-      <div><label class="f" for="srcLabel">Label</label><input id="srcLabel" placeholder="Moodle calendar feed"></div>
+      <div><label class="f" for="srcLabel">Label</label><input id="srcLabel" placeholder="Canvas calendar feed"></div>
       <div><label class="f" for="srcKind">What is it</label><select id="srcKind"></select></div>
-      <div><label class="f" for="srcUrl">URL</label><input id="srcUrl" placeholder="https://iu.instructure.com/feeds/calendars/user_xxxxx.ics"></div>
+      <div><label class="f" for="srcUrl">URL</label><input id="srcUrl" placeholder="https://byu.instructure.com/feeds/calendars/user_xxxxx.ics"></div>
     </div>
     <div class="row" style="margin-top:13px">
       <button class="btn primary" id="btnTestSrc">Test &amp; save</button>
@@ -1024,7 +1024,7 @@ ul.none{list-style:none;padding:0;margin:0}
       <span class="hint" id="srcMsg" style="margin:0"></span>
     </div>
     <div class="divider"></div>
-    <div class="note warn"><b>What "Test" actually does.</b> A saved page cannot read a private Moodle feed — your browser blocks cross-site requests to a domain that has not opted in, and your Moodle feed is authenticated to you. So Test does three real things: it validates the URL structure, it recognises whether the host is one this planner knows how to use, and it attempts a live no-cors reachability probe. A probe can fail on a URL that works fine in your browser, which is why every result tells you which of the three checks passed. For anything the probe cannot confirm, use the paste box below — that path always works.</div>
+    <div class="note warn"><b>What "Test" actually does.</b> A saved page cannot read a private Canvas feed — your browser blocks cross-site requests to a domain that has not opted in, and your Canvas feed is authenticated to you. So Test does three real things: it validates the URL structure, it recognises whether the host is one this planner knows how to use, and it attempts a live no-cors reachability probe. A probe can fail on a URL that works fine in your browser, which is why every result tells you which of the three checks passed. For anything the probe cannot confirm, use the paste box below — that path always works.</div>
   </div>
 
   <div class="panel">
@@ -1037,21 +1037,21 @@ ul.none{list-style:none;padding:0;margin:0}
 
   <div class="panel">
     <div class="panel-hd"><div class="t">
-      <h2>One-click Moodle import</h2>
-      <div class="d">The lowest-input route that actually works. Drag the button to your bookmarks bar, open Moodle, click it — it reads your grade report from inside your signed-in session and copies every course, item, score and weight to the clipboard. Paste below and everything lands at once.</div>
+      <h2>One-click Canvas import</h2>
+      <div class="d">The lowest-input route that actually works. Drag the button to your bookmarks bar, open Canvas, click it — it reads your grade report from inside your signed-in session and copies every course, item, score and weight to the clipboard. Paste below and everything lands at once.</div>
     </div></div>
     <div id="bookmarkletBox"></div>
   </div>
 
   <div class="panel">
     <div class="panel-hd"><div class="t">
-      <h2>Import your schedule from myPortal</h2>
-      <div class="d">myPortal is where your real meeting times live. Trine documents no student-accessible API for it, so this reads the page the same way you would copy it yourself \u2014 select your schedule, copy, paste below.</div>
+      <h2>Import your schedule from MyBYU</h2>
+      <div class="d">MyBYU is where your real meeting times live. BYU documents no student-accessible API for it, so this reads the page the same way you would copy it yourself — select your schedule, copy, paste below.</div>
     </div></div>
     <div id="stellicBox"></div>
     <div class="divider"></div>
     <label class="f" for="stellicPaste">Paste the copied text here</label>
-    <textarea id="stellicPaste" style="min-height:130px" placeholder="Paste your schedule from myPortal, or any block of text listing your courses, days and times…"></textarea>
+    <textarea id="stellicPaste" style="min-height:130px" placeholder="Paste your schedule from MyBYU, or any block of text listing your courses, days and times…"></textarea>
     <div class="row" style="margin-top:11px"><button class="btn primary" id="btnScanStellic">Scan text</button>
       <span class="hint" id="stellicMsg" style="margin:0"></span></div>
     <div id="stellicResults" style="margin-top:14px"></div>
@@ -1060,11 +1060,11 @@ ul.none{list-style:none;padding:0;margin:0}
   <div class="panel">
     <div class="panel-hd"><div class="t">
       <h2>Screenshot schedule scanner</h2>
-      <div class="d">Drop in a screenshot of your weekly schedule and this reads it with an in-browser OCR engine — nothing is uploaded anywhere, the image never leaves this tab. It looks for a day-header row and an hour axis to work out real times; when it cannot find either, it falls back to mining whatever text it read, same as the myPortal box above.</div>
+      <div class="d">Drop in a screenshot of your weekly schedule and this reads it with an in-browser OCR engine — nothing is uploaded anywhere, the image never leaves this tab. It looks for a day-header row and an hour axis to work out real times; when it cannot find either, it falls back to mining whatever text it read, same as the MyBYU box above.</div>
     </div></div>
     <div id="shotDrop" class="empty" style="cursor:pointer;padding:34px 18px">
       <div>Click to choose an image, or drag one here.</div>
-      <div class="hint" style="margin-top:6px">A clean screenshot of the weekly grid works best — the one you’d get from myPortal’s schedule view.</div>
+      <div class="hint" style="margin-top:6px">A clean screenshot of the weekly grid works best — the one you’d get from MyBYU’s schedule view.</div>
     </div>
     <input type="file" id="shotFile" accept="image/*" style="display:none">
     <div class="row" style="margin-top:12px;display:none" id="shotPreviewRow">
@@ -1084,7 +1084,7 @@ ul.none{list-style:none;padding:0;margin:0}
   <div class="panel">
     <div class="panel-hd"><div class="t">
       <h2>Paste data in</h2>
-      <div class="d">The path that always works. Paste an .ics calendar feed, a Moodle export, or plain lines and this parses them into real courses, assignments and announcements.</div>
+      <div class="d">The path that always works. Paste an .ics calendar feed, a Canvas export, or plain lines and this parses them into real courses, assignments and announcements.</div>
     </div></div>
     <div class="grid g2">
       <div>
@@ -1141,11 +1141,11 @@ ul.none{list-style:none;padding:0;margin:0}
 <div id="toasts"></div>
 <div id="modalback"><div id="modal"></div></div>
 
-<script type="application/json" id="socData">{"metadata":{"institution":"Trine University","campus":"Trine — Angola","term":"Fall 2026","course_count":0,"section_count":0,"meeting_count":0,"note":"Trine publishes no machine-readable schedule export that this build could reach."},"instructors":{},"courses":[]}</script>
+<script type="application/json" id="socData">{"metadata":{"institution":"Brigham Young University","campus":"BYU — Provo","term":"Fall 2026","course_count":0,"section_count":0,"meeting_count":0,"note":"BYU publishes no machine-readable schedule export that this build could reach."},"instructors":{},"courses":[]}</script>
 <script>
 "use strict";
 /* ======================================================================
-   Thunder Command — Trine University planner.
+   Cougar Command — BYU Provo planner.
 
    Design rule that governs the whole file: every rendered fact carries a
    provenance tag. VERIFIED facts are quoted from a named source and the
@@ -1154,7 +1154,7 @@ ul.none{list-style:none;padding:0;margin:0}
    are all on screen. Nothing is asserted without one of those four.
    ====================================================================== */
 
-const KEY = 'trine.thunderCommand.v1';
+const KEY = 'byu.cougarCommand.v1';
 /* 'owner' boots with the pre-loaded Fall 2026 schedule. 'blank' boots empty,
    for the copy you hand to someone else. build-artifact.py flips this. */
 const BOOT_PROFILE = 'blank';
@@ -1229,45 +1229,72 @@ function src(text, url){
 
 /* --- citations: the single registry everything cites ------------------ */
 const CITE = {
-  stellicIU:{t:'myPortal \u2014 schedules, grades and account information', o:'Trine University', u:'https://myportal.trine.edu/ICS'},
-  stellicNews:{t:'Registrar \u2014 registration, transcripts and academic records', o:'Trine University', u:'https://www.trine.edu/about/offices-services/registrar/index.aspx'},
-  stellicReg:{t:'Fall 2026 course catalog (SmartCatalog)', o:'Trine University', u:'https://trine.smartcatalogiq.com/en/current/fall-2026-trine-course-catalog/'},
-  stellicIDS:{t:'Technology \u2014 Moodle and myPortal', o:'TrineOnline', u:'https://www.trine.edu/online/about/technology.aspx'},
-  stellicDocs:{t:'myPortal sign-in \u2014 no public student API is documented for it', o:'Trine University', u:'https://myportal.trine.edu/ICS'},
-  tCal:      {t:'Academic Calendar', o:'Trine University', u:'https://www.trine.edu/academics/academic-calendar.aspx'},
-  tCal27:    {t:'Academic Calendar 2026-2027 (PDF)', o:'Trine University', u:'https://www.trine.edu/academics/2026-2027%20Academic%20Calendar%205%2015%202026.pdf'},
-  tCatalog:  {t:'Fall 2026 course catalog', o:'Trine University', u:'https://trine.smartcatalogiq.com/en/current/fall-2026-trine-course-catalog/'},
-  tRegistrar:{t:'Registrar', o:'Trine University', u:'https://www.trine.edu/academics/registrar/index.aspx'},
-  tPortal:   {t:'myPortal - schedules, account, aid', o:'Trine University', u:'https://myportal.trine.edu/ICS'},
-  tMoodle:   {t:'Moodle - Trine\u2019s learning management system', o:'Trine University', u:'https://apps.trine.edu/moodle/'},
-  tTech:     {t:'Technology - Moodle and myPortal', o:'TrineOnline', u:'https://www.trine.edu/online/about/technology.aspx'},
-  tDining:   {t:'Dining - Bon App\u00e9tit locations', o:'Trine University', u:'https://www.trine.edu/campus-life/dining/index.aspx'},
-  tDepot:    {t:'The Depot', o:'Trine University', u:'https://www.trine.edu/campus-life/dining/depot-grill.aspx'},
-  tHousing:  {t:'Housing Requirements - meal plan requirement', o:'Trine University', u:'https://www.trine.edu/campus-life/housing/housing-requirements.aspx'},
-  tBonApp:   {t:'Bon App\u00e9tit at Trine', o:'Bon App\u00e9tit Management Company', u:'https://trine.catertrax.com/'},
-  tSupport:  {t:'Student Support and Wellness Services', o:'Trine University', u:'https://www.trine.edu/campus-life/support-and-wellness/index.aspx'},
-  tCounsel:  {t:'Counseling', o:'Trine University', u:'https://www.trine.edu/campus-life/support-and-wellness/counseling.aspx'},
-  tHealth:   {t:'Student Health Center', o:'Trine University', u:'https://www.trine.edu/campus-life/support-and-wellness/health-center.aspx'},
-  tASC:      {t:'Academic Success Center - academic support services', o:'Trine University', u:'https://www.trine.edu/academics/success/student-success/academic-support-services.aspx'},
-  tAcadRes:  {t:'Academic Resources - the LINK, Writing Center, tutoring', o:'Trine University', u:'https://www.trine.edu/academics/success/index.aspx'},
-  tMap:      {t:'Campus Map', o:'Trine University', u:'https://www.trine.edu/about/campus/campus-map.aspx'},
-  tFacil:    {t:'Athletic facilities', o:'Trine University Athletics', u:'https://trinethunder.com/sports/2024/5/30/copy-of-facilities.aspx'},
-  tIce:      {t:'Thunder Ice Arena', o:'Trine University', u:'https://www.trine.edu/campus-life/athletic-facilities/thunder-ice-arena/index.aspx'},
-  tGrowing:  {t:'Growing Trine - Fawick Hall, Best Hall of Science', o:'Trine University', u:'https://www.trine.edu/about/campus/growing-trine.aspx'},
-  tPerform:  {t:'Performing Arts - Fabiani Theatre', o:'Trine University', u:'https://www.trine.edu/campus-life/performing-arts/index.aspx'},
-  tThunder:  {t:'Trine University Athletics', o:'Trine Thunder', u:'https://trinethunder.com/'},
-  tNCAA:     {t:'Trine University - NCAA Division III, MIAA', o:'NCAA', u:'https://www.ncaa.com/schools/trine'},
-  tWiki:     {t:'Trine University', o:'Wikipedia', u:'https://en.wikipedia.org/wiki/Trine_University'},
-  tWorkStudy:{t:'Federal Work Study', o:'Trine University', u:'https://www.trine.edu/admission-aid/tuition-aid/types-of-aid/work-study.aspx'},
-  tPFA:      {t:'Parent Association discounts', o:'Trine University', u:'https://www.trine.edu/alumni/network/parent-association/discounts.aspx'},
-  tCorpShop: {t:'Trine University student discounts', o:'Corporate Shopping Company', u:'https://corporateshopping.com/student-discounts/trine-university'},
-  tGuide:    {t:'Student Resource Guide', o:'Trine University', u:'https://www.trine.edu/campus-life/student-resource-guide.aspx'},
-  tCalEvents:{t:'Calendar of Events', o:'Trine University', u:'https://www.trine.edu/calendar/'},
-  wageZip:   {t:'Trine University hourly pay in Angola, IN', o:'ZipRecruiter', u:'https://www.ziprecruiter.com/Jobs/Trine-University/-in-Angola,IN'},
+  stellicIU:{t:'MyBYU \u2014 schedules, grades and account information', o:'Brigham Young University', u:'https://my.byu.edu/'},
+  stellicNews:{t:'Registrar \u2014 registration, transcripts and academic records', o:'Brigham Young University', u:'https://registrar.byu.edu/'},
+  stellicReg:{t:'BYU course catalog', o:'Brigham Young University', u:'https://catalog.byu.edu/courses'},
+  stellicIDS:{t:'Getting started with Canvas', o:'BYU Canvas', u:'https://byucanvas.byu.edu/getting-started-with-canvas'},
+  stellicDocs:{t:'MyBYU sign-in \u2014 no public student API is documented for it', o:'Brigham Young University', u:'https://my.byu.edu/'},
+  bCal:      {t:'Academic Calendar', o:'BYU', u:'https://academiccalendar.byu.edu/'},
+  bCal26:    {t:'2026 Calendar, list view', o:'BYU', u:'https://academiccalendar.byu.edu/2026-calendar-list-view'},
+  bCatalog:  {t:'Course Catalog', o:'BYU', u:'https://catalog.byu.edu/courses'},
+  bCore:     {t:'University Core Explained', o:'BYU Undergraduate Catalog', u:'https://catalog.byu.edu/about-byu/university-core-explained'},
+  bCoreReq:  {t:'General Education Requirements', o:'BYU Catalog', u:'https://catalog.byu.edu/pages/03MfHiIsBx8dJn7ogb8S'},
+  bAmHtg:    {t:'Requirement 1 — American Heritage', o:'BYU Catalog', u:'https://catalog.byu.edu/pages/etcMcLPynkU39DOba7Nt'},
+  bWrtg:     {t:'First-Year Writing', o:'BYU University Writing', u:'https://writing.byu.edu/first-year-writing/'},
+  bRegistrar:{t:'Office of the Registrar', o:'BYU', u:'https://registrar.byu.edu/'},
+  bMyMap:    {t:'MyMAP — registration, schedule and progress', o:'BYU', u:'https://my.byu.edu/'},
+  bCanvas:   {t:'Getting started with Canvas', o:'BYU Canvas', u:'https://byucanvas.byu.edu/getting-started-with-canvas'},
+  bCanvasLms:{t:'Canvas LMS and user email accounts at BYU', o:'BYU Canvas', u:'https://byucanvas.byu.edu/canvas-lms-and-user-email-accounts-at-byu'},
+  canvasIcal:{t:'How do I subscribe to the Calendar feed using a calendar app?', o:'Instructure Community', u:'https://community.canvaslms.com/t5/Student-Guide/How-do-I-subscribe-to-the-Calendar-feed-using-a-calendar-app-as-a/ta-p/535'},
+  canvasCourses:{t:'Courses API — GET /api/v1/courses', o:'Canvas LMS REST API', u:'https://canvas.instructure.com/doc/api/courses.html'},
+  canvasAG:  {t:'Assignment Groups API — GET /api/v1/courses/:id/assignment_groups', o:'Canvas LMS REST API', u:'https://canvas.instructure.com/doc/api/assignment_groups.html'},
+  bHonor:    {t:'Church Educational System Honor Code', o:'BYU', u:'https://policy.byu.edu/view/church-educational-system-honor-code'},
+  bDining:   {t:'BYU Dining', o:'BYU Dining Services', u:'https://dining.byu.edu/'},
+  bMealHome: {t:'Meal plan home', o:'BYU Dining', u:'https://dining.byu.edu/meal-plan-home'},
+  bMealInfo: {t:'Meal Plans — what dining dollars buy and where', o:'BYU Dining', u:'https://dining.byu.edu/mealplans/info/'},
+  bDiningPlus:{t:'Dining Plus meal plan', o:'BYU Dining', u:'https://dining.byu.edu/meal-plans/dining-plus-meal-plan'},
+  bOpenDoor: {t:'Open Door meal plan', o:'BYU Dining', u:'https://dining.byu.edu/meal-plans/open-door'},
+  bEzDining: {t:'EZ Dining meal plan', o:'BYU Dining', u:'https://dining.byu.edu/meal-plans/ez-dining'},
+  bTrueBlue: {t:'True Blue Dining meal plan', o:'BYU Dining', u:'https://dining.byu.edu/meal-plans/true-blue-dining'},
+  bCougarCash:{t:'Cougar Cash benefits', o:'BYU', u:'https://cougarcash.byu.edu/benefits'},
+  bHousing:  {t:'On-campus housing', o:'BYU Housing', u:'https://housing.byu.edu/'},
+  bMap:      {t:'Campus Map', o:'BYU', u:'https://map.byu.edu/'},
+  bBuildings:{t:'List of Brigham Young University buildings', o:'Wikipedia', u:'https://en.wikipedia.org/wiki/List_of_Brigham_Young_University_buildings'},
+  bLibrary:  {t:'Harold B. Lee Library', o:'BYU', u:'https://lib.byu.edu/'},
+  bWilk:     {t:'Ernest L. Wilkinson Student Center', o:'Wikipedia', u:'https://en.wikipedia.org/wiki/Ernest_L._Wilkinson_Student_Center'},
+  bCaps:     {t:'Counseling and Psychological Services', o:'BYU', u:'https://caps.byu.edu/'},
+  bHealth:   {t:'Student Health Center', o:'BYU', u:'https://health.byu.edu/'},
+  bAccess:   {t:'University Accessibility Center', o:'BYU', u:'https://uac.byu.edu/'},
+  bTutor:    {t:'Tutoring and academic support', o:'BYU Research and Writing Center', u:'https://rwc.byu.edu/'},
+  bAthletics:{t:'BYU Cougars — official athletics site', o:'BYU Athletics', u:'https://byucougars.com/'},
+  bFB26:     {t:'BYU, Big 12 announce 2026 football schedule', o:'BYU Athletics', u:'https://byucougars.com/news/2026/01/21/byu-big-12-announce-2026-football-schedule'},
+  bFBsched:  {t:'2026 BYU football schedule', o:'FBSchedules', u:'https://fbschedules.com/2026-byu-football-schedule/'},
+  bTickets:  {t:'Football tickets and LaVell Edwards Stadium', o:'BYU Athletics', u:'https://tickets.byu.edu/football'},
+  bRec:      {t:'Student Wellness and Intramural Sports', o:'BYU', u:'https://studentwellness.byu.edu/'},
+  bJobs:     {t:'Student employment', o:'BYU', u:'https://hr.byu.edu/student-employment'},
+  bStudentJobs:{t:'Student job listings', o:'BYU', u:'https://studentjobs.byu.edu/'},
+  bWhyWork:  {t:'Why Work on Campus — student starting wage range', o:'BYU Financial Services', u:'https://finserve.byu.edu/why-work-on-campus'},
+  bPayScale: {t:'Student Employee Hourly Pay Scale 2026', o:'BYU Human Resources', u:'https://hrs.byu.edu/hourly-pay-scale'},
+  wageZip:   {t:'BYU Student jobs — reported hourly pay', o:'ZipRecruiter', u:'https://www.ziprecruiter.com/Jobs/Byu-Student'},
+  bCougareat:{t:'Cougareat', o:'BYU Dining', u:'https://dining.byu.edu/cougareat'},
+  bCreamery: {t:'Creamery on Ninth', o:'BYU Dining', u:'https://dining.byu.edu/creamery-on-ninth'},
+  bCommons:  {t:'Dining locations, including the Commons at the Cannon Center', o:'BYU Housing', u:'https://housing.byu.edu/oncampushousing/conf_dining_locations.shtml'},
+  bBig12Wk:  {t:'Big 12 announces weekday game selections for the 2026 season', o:'Big 12 Conference', u:'https://big12sports.com/news/2026/4/10/big-12-announces-weekday-game-selections-for-2026-football-season.aspx'},
+  bRMP:      {t:'Brigham Young University instructor reviews', o:'RateMyProfessors', u:'https://www.ratemyprofessors.com/search/schools?q=Brigham%20Young%20University'},
+  bAcctRec:  {t:'Account recovery and the BYU NetID', o:'BYU', u:'https://accountrecovery.byu.edu/'},
+  csCS111:   {t:'C S 111 course entry', o:'BYU Catalog', u:'https://catalog.byu.edu/courses/14243-000'},
+  csCS142:   {t:'C S 142 course entry', o:'BYU Catalog', u:'https://catalog.byu.edu/courses/01489-002'},
+  csMath112: {t:'MATH 112 course entry', o:'BYU Catalog', u:'https://catalog.byu.edu/courses/03615-008'},
+  csWrtg150: {t:'WRTG 150 course entry', o:'BYU Catalog', u:'https://catalog.byu.edu/courses/06839-013'},
+  csAHtg100: {t:'A HTG 100 course entry', o:'BYU Catalog', u:'https://catalog.byu.edu/courses/02859-006'},
+  csRelA275: {t:'Teachings and Doctrine of the Book of Mormon (REL A 275)', o:'BYU Religious Studies Center', u:'https://rsc.byu.edu/my-gospel-study/recommended-readings/doctrines-teachings-book-mormon'},
+  csRelBgs:  {t:'University Core requirements, including religion', o:'BYU Bachelor of General Studies', u:'https://bgs.byu.edu/university-core-requirements'},
+  csCsMap:   {t:'BS in Computer Science MAP sheet — course list and credit hours', o:'BYU College of Physical and Mathematical Sciences', u:'https://science.byu.edu/00000191-9a7e-d806-afb1-be7f718f0001/3-map-bs-in-computer-science-2024-2025-pdf'},
+  csBioMap:  {t:'Biology MAP sheet — University Core course choices', o:'BYU Department of Biology', u:'https://biology.byu.edu/00000193-bce7-d282-afbf-ffe738ea0001/biology-standard-map-sheet'},
+  csChemMap: {t:'Chemistry BA MAP sheet — University Core course choices', o:'BYU College of Physical and Mathematical Sciences', u:'https://science.byu.edu/00000183-429f-d026-a7c7-469fef1f0001/chem-ba-map-22-23'},
+  csStat121: {t:'STAT 121 course listing', o:'BYU Independent Study', u:'https://indstudy.byu.edu/catalog/STAT-121-301-001'},
   amdr:      {t:'Description of the Acceptable Macronutrient Distribution Range', o:'National Academies / NCBI Bookshelf', u:'https://www.ncbi.nlm.nih.gov/books/NBK610333/'},
   amdr2:     {t:'Rethinking the Acceptable Macronutrient Distribution Range for the 21st Century', o:'National Academies', u:'https://www.nationalacademies.org/publications/27957'},
-  moodleIcal:{t:'Calendar export - iCal feed', o:'Moodle Docs', u:'https://docs.moodle.org/en/Calendar_export'},
-  moodleGrades:{t:'Grade user report', o:'Moodle Docs', u:'https://docs.moodle.org/en/Grade_user_report'},
   ghStudent: {t:'GitHub Student Developer Pack', o:'GitHub Education', u:'https://education.github.com/pack'},
   primeStudent:{t:'Prime Student', o:'Amazon', u:'https://www.amazon.com/gp/student/signup/info'},
   spotifyStudent:{t:'Premium Student', o:'Spotify', u:'https://www.spotify.com/us/student/'},
@@ -1298,17 +1325,146 @@ const CKIND = {
 /* --- Fall 2026 calendar (verified) ------------------------------------ */
 const TERM = {
   name:'Fall 2026',
-  start:'2026-08-24',            // classes begin
+  start:'2026-09-02',            // classes begin, Wednesday
   thanksLast:'2026-11-24',       // last class day before the break
-  thanksBack:'2026-11-30',       // classes resume after the Nov 25-27 break
-  lastClass:'2026-12-19',        // classes end
-  finalsStart:'2026-12-14',      // NOT CONFIRMED - see the works-cited gaps
-  finalsEnd:'2026-12-19',
-  cite:'tCal27'
+  thanksBack:'2026-11-30',       // classes resume
+  lastClass:'2026-12-10',        // last day of instruction
+  finalsStart:'2026-12-12',      // finals run Dec 12-17; Dec 11 is Exam Preparation Day
+  finalsEnd:'2026-12-17',
+  cite:'bCal26'
 };
 
 /* --- course catalog: quoted, not paraphrased -------------------------- */
-const CATALOG = {};
+const CATALOG = {
+  'A HTG 100':{
+    title:'American Heritage', credits:3, creditsVerified:true, cite:'csAHtg100',
+    desc:'The University Core requirement in American Heritage. New students are expected to take at least one course toward this requirement during their first year.',
+    prereq:'None stated in the catalog entry.',
+    topics:['American political and economic institutions','Founding documents and principles','Historical development of the republic'],
+    topicsCite:'bAmHtg', reported:[],
+    watch:['One of the two things BYU expects you to start in your first year, alongside first-year writing.'],
+    color:'--s1'},
+  'WRTG 150':{
+    title:'Writing and Rhetoric', credits:3, creditsVerified:true, cite:'csWrtg150',
+    desc:'Writing and research with a focus on inquiry, information literacy, rhetorical awareness, genre knowledge and reflection. One of the ways to satisfy the First-Year Writing requirement.',
+    prereq:'A score of 4 or higher on AP Language and Composition earns WRTG 150 credit.',
+    topics:['Inquiry and research','Information literacy','Rhetorical awareness','Genre knowledge','Reflection'],
+    topicsCite:'bWrtg', reported:[],
+    watch:['Carries the Y Search library modules in most sections — they are easy marks and easy to forget.'],
+    color:'--s5'},
+  'C S 111':{
+    title:'Introduction to Computer Science', credits:3, creditsVerified:true, cite:'csCS111',
+    desc:'An introduction to computer science. Listed alongside C S 142 as an entry point into the major.',
+    prereq:'None stated in the MAP sheet.',
+    topics:['Computational thinking','Introductory programming'],
+    topicsCite:'csCsMap', reported:[],
+    watch:['C S 111 and C S 142 are alternative entry points — check which one your MAP sheet expects before enrolling in both.'],
+    color:'--s3'},
+  'C S 142':{
+    title:'Introduction to Computer Programming', credits:3, creditsVerified:true, cite:'csCS142',
+    desc:'Introduction to computer programming and the first programming course in the Computer Science major sequence.',
+    prereq:'None stated in the catalog entry.',
+    topics:['Program design','Control flow and data types','Functions and decomposition','Debugging'],
+    topicsCite:'csCsMap', reported:[],
+    watch:['The prerequisite for C S 235; a late withdrawal here pushes the whole major sequence back a semester.'],
+    color:'--s3'},
+  'C S 235':{
+    title:'Data Structures and Algorithms', credits:3, creditsVerified:true, cite:'csCsMap',
+    desc:'Data structures and algorithms, following the introductory programming sequence.',
+    prereq:'C S 142 or C S 111, per the Computer Science MAP sheet.',
+    topics:['Lists, stacks and queues','Trees and graphs','Sorting and searching','Algorithmic complexity'],
+    topicsCite:'csCsMap', reported:[],
+    watch:['The course the CS major is usually decided in. Front-load it.'],
+    color:'--s3'},
+  'MATH 112':{
+    title:'Calculus 1', credits:4, creditsVerified:true, cite:'csMath112',
+    desc:'Calculus 1, designed for students majoring in the mathematical and physical sciences, engineering or mathematics education, and for students minoring in mathematics or mathematics education.',
+    prereq:'Stated on the catalog page — check your placement.',
+    topics:['Limits and continuity','Derivatives and applications','Integrals','The fundamental theorem'],
+    topicsCite:'csMath112', reported:[],
+    watch:['4 credit hours, not 3 — a common miscount when planning a 15-hour semester.'],
+    color:'--s4'},
+  'STAT 121':{
+    title:'Principles of Statistics', credits:3, creditsVerified:true, cite:'csStat121',
+    desc:'Principles of statistics. Commonly taken to satisfy a quantitative reasoning requirement.',
+    prereq:'None stated in the listing.',
+    topics:['Descriptive statistics','Probability','Inference','Regression basics'],
+    topicsCite:'csStat121', reported:[],
+    watch:['Check whether your major wants STAT 121 or a department-specific statistics course before enrolling.'],
+    color:'--s4'},
+  'ECON 110':{
+    title:'Economic Principles and Problems', credits:3, creditsVerified:true, cite:'csChemMap',
+    desc:'Introductory economics. Appears on University Core MAP sheets as a Social Science option.',
+    prereq:'None stated on the MAP sheet.',
+    topics:['Supply and demand','Markets and prices','Macroeconomic aggregates'],
+    topicsCite:'csChemMap', reported:[],
+    watch:['A large-lecture course; the midterm curve is the thing to ask about, not the reading load.'],
+    color:'--s7'},
+  'PSYCH 111':{
+    title:'Psychological Science', credits:3, creditsVerified:true, cite:'csBioMap',
+    desc:'Introductory psychology. Appears on University Core MAP sheets as a Social Science option.',
+    prereq:'None stated on the MAP sheet.',
+    topics:['Research methods','Biological bases of behaviour','Learning and cognition','Development and personality'],
+    topicsCite:'csBioMap', reported:[],
+    watch:['Memorisation-heavy. Spaced retrieval beats re-reading here by a wide margin.'],
+    color:'--s5'},
+  'BIO 130':{
+    title:'Biology', credits:4, creditsVerified:true, cite:'csBioMap',
+    desc:'Introductory biology, listed on MAP sheets as a Biological Science option in the University Core.',
+    prereq:'None stated on the MAP sheet.',
+    topics:['Cells and molecules','Genetics','Evolution','Ecology'],
+    topicsCite:'csBioMap', reported:[],
+    watch:['4 credits with a lab component in most sections — budget the lab hours separately.'],
+    color:'--s6'},
+  'PHSCS 121':{
+    title:'Introduction to Newtonian Mechanics', credits:3, creditsVerified:true, cite:'csChemMap',
+    desc:'Introductory physics covering Newtonian mechanics. Appears on MAP sheets as a Physical Science option.',
+    prereq:'Calculus is normally taken alongside or before — check your MAP sheet.',
+    topics:['Kinematics','Newton’s laws','Work and energy','Momentum and rotation'],
+    topicsCite:'csChemMap', reported:[],
+    watch:['Paired with a separate lab in most programmes. Confirm whether yours requires it.'],
+    color:'--s2'},
+  'CHEM 105':{
+    title:'General College Chemistry', credits:4, creditsVerified:true, cite:'csChemMap',
+    desc:'General chemistry. The MAP sheets list CHEM 105 as substitutable for CHEM 111.',
+    prereq:'Placement or prior chemistry — check the catalog entry.',
+    topics:['Atomic structure','Bonding','Stoichiometry','Thermochemistry'],
+    topicsCite:'csChemMap', reported:[],
+    watch:['4 credits and lab-bearing. If your MAP sheet says CHEM 111, confirm the substitution with an advisor rather than assuming it.'],
+    color:'--s2'},
+  'REL A 275':{
+    title:'Teachings and Doctrine of the Book of Mormon', credits:2, creditsVerified:true, cite:'csRelA275',
+    desc:'A cornerstone religion course on the teachings and doctrine of the Book of Mormon.',
+    prereq:'REL A 121 and REL A 122 together also satisfy this cornerstone requirement.',
+    topics:['Book of Mormon narrative and structure','Doctrinal themes'],
+    topicsCite:'csRelBgs', reported:[],
+    watch:['2 credits, not 3 — religion courses are counted separately from the University Core in the graduation audit.'],
+    color:'--s8'},
+  'REL C 225':{
+    title:'Foundations of the Restoration', credits:2, creditsVerified:true, cite:'csRelBgs',
+    desc:'A cornerstone religion course, required for students who began at BYU in Fall 2015 or later.',
+    prereq:'None stated.',
+    topics:['Restoration history and doctrine'],
+    topicsCite:'csRelBgs', reported:[],
+    watch:['Applies to students starting Fall 2015 or later; earlier catalog years differ.'],
+    color:'--s8'},
+  'REL C 324':{
+    title:'The Doctrine and Covenants, Sections 1–76', credits:2, creditsVerified:true, cite:'csRelBgs',
+    desc:'First half of the Doctrine and Covenants sequence.',
+    prereq:'None stated.',
+    topics:['Doctrine and Covenants sections 1–76'],
+    topicsCite:'csRelBgs', reported:[],
+    watch:['Paired with REL C 325; either one alone is 2 credits.'],
+    color:'--s8'},
+  'REL C 325':{
+    title:'The Doctrine and Covenants, Sections 77–OD 2', credits:2, creditsVerified:true, cite:'csRelBgs',
+    desc:'Second half of the Doctrine and Covenants sequence.',
+    prereq:'None stated.',
+    topics:['Doctrine and Covenants sections 77 to Official Declaration 2'],
+    topicsCite:'csRelBgs', reported:[],
+    watch:['Paired with REL C 324; either one alone is 2 credits.'],
+    color:'--s8'}
+};
 
 /* ======================================================================
    ATHLETICS
@@ -1318,33 +1474,44 @@ const CATALOG = {};
    linked as the authority. No date here is presented as settled.
    ====================================================================== */
 const SPORTS = [
-  {id:'fb',  name:'Football',           season:'Fall',   access:'Ticket policy: ask Athletics. Division III admission practice varies by school and I could not verify Trine\u2019s.', cite:'tThunder'},
-  {id:'mbb', name:"Men's Basketball",   season:'Winter', access:'2024 NCAA Division III national champions. Ticket policy: ask Athletics.', cite:'tNCAA'},
-  {id:'wbb', name:"Women's Basketball", season:'Winter', access:'Ticket policy: ask Athletics.', cite:'tThunder'},
-  {id:'hoc', name:'Hockey',             season:'Winter', access:'Plays at Thunder Ice Arena on U.S. 20 / West Maumee St - 700 seats, with a pro shop and concessions.', cite:'tIce'},
-  {id:'sb',  name:'Softball',           season:'Spring', access:'National champions in 2025, and three straight MIAA tournament titles.', cite:'tWiki'},
-  {id:'oth', name:'Everything else',    season:'Varies', access:'Trine competes in the MIAA as an NCAA Division III affiliate across a wide slate. Full schedules are on trinethunder.com.', cite:'tNCAA'}
+  {id:'fb',  name:'Football',           season:'Fall',   access:'Big 12. Home games are at LaVell Edwards Stadium. Student ticket policy is set by Athletics — check the ticket office rather than assuming admission is included.', cite:'bTickets'},
+  {id:'mbb', name:"Men's Basketball",   season:'Winter', access:'Big 12. Plays at the Marriott Center, 701 East University Parkway.', cite:'bAthletics'},
+  {id:'wbb', name:"Women's Basketball", season:'Winter', access:'Big 12. Also at the Marriott Center.', cite:'bAthletics'},
+  {id:'vb',  name:"Women's Volleyball", season:'Fall',   access:'Big 12. Ticket policy: ask Athletics.', cite:'bAthletics'},
+  {id:'oth', name:'Everything else',    season:'Varies', access:'BYU competes in the Big 12 across a wide slate. Full schedules are on byucougars.com.', cite:'bAthletics'}
 ];
 const CLAIM_WINDOWS = [];
-/* No Trine home schedule was published in a source I could reach, so nothing
-   is pre-loaded. Add games from the official schedule and each one gets
-   checked against your week exactly like a class. */
-const HOME_GAMES = [];
+/* BYU’s student ticket claim windows were not published on a page I could
+   reach, so nothing is pre-loaded. The seven 2026 home football games below
+   ARE published, and each one gets checked against your week like a class. */
+const HOME_GAMES = [
+  {id:'fb1', sport:'fb', opp:'Utah Tech',     date:'2026-09-05', start:'',      mins:240, tv:'',     prov:'reported'},
+  {id:'fb2', sport:'fb', opp:'Arizona',       date:'2026-09-12', start:'13:30', mins:240, tv:'',     prov:'reported', note:'1:30 p.m. MDT.'},
+  {id:'fb3', sport:'fb', opp:'Iowa State',    date:'2026-10-09', start:'20:15', mins:240, tv:'ESPN', prov:'reported', note:'Moved from Saturday Oct 10 to Friday Oct 9 — the only weeknight game on the schedule. It will eat a Friday evening.'},
+  {id:'fb4', sport:'fb', opp:'Notre Dame',    date:'2026-10-17', start:'',      mins:240, tv:'',     prov:'reported'},
+  {id:'fb5', sport:'fb', opp:'Arizona State', date:'2026-10-31', start:'',      mins:240, tv:'',     prov:'reported'},
+  {id:'fb6', sport:'fb', opp:'Baylor',        date:'2026-11-14', start:'',      mins:240, tv:'',     prov:'reported'},
+  {id:'fb7', sport:'fb', opp:'Cincinnati',    date:'2026-11-28', start:'',      mins:240, tv:'',     prov:'reported'}
+];
 
 /* --- meal plans: components verified; prices not published where I could reach --- */
 const PLANS = [
-  {id:'m10', name:'10-meal plan', scans:'10 meals per week', scansNum:10, unlimited:false, dollars:0, combo:null,
-   note:'One of the two plans every residential student must choose between.'},
-  {id:'m19', name:'19-meal plan', scans:'19 meals per week', scansNum:19, unlimited:false, dollars:0, combo:null,
-   note:'The larger of the two required residential plans.'}
+  {id:'opendoor', name:'Open Door', scans:'Unlimited at Cannon Commons', scansNum:null, unlimited:true, dollars:200, combo:null,
+   note:'Unlimited access to the Cannon Commons during opening hours, plus 200 dining dollars debit-style at the start of the semester, usable tax-free at any BYU Dining location. Reported at $2,730 per semester — confirm on the plan page before you budget on it.'},
+  {id:'diningplus', name:'Dining Plus', scans:'15 dining dollars a day', scansNum:null, unlimited:false, dollars:0, combo:null,
+   note:'A daily allocation of 15 dining dollars; unused dollars roll over to the next day. Reported at $2,730 per semester or $1,365 per term. Enter the dollars you actually get below — this plan has no meal scans.'},
+  {id:'trueblue', name:'True Blue Dining', scans:'Dining dollars only', scansNum:0, unlimited:false, dollars:500, combo:null,
+   note:'Either 500 or 800 dining dollars for the semester. Reported at $500 / $800 per semester. Set the dollars to whichever you bought.'},
+  {id:'ez', name:'EZ Dining', scans:'Dining dollars only', scansNum:0, unlimited:false, dollars:100, combo:null,
+   note:'100, 150 or 200 debit-style dining dollars a month, rolling over month to month. Reported at $100 / $150 / $200 per month. Set the dollars to your monthly amount.'}
 ];
 
 /* ======================================================================
    FOOD LIBRARY
    Reference values for standard portions, from widely published
-   USDA-derived nutrition charts. THIS IS NOT TRINE MENU DATA. A dining
-   hall's own preparation differs — sometimes a lot — and Bon Appétit publishes
-   per-item nutrition through Bon Appétit, which is linked
+   USDA-derived nutrition charts. THIS IS NOT BYU DINING DATA. A dining
+   hall's own preparation differs — sometimes a lot — and BYU Dining publishes
+   per-item nutrition through BYU Dining, which is linked
    everywhere this library appears. Every value here is editable, and
    items can be marked as checked against the real menu once you have.
 
@@ -1409,14 +1576,14 @@ const FOODS = [
   {id:'f40', n:'Protein shake (whey)',   st:'cstore',   portion:'1 scoop + water',kcal:120,p:24, c:3,  f:1,  has:['dairy'], diet:['omni','vegetarian','pescatarian']}
 ];
 /* The five all-you-care-to-eat halls. Which stations each one runs is NOT
-   something Trine publishes anywhere I could reach, so every hall starts with
+   something BYU publishes anywhere I could reach, so every hall starts with
    every station switched on and you untick what is not there once you have
    been. That way the grouping works from day one and gets sharper with use. */
 const HALLS = [
-  {id:'whitney', n:'Whitney Commons', sub:'Main dining', home:true},
-  {id:'depot',   n:'The Depot',       sub:'Grill and take-out'},
-  {id:'storms',  n:"Storm's A-Brewing", sub:'Coffee, SDI Center'},
-  {id:'bean',    n:'The Bean Counter', sub:'Coffee, Ford Hall'}
+  {id:'cannon',    n:'Cannon Commons',      sub:'All-you-care-to-eat, Helaman Halls', home:true},
+  {id:'cougareat', n:'Cougareat',           sub:'Food court, Wilkinson Center'},
+  {id:'creamery',  n:'Creamery on Ninth',   sub:'Grill, ice cream and groceries'},
+  {id:'wilk',      n:'Other Wilkinson outlets', sub:'Cafes and counters in the WSC'}
 ];
 const ALLERGENS = [
   {id:'dairy',    n:'Dairy'},      {id:'egg',       n:'Egg'},
@@ -1434,37 +1601,43 @@ const DIETS = [
 
 /* --- dining + campus locations. Addresses verified; layout is schematic. --- */
 const PLACES = [
-  {id:'campus', name:'Campus centre', kind:'home', addr:'1 University Ave, Angola, IN 46703', cite:'tMap',
-   where:'Your starting point', note:'Set this to your own hall on the Data tab if you live somewhere more specific.'},
-  {id:'whitney', name:'Whitney Commons', kind:'aycte', addr:'Whitney Commons, Trine University, Angola, IN 46703', cite:'tDining',
-   where:'Main dining', posUnverified:true, note:'The main dining location, run by Bon App\u00e9tit. Your Trine student ID is your meal card.'},
-  {id:'depot', name:'The Depot', kind:'aycte', addr:'The Depot, Trine University, Angola, IN 46703', cite:'tDepot',
-   where:'Grill and take-out', posUnverified:true, note:'Sit-down or quick take-out: burritos, tacos, house-made soups, customizable salads. Specialty themed menus on Monday, Wednesday and Friday evenings.'},
-  {id:'storms', name:"Storm's A-Brewing", kind:'aycte', addr:'SDI Center, Trine University, Angola, IN 46703', cite:'tDining',
-   where:'SDI Center', posUnverified:true, note:'Coffee shop.'},
-  {id:'bean', name:'The Bean Counter', kind:'aycte', addr:'Ford Hall, Trine University, Angola, IN 46703', cite:'tDining',
-   where:'Ford Hall', posUnverified:true, note:'The other campus coffee shop.'},
-  {id:'link', name:'The LINK (library)', kind:'study', addr:'Rick L. & Vicki L. James University Center, Trine University, Angola, IN 46703', cite:'tAcadRes',
-   where:'James University Center', posUnverified:true, note:'Library, study areas and meeting rooms. The Writing Center is on the first floor, and the Cup of Joe programme means free coffee here all year.'},
-  {id:'asc', name:'Academic Success Center', kind:'study', addr:'Trine University, Angola, IN 46703', cite:'tASC',
-   where:'Ask at the LINK', posUnverified:true, note:'Free academic coaching, tutoring and one-to-one assistance.'},
-  {id:'fawick', name:'Fawick Hall', kind:'class', addr:'713 Saginaw St, Angola, IN 46703', cite:'tGrowing',
-   where:'Saginaw St', note:'Engineering. Classrooms, labs and computer centres after a $5 million renovation.'},
-  {id:'best', name:'Best Hall of Science', kind:'class', addr:'Best Hall of Science, Trine University, Angola, IN 46703', cite:'tGrowing',
-   where:'Main campus', posUnverified:true, note:'Sciences and health sciences. Expanded twice since 2016.'},
-  {id:'juc', name:'James University Center', kind:'class', addr:'Rick L. & Vicki L. James University Center, Trine University, Angola, IN 46703', cite:'tPerform',
-   where:'Main campus', posUnverified:true, note:'Also home to Fabiani Theatre, 320 seats, which hosts events through the year.'},
-  {id:'health', name:'Campus Health Center', kind:'care', addr:'Quest Hall, 1107 West Maumee St, Angola, IN 46703', cite:'tHealth',
-   where:'Quest Hall', note:'Run with Cameron Health. A licensed Nurse Practitioner and a Certified Medical Assistant. Monday to Friday, 9 a.m. to 4 p.m. Confidential.'},
-  {id:'counsel', name:'Counseling Services', kind:'care', addr:'Trine University, Angola, IN 46703', cite:'tCounsel',
-   where:'Main campus', posUnverified:true, note:'Three licensed mental health clinicians offering solutions-focused, short-term counselling. Free and confidential.'},
-  {id:'arc', name:'The ARC (rec centre)', kind:'rec', addr:'Keith E. Busse/Steel Dynamics Athletic and Recreation Center, Angola, IN 46703', cite:'tFacil',
-   where:'Main campus', posUnverified:true, note:'Indoor 200-metre track, tennis courts, baseball and softball cages.'},
-  {id:'ice', name:'Thunder Ice Arena', kind:'rec', addr:'Thunder Ice Arena, West Maumee St, Angola, IN 46703', cite:'tIce',
-   where:'U.S. 20 / West Maumee St', note:'700 seats, NCAA-compliant rink, pro shop, weight and training rooms.'}
+  {id:'campus', name:'Campus centre', kind:'home', addr:'Brigham Young University, Provo, UT 84602', cite:'bMap',
+   where:'Your starting point', note:'Set this to your own hall or apartment on the Data tab and every walk time here is recalculated from there.'},
+  {id:'cannon', name:'Cannon Commons', kind:'aycte', addr:'Cannon Center, Helaman Halls, Brigham Young University, Provo, UT 84602', cite:'bDining',
+   where:'Helaman Halls', posUnverified:true, note:'All-you-care-to-eat with six stations — entrees, wraps, soups, salads, pasta, grill, breads and desserts. The Open Door plan is unlimited access here.'},
+  {id:'cougareat', name:'Cougareat', kind:'aycte', addr:'Wilkinson Student Center, Brigham Young University, Provo, UT 84602', cite:'bDining',
+   where:'Wilkinson Center', posUnverified:true, note:'The food court: national brands and campus favourites, calzones through sushi. Pay with dining dollars or Cougar Cash.'},
+  {id:'creamery', name:'Creamery on Ninth', kind:'aycte', addr:'Creamery on Ninth, 1209 N 900 E, Provo, UT 84602', cite:'bDining',
+   where:'900 East', posUnverified:true, note:'Grill, the full BYU ice cream range, and a grocery store — the one place on this list where you can do a real shop.'},
+  {id:'wilk', name:'Wilkinson Student Center', kind:'study', addr:'Wilkinson Student Center, Brigham Young University, Provo, UT 84602', cite:'bWilk',
+   where:'Centre of campus', posUnverified:true, note:'The student centre: dining, lounges, study space, student services and CAPS on the top floor.'},
+  {id:'hbll', name:'Harold B. Lee Library', kind:'study', addr:'1130 Harold B. Lee Library, Brigham Young University, Provo, UT 84602', cite:'bLibrary',
+   where:'Centre of campus, south of the Administration Building', note:'The main library. Study space at every noise level, plus the subject librarians who will save you an evening on a research paper.'},
+  {id:'rwc', name:'Research and Writing Center', kind:'study', addr:'Brigham Young University, Provo, UT 84602', cite:'bTutor',
+   where:'Ask at the HBLL', posUnverified:true, note:'Free help with writing and research at any stage of a paper.'},
+  {id:'jfsb', name:'Joseph F. Smith Building (JFSB)', kind:'class', addr:'Joseph F. Smith Building, Brigham Young University, Provo, UT 84602', cite:'bBuildings',
+   where:'Main campus', posUnverified:true, note:'Humanities and social sciences. Where most WRTG and language sections meet.'},
+  {id:'tmcb', name:'Talmage Building (TMCB)', kind:'class', addr:'James E. Talmage Math Sciences/Computer Building, Campus Dr, Provo, UT 84604', cite:'bBuildings',
+   where:'Campus Drive', note:'Mathematics and computer science. C S and MATH sections, plus the CS labs.'},
+  {id:'marb', name:'Martin Building (MARB)', kind:'class', addr:'Ezra Taft Benson Building area, Brigham Young University, Provo, UT 84602', cite:'bBuildings',
+   where:'Science district', posUnverified:true, note:'Large science lecture halls — the 300-plus-seat rooms most first-year science courses meet in.'},
+  {id:'jkb', name:'Jesse Knight Building (JKB)', kind:'class', addr:'Jesse Knight Building, Brigham Young University, Provo, UT 84602', cite:'bBuildings',
+   where:'Main campus', posUnverified:true, note:'Classrooms across several departments.'},
+  {id:'caps', name:'Counseling and Psychological Services', kind:'care', addr:'1500 Wilkinson Student Center, Brigham Young University, Provo, UT 84602', cite:'bCaps',
+   where:'Wilkinson Center, top floor', note:'Walk-in crisis hours Monday to Friday, 8:00 a.m. to 4:15 p.m., subject to counsellor availability. Phone 801-422-3035.'},
+  {id:'health', name:'Student Health Center', kind:'care', addr:'1750 N Wymount Terrace Dr, Provo, UT 84604', cite:'bHealth',
+   where:'Wymount Terrace', note:'General clinic and urgent care, Monday to Friday 8:00 a.m. to 5:30 p.m.; urgent care also Saturday mornings 8:00–11:30 during Fall and Winter. Phone 801-422-5156.'},
+  {id:'uac', name:'University Accessibility Center', kind:'care', addr:'Brigham Young University, Provo, UT 84602', cite:'bAccess',
+   where:'Main campus', posUnverified:true, note:'Accommodations for disability, chronic illness and mental health conditions. Start here early in the term, not the week of an exam.'},
+  {id:'marriott', name:'Marriott Center', kind:'rec', addr:'701 East University Parkway, Provo, UT 84602', cite:'bAthletics',
+   where:'University Parkway', note:'Basketball, devotionals and forums. One of the largest on-campus arenas in the country.'},
+  {id:'les', name:'LaVell Edwards Stadium', kind:'rec', addr:'LaVell Edwards Stadium, Provo, UT 84602', cite:'bTickets',
+   where:'North campus', posUnverified:true, note:'Home football. All seven 2026 home games are already on your calendar here.'},
+  {id:'wellness', name:'Student Wellness and Intramurals', kind:'rec', addr:'Brigham Young University, Provo, UT 84602', cite:'bRec',
+   where:'Main campus', posUnverified:true, note:'Intramural sports and wellness programming. Whether facility access is included in your fees was not published anywhere I could reach — check before assuming.'}
 ];
 const PLACE_KIND = {
-  home:{c:'var(--crimson)', label:'Home'},
+  home:{c:'var(--brand)', label:'Home'},
   aycte:{c:'var(--s3)', label:'Dining hall'},
   class:{c:'var(--s1)', label:'Class building'},
   study:{c:'var(--s7)', label:'Study / tutoring'},
@@ -1485,40 +1658,43 @@ function mapsUrl(from, to){
    ====================================================================== */
 const DEALS = [
 /* ---------------- campus ---------------------------------------------- */
-{id:'joe', g:'campus', n:'Cup of Joe — free coffee in the LINK', v:null, per:'year',
- d:'Free coffee all year round in the campus LINK. The single easiest thing on this list to actually use, because you are already in the library.',
- vb:'Enter what you would otherwise spend on coffee in a week and multiply it out.',
- prov:'reported', cite:'tPFA', go:'https://www.trine.edu/academics/success/index.aspx'},
-{id:'asc', g:'campus', n:'Academic Success Center — free', v:null, per:'year',
- d:'Academic coaching, tutoring and one-to-one assistance, at no cost. Trine states these services are free.',
- vb:'Not a discount — already paid for. A private tutor runs $30–60/hour; enter what you would otherwise spend.',
- prov:'verified', cite:'tASC', go:'https://www.trine.edu/academics/success/student-success/academic-support-services.aspx'},
-{id:'wc', g:'campus', n:'Writing Center — free', v:null, per:'year',
- d:'Help with writing at any stage, plus help using computers for research or composing a paper. First floor of the LINK in the James University Center.',
- vb:'Not a discount — already paid for.', prov:'verified', cite:'tAcadRes',
- go:'https://www.trine.edu/academics/success/index.aspx'},
-{id:'counsel', g:'campus', n:'Counseling Services — free and confidential', v:null, per:'year',
- d:'Three licensed mental health clinicians providing solutions-focused, short-term counselling. Trine states the service is free and confidential for Main Campus and Brooks College of Health Professions students.',
- vb:'Not a discount — already provided.', prov:'verified', cite:'tCounsel',
- go:'https://www.trine.edu/campus-life/support-and-wellness/counseling.aspx'},
-{id:'health', g:'campus', n:'Campus Health Center', v:null, per:'year',
- d:'Quest Hall, 1107 West Maumee St, Monday to Friday 9 a.m. to 4 p.m. Run with Cameron Health; a licensed Nurse Practitioner and a Certified Medical Assistant. Confidential.',
- vb:'Charges were not stated in the source — ask before you assume it is free.',
- prov:'verified', cite:'tHealth', go:'https://www.trine.edu/campus-life/support-and-wellness/health-center.aspx'},
-{id:'corpshop', g:'campus', n:'Corporate Shopping Company — 250+ retailers', v:null, per:'year',
- d:'A student discount programme listing Trine specifically. Registration is described as free for life; deals at over 250 retailers.',
- vb:'Depends entirely on what you buy.', prov:'reported', cite:'tCorpShop',
- go:'https://corporateshopping.com/student-discounts/trine-university'},
+{id:'rwc', g:'campus', n:'Research and Writing Center — free', v:null, per:'year',
+ d:'Help with writing and research at any stage of a paper, from a blank page to a final draft. Already paid for out of your tuition.',
+ vb:'Not a discount — already paid for. A private writing tutor runs $30–60/hour; enter what you would otherwise spend.',
+ prov:'verified', cite:'bTutor', go:'https://rwc.byu.edu/'},
+{id:'hbll', g:'campus', n:'Harold B. Lee Library — subject librarians', v:null, per:'year',
+ d:'The part of the library almost nobody uses: a librarian for your specific subject who will find sources for a paper in twenty minutes that would take you an evening.',
+ vb:'Not a discount — already paid for. Value it in hours saved.',
+ prov:'verified', cite:'bLibrary', go:'https://lib.byu.edu/'},
+{id:'caps', g:'campus', n:'Counseling and Psychological Services', v:null, per:'year',
+ d:'CAPS runs walk-in crisis hours Monday to Friday, 8:00 a.m. to 4:15 p.m., on the top floor of the Wilkinson Center. Phone 801-422-3035.',
+ vb:'No fee was stated on the pages I could reach — ask rather than assuming it is free or that it is not.',
+ prov:'verified', cite:'bCaps', go:'https://caps.byu.edu/'},
+{id:'uac', g:'campus', n:'University Accessibility Center', v:null, per:'year',
+ d:'Formal accommodations for disability, chronic illness and mental health conditions. Set up in week two is worth far more than set up the week of a final.',
+ vb:'Not a discount — an entitlement most eligible students never register for.',
+ prov:'verified', cite:'bAccess', go:'https://uac.byu.edu/'},
+{id:'health', g:'campus', n:'Student Health Center', v:null, per:'year',
+ d:'1750 N Wymount Terrace Dr. General clinic and urgent care Monday to Friday 8:00 a.m. to 5:30 p.m., plus Saturday urgent care 8:00–11:30 a.m. during Fall and Winter.',
+ vb:'Charges depend on your plan and the visit — the pages I could reach did not state them. Ask before you assume it is free.',
+ prov:'verified', cite:'bHealth', go:'https://health.byu.edu/'},
+{id:'wellness', g:'campus', n:'Intramural sports and Student Wellness', v:null, per:'year',
+ d:'Intramurals and wellness programming. The cheapest reliable way to keep the social floor on this site above zero without spending an evening on it.',
+ vb:'Whether facility access is included in your fees was not published anywhere I could reach.',
+ prov:'reported', cite:'bRec', go:'https://studentwellness.byu.edu/'},
+{id:'cougarcash', g:'campus', n:'Cougar Cash on campus', v:null, per:'year',
+ d:'The campus debit balance on your ID. Dining Services states that dining dollars are spent tax-free at BYU Dining locations, which is a real few per cent on every meal.',
+ vb:'Roughly the local sales-tax rate on whatever you spend on campus food.',
+ prov:'reported', cite:'bCougarCash', go:'https://cougarcash.byu.edu/benefits'},
+{id:'studentjobs', g:'campus', n:'On-campus student employment', v:null, per:'year',
+ d:'BYU states student starting pay runs $9.00 to $20.00 an hour depending on the job and your qualifications, with a published hourly pay scale behind it.',
+ vb:'The gap between a $9 job and a $16 job over 15 hours a week for a semester is about $1,500. Worth one afternoon of looking.',
+ prov:'verified', cite:'bJobs', go:'https://hr.byu.edu/student-employment'},
 
-/* ---------------- Angola ---------------------------------------------- */
-{id:'pfa', g:'angola', n:'Parent Association discount card', v:null, per:'year',
- d:'Membership of the Parent and Family Association comes with a discount card covering area businesses and places on campus — hotels, experiences and dining around Angola. Named partners include Comfort Inn and Quality Inn, Timbers Steakhouse & Seafood, Wings Etc. Grill & Pub, the T-Gear Store, Whitney Commons and The Depot.',
- vb:'Read this one carefully: the card comes with PFA membership, which is a parent/family programme, not an automatic student benefit. Check whether your family has one before planning around it.',
- prov:'verified', cite:'tPFA', go:'https://www.trine.edu/alumni/network/parent-association/discounts.aspx'},
-{id:'localfood', g:'angola', n:'Angola restaurants near campus', v:null, per:'visit',
- d:'Trine sits in a small town, so the walkable options are limited and worth knowing. Nothing here is a verified student discount — add the ones you find and record what they actually give you.',
- vb:'Yours to fill in.', prov:'mine', cite:'tGuide',
- go:'https://www.trine.edu/campus-life/student-resource-guide.aspx'},
+/* ---------------- Provo ----------------------------------------------- */
+{id:'provolocal', g:'provo', n:'Provo places that take a student ID', v:null, per:'visit',
+ d:'I could not verify a single Provo student discount from a source I trust, so nothing is listed here as fact. Add the ones you actually find and record what they gave you.',
+ vb:'Yours to fill in.', prov:'mine', cite:'bMap', go:'https://map.byu.edu/'},
 
 /* ---------------- subscriptions --------------------------------------- */
 {id:'prime', g:'subs', n:'Amazon Prime Student', v:70, per:'year',
@@ -1538,11 +1714,11 @@ const DEALS = [
 
 /* ---------------- software & dev -------------------------------------- */
 {id:'ghpack', g:'dev', n:'GitHub Student Developer Pack', v:200, vEst:true, per:'once',
- d:'GitHub Pro, JetBrains IDEs, $200 DigitalOcean credit for a year, a free .TECH domain for a year, and 100+ partner offers. Relevant if you are in engineering, which at Trine is a fair bet.',
+ d:'GitHub Pro, JetBrains IDEs, $200 DigitalOcean credit for a year, a free .TECH domain for a year, and 100+ partner offers.',
  vb:'$200 is the DigitalOcean credit — the one figure the sources state outright.',
  prov:'reported', cite:'ghStudent', go:'https://education.github.com/pack'},
 {id:'autodesk', g:'dev', n:'Autodesk Education — free', v:null, per:'year',
- d:'Fusion, AutoCAD, Inventor and Revit are offered free to students and educators. Directly relevant to an engineering programme.',
+ d:'Fusion, AutoCAD, Inventor and Revit are offered free to students and educators.',
  vb:'Enter the licence cost you avoid.', prov:'reported', cite:'nbcDeals',
  go:'https://www.autodesk.com/education/edu-software/overview'},
 {id:'notion', g:'dev', n:'Notion Plus — free for students', v:null, per:'year',
@@ -1576,10 +1752,10 @@ const DEALS = [
  prov:'reported', cite:'studentbeans', go:'https://www.studentbeans.com/us'}
 ];
 const DEAL_GROUPS = [
-  {id:'campus', n:'On campus — what Trine already provides', d:'University-run services and programmes. The highest-confidence items here, and the ones students most often miss.'},
-  {id:'angola', n:'Angola', d:'A small town, so the local list is short. Add what you find and record what it actually gives you.'},
+  {id:'campus', n:'On campus — what BYU already provides', d:'University-run services and programmes. The highest-confidence items here, and the ones students most often miss.'},
+  {id:'provo',  n:'Provo', d:'Local. Nothing here is verified as a student discount unless the card says so — add what you find and record what it actually gives you.'},
   {id:'subs',   n:'Subscriptions', d:'Student tiers on things you may already pay for.'},
-  {id:'dev',    n:'Software & engineering tools', d:'Trine is an engineering school first — this group is worth more here than almost anywhere else.'},
+  {id:'dev',    n:'Software & dev tools', d:'Worth the most if you are in a C S, engineering or design programme.'},
   {id:'retail', n:'Retail & verification hubs', d:'Lower confidence, secondary sources. Confirm before planning around them.'}
 ];
 
@@ -1593,8 +1769,8 @@ const DEAL_GROUPS = [
 function defaults(raw){
   const base = {
     v:3,
-    meta:{term:TERM.name, dorm:'', dormAddr:'1 University Ave, Angola, IN 46703'},
-    /* Nothing ships pre-loaded: no Trine course data was researched, and a
+    meta:{term:TERM.name, dorm:'', dormAddr:'Brigham Young University, Provo, UT 84602'},
+    /* Nothing ships pre-loaded: no BYU course data was researched, and a
        timetable invented for a stranger would be worse than none. */
     courses:[],
     plan:{
@@ -1607,11 +1783,11 @@ function defaults(raw){
       weekendStudyShare:0.22, confirmed:false
     },
     dining:{
-      planId:'m19', priceSem:null, comboPerWeek:null,
-      dollarsStart:0, dollarsLeft:0, scansLeft:null, log:[],
+      planId:'opendoor', priceSem:null, comboPerWeek:null,
+      dollarsStart:200, dollarsLeft:200, scansLeft:null, log:[],
       weight:null, weightUnit:'lb', kcal:2400,
       diet:'omni', avoid:[], hidden:[], never:[], favs:[], custom:[], edits:{}, checked:{},
-      halls:{}, hall:'whitney',
+      halls:{}, hall:'cannon',
       tray:{breakfast:[], lunch:[], dinner:[], snack:[]}, meal:'lunch', proteinTarget:null
     },
     deals:{checked:{}, qty:{}, val:{}, custom:[]},
@@ -1639,9 +1815,9 @@ function defaults(raw){
 function blankDefaults(){
   const b = defaults(true);
   b.courses = [];
-  b.meta = {term:TERM.name, dorm:'', dormAddr:'1 University Ave, Angola, IN 46703'};
-  b.dining = {...b.dining, planId:'m19', priceSem:null, comboPerWeek:null,
-              dollarsStart:0, dollarsLeft:0, log:[], weight:null};
+  b.meta = {term:TERM.name, dorm:'', dormAddr:'Brigham Young University, Provo, UT 84602'};
+  b.dining = {...b.dining, planId:'opendoor', priceSem:null, comboPerWeek:null,
+              dollarsStart:200, dollarsLeft:200, log:[], weight:null};
   b.plan = {...b.plan, mealAt:{breakfast:'08:00', lunch:'12:30', dinner:'18:00'}};
   return b;
 }
@@ -2184,7 +2360,7 @@ function deriveDining(d){
       o.hallStations[h.id][st] = saved && saved[st]!==undefined ? !!saved[st] : true;
     });
   });
-  o.hallId = dg2.hall || 'whitney';
+  o.hallId = dg2.hall || 'cannon';
   o.hallFoods = {};
   HALLS.forEach(h=>{
     o.hallFoods[h.id] = o.allowed.filter(f=> o.hallStations[h.id][f.st] !== false);
@@ -2402,7 +2578,7 @@ function suggestTripWeekends(d){
 }
 
 /* --------------------------------------------------------- part-time work */
-const WAGE = {min:null, avgLo:13.73, avg:21.70, avgHi:23.17, typHours:'set yours'};
+const WAGE = {min:9, avgLo:13.46, avg:14.21, avgHi:20, typHours:'set yours'};
 function deriveJobs(d){
   const W = S.jobW || {pay:3, flex:3, ben:2, exp:2, fit:3};
   const wsum = (W.pay+W.flex+W.ben+W.exp+W.fit) || 1;
@@ -2832,9 +3008,9 @@ function chartStrain(mountId, ttId, legendId, weeks, curWeek){
       opacity: w.w===curWeek?1:0.6}));
     if(w.w===curWeek){
       /* the "now" marker lives under the axis so it never fights the plot */
-      s.appendChild(n('rect',{x:x-2, y:PT+ih+2, width:bw+4, height:3, rx:1.5, fill:CV('--crimson')}));
+      s.appendChild(n('rect',{x:x-2, y:PT+ih+2, width:bw+4, height:3, rx:1.5, fill:CV('--brand')}));
       s.appendChild(n('text',{x:cx, y:H-8,'text-anchor':'middle','font-size':'9',
-        fill:CV('--crimson-lift'),'letter-spacing':'.12em'},'NOW'));
+        fill:CV('--brand-lift'),'letter-spacing':'.12em'},'NOW'));
       s.appendChild(n('text',{x:cx, y:y0-6,'text-anchor':'middle','font-size':'10.5',
         'font-family':'var(--mono)','font-weight':'600', fill:CV('--ink')}, w.idx));
     }
@@ -2979,13 +3155,13 @@ function renderToday(){
   $('gToday').innerHTML='<ul class="none" style="display:flex;flex-direction:column;gap:7px">'+all.map(x=>{
     const past=x.b<nowM, live=x.a<=nowM&&x.b>nowM;
     return '<li style="display:grid;grid-template-columns:92px 1fr;gap:11px;align-items:baseline;'
-      +(past?'opacity:.42;':'')+(live?'background:var(--crimson-wash);border-radius:6px;padding:4px 7px;margin:-4px -7px;':'')+'">'
+      +(past?'opacity:.42;':'')+(live?'background:var(--brand-wash);border-radius:6px;padding:4px 7px;margin:-4px -7px;':'')+'">'
       +'<span style="font-family:var(--mono);font-size:11.5px;color:var(--ink-3)">'+esc(fmtRange(x.a,x.b))+'</span>'
       +'<span style="display:flex;gap:8px;align-items:baseline">'
       +'<i style="width:7px;height:7px;border-radius:2px;background:var('+x.color+');flex:none;transform:translateY(-1px)"></i>'
       +'<span><b style="font-weight:600">'+esc(x.label)+'</b>'
       +(x.sub?' <span style="color:var(--ink-3);font-size:12px">'+esc(x.sub)+'</span>':'')
-      +(live?' <span class="pill" style="border-color:var(--crimson)">now</span>':'')+'</span></span></li>';
+      +(live?' <span class="pill" style="border-color:var(--brand)">now</span>':'')+'</span></span></li>';
   }).join('')+'</ul>';
 }
 
@@ -2996,10 +3172,10 @@ function renderSignals(){
 
   if(d.courses.some(c=>(c.meetings||[]).some(m=>m.disputed)))
     push('crit','Courses','A meeting is marked unresolved',
-      'One of your meetings is flagged as unresolved rather than estimated. Open the Courses tab and set its days and times from myPortal.');
+      'One of your meetings is flagged as unresolved rather than estimated. Open the Courses tab and set its days and times from MyBYU.');
   if(d.courses.some(c=>(c.meetings||[]).some(m=>m.tEst && !m.disputed)))
     push('warn','Courses','Some meeting times are still estimates',
-      'Meetings brought in by the screenshot scanner or the myPortal importer are marked estimated until you confirm them. Check them against myPortal on the Courses tab and this clears.');
+      'Meetings brought in by the screenshot scanner or the MyBYU importer are marked estimated until you confirm them. Check them against MyBYU on the Courses tab and this clears.');
   if((d.walkPairs||[]).length && d.walkKnown < d.walkPairs.length)
     push('warn','Dining & Map', (d.walkPairs.length-d.walkKnown)+' walking route'+(d.walkPairs.length-d.walkKnown===1?'':'s')+' unmeasured',
       'Your week needs '+d.walkPairs.length+' distinct walk'+(d.walkPairs.length===1?'':'s')+'. Each one has a Google Maps link on the Dining &amp; Map tab — measure them once and the commute line stops being a flat guess.');
@@ -3018,12 +3194,12 @@ function renderSignals(){
       'There is not enough waking time left after class, sleep and meals. Something has to move: a shorter sleep target, a later bedtime, or accepting less study time than the two-hours-per-credit convention implies.');
   if(d.dining.price==null)
     push('warn','Dining','Meal plan price is blank',
-      'Trine does not publish plan prices anywhere I could reach, so I left it empty rather than guessing. Enter what you were charged and the whole value engine switches on.');
+      'BYU does not publish plan prices anywhere I could reach, so I left it empty rather than guessing. Enter what you were charged and the whole value engine switches on.');
   else if(Math.abs(d.dining.dollarDelta) > d.dining.dollarsStart*0.12){
     const ahead = d.dining.dollarDelta>0;
     push(ahead?'warn':'crit','Dining','Dining Dollars are '+(ahead?'running behind pace':'running out early'),
       ahead
-        ? 'You are <b>'+money(d.dining.dollarDelta)+'</b> above the straight line to zero. Dining Dollars carry from fall to spring but expire at the end of the academic year, so unspent money is lost money.'
+        ? 'You are <b>'+money(d.dining.dollarDelta)+'</b> above the straight line to zero. Whether an unspent balance carries over is not published anywhere I could reach \u2014 check before you assume it survives the term.'
         : 'You are <b>'+money(-d.dining.dollarDelta)+'</b> below pace and will run dry before finals at this rate. Current sustainable spend is '+money(d.dining.dollarsPerWeekLeft)+'/week.');
   }
   if(d.strain.crunch.length)
@@ -3037,7 +3213,7 @@ function renderSignals(){
       d.grades.weightWarn.map(w=>esc(w.code)+' sums to '+rnd(w.sum,1)+'%').join(' · ')+'. Projections will be off until they do.');
   if(!S.sources.length)
     push('acc','Data & Sources','No sources connected',
-      'Adding your Moodle calendar feed lets you pull deadlines in bulk instead of typing them one at a time.');
+      'Adding your Canvas calendar feed lets you pull deadlines in bulk instead of typing them one at a time.');
   if(!out.length) push('good','All tabs','Nothing needs your attention','Every check this page runs came back clean.');
   $('gSignals').innerHTML = out.join('');
 }
@@ -3240,12 +3416,12 @@ function renderSchedToday(){
   $('schedToday').innerHTML='<ul class="none" style="display:flex;flex-direction:column;gap:7px">'+blocks.map(b=>{
     const past=b.b<now, live=b.a<=now&&b.b>now;
     return '<li style="display:grid;grid-template-columns:96px 1fr;gap:11px;align-items:baseline;'
-      +(past?'opacity:.4;':'')+(live?'background:var(--crimson-wash);border-radius:6px;padding:4px 7px;margin:-4px -7px;':'')+'">'
+      +(past?'opacity:.4;':'')+(live?'background:var(--brand-wash);border-radius:6px;padding:4px 7px;margin:-4px -7px;':'')+'">'
       +'<span style="font-family:var(--mono);font-size:11.5px;color:var(--ink-3)">'+esc(fmtRange(b.a,b.b))+'</span>'
       +'<span style="display:flex;gap:8px;align-items:baseline">'
       +'<i style="width:7px;height:7px;border-radius:2px;background:var('+b.color+');flex:none;transform:translateY(-1px)"></i>'
       +'<span><b>'+esc(b.label)+'</b>'+(b.sub?' <span style="color:var(--ink-3);font-size:12px">'+esc(b.sub)+'</span>':'')
-      +(live?' <span class="pill" style="border-color:var(--crimson)">now</span>':'')+'</span></span></li>';
+      +(live?' <span class="pill" style="border-color:var(--brand)">now</span>':'')+'</span></span></li>';
   }).join('')+'</ul>';
 }
 
@@ -3286,9 +3462,9 @@ function renderCourses(){
   }
   if(unconfirmed){
     banner += (disputed?'<div class="divider"></div>':'')
-      + '<b>Some meeting times are still estimates.</b> Anything brought in by the screenshot scanner or the myPortal importer stays marked estimated until you confirm it. '
+      + '<b>Some meeting times are still estimates.</b> Anything brought in by the screenshot scanner or the MyBYU importer stays marked estimated until you confirm it. '
       + '<div class="row" style="margin-top:11px"><button class="btn primary sm" id="btnConfirmTimes">Confirm the estimated times</button>'
-      + '<a class="btn sm" href="https://myportal.trine.edu/ICS" target="_blank" rel="noopener">Open myPortal</a></div>';
+      + '<a class="btn sm" href="https://my.byu.edu/" target="_blank" rel="noopener">Open MyBYU</a></div>';
   }
   if(!banner){
     banner = '<b>Every meeting confirmed.</b> The time charts, the study plan, the walking analysis and the strain model are all running on times you verified rather than on my reading of a screenshot.'
@@ -3306,7 +3482,7 @@ function renderCourses(){
 
 /* ---------------------------------------------- catalog browser ------ */
 /* ======================================================================
-   SCHEDULE OF CLASSES — empty in this build. Trine publishes no
+   SCHEDULE OF CLASSES — empty in this build. BYU publishes no
 
    Embedded as JSON rather than hand-written, so it is the registrar's data
    verbatim, not a transcription. Parsed once, on first use, because it is a
@@ -3365,7 +3541,7 @@ function renderCatalogBrowser(){
       if(!q) return true;
       return code.toLowerCase().includes(q) || (CATALOG[code].title||'').toLowerCase().includes(q);
     });
-    list.innerHTML = '<div class="note warn" style="margin-bottom:10px"><b>No course list ships with this build.</b> Trine publishes its catalog as web pages rather than a downloadable export, so there was nothing to embed that I could reach. Add courses from the panel above, or open Trine’s catalog with the search below.</div>'
+    list.innerHTML = '<div class="note warn" style="margin-bottom:10px"><b>This is a cited sample, not the whole catalog.</b> Sixteen BYU courses ship with credit hours and descriptions from catalog.byu.edu and from published MAP sheets. BYU publishes no downloadable section export I could reach, so there is no term-by-term schedule of classes embedded here — for anything not listed above, the live search below hands your query straight to catalog.byu.edu.</div>'
       + (codes.length ? catSimpleTable(codes) : '<div class="empty">No match.</div>');
     return;
   }
@@ -3545,10 +3721,10 @@ function courseCard(c){
 
   const q = encodeURIComponent(c.code.replace(/\s+/g,' '));
   const links = [
-    ['Course catalog', 'https://trine.smartcatalogiq.com/en/current/fall-2026-trine-course-catalog/', 'Official description, credit hours, prerequisites.'],
-    ['myPortal', 'https://myportal.trine.edu/ICS', 'Your own schedule — the authority on meeting times.'],
-    ['RateMyProfessors — Trine', 'https://www.ratemyprofessors.com/search/schools?q=Trine%20University', 'Unofficial, self-selected, and thin at this school size. Read comments, ignore scores.'],
-    ['Moodle', 'https://apps.trine.edu/moodle/', 'The syllabus is the only authority on how a course is graded.']
+    ['Course catalog', 'https://catalog.byu.edu/courses', 'Official description, credit hours, prerequisites.'],
+    ['MyBYU', 'https://my.byu.edu/', 'Your own schedule — the authority on meeting times.'],
+    ['RateMyProfessors — BYU', 'https://www.ratemyprofessors.com/search/schools?q=BYU%20University', 'Unofficial, self-selected, and thin at this school size. Read comments, ignore scores.'],
+    ['Canvas', 'https://byucanvas.byu.edu/', 'The syllabus is the only authority on how a course is graded.']
   ];
 
   return '<div class="course" style="--cc:var('+c.color+')">'
@@ -3607,22 +3783,22 @@ function courseCard(c){
 
 function renderProfTools(){
   const tools=[
-    {n:'The course catalog', chipk:'verified', tier:'Official \u00b7 factual only',
-     d:'Trine publishes its catalog through SmartCatalog, including the Fall 2026 edition: official description, credit hours, prerequisites, and how a course sits inside a programme.',
-     use:'Start here to confirm credit hours before you set them on a course card \u2014 every hour total on this site is built on that number. It will tell you nothing about an instructor.',
-     u:CITE.tCatalog.u, u2:CITE.tRegistrar.u},
-    {n:'myPortal', chipk:'verified', tier:'Official \u00b7 your own record',
-     d:'Trine\u2019s student hub: schedules, account information, financial aid.',
-     use:'The authority on your own meeting times. Confirm them here rather than trusting anything typed in from memory.',
-     u:CITE.tPortal.u, u2:CITE.tMoodle.u},
-    {n:'Ask people in the programme', chipk:'unverified', tier:'Unofficial \u00b7 but the best signal you have',
-     d:'Trine has roughly two thousand undergraduates in Angola. At that size there is no published grade-distribution database, and review sites carry very few entries per instructor \u2014 often none.',
-     use:'This is the real difference from a large state school, and it cuts both ways. There is no dataset to look up, but the person who took the course last year is findable and will tell you more than any star rating would. Ask in the department, ask a club, ask at the Academic Success Center.',
-     u:CITE.tASC.u, u2:CITE.tSupport.u},
-    {n:'RateMyProfessors', chipk:'reported', tier:'Unofficial \u00b7 weakest signal',
-     d:'Not affiliated with Trine, self-selected, and at a school this size often a handful of reviews per instructor \u2014 sometimes zero.',
-     use:'Read the written comments and ignore the score. An average over five reviews is noise. Comments describing the structure of a course \u2014 how many exams, whether labs are graded hard, whether attendance is enforced \u2014 stay useful regardless of the reviewer\u2019s mood.',
-     u:'https://www.ratemyprofessors.com/search/schools?q=Trine%20University', u2:CITE.tCatalog.u}
+    {n:'The BYU course catalog', chipk:'verified', tier:'Official · factual only',
+     d:'catalog.byu.edu is the authority on what a course is: official title, credit hours, prerequisites, and which University Core requirement it satisfies.',
+     use:'Start here to confirm credit hours before you set them on a course card — every hour total on this site is built on that number. MATH 112 is 4 credits, not 3, and religion courses are 2. It will tell you nothing about an instructor.',
+     u:CITE.bCatalog.u, u2:CITE.bCoreReq.u},
+    {n:'Your MAP sheet', chipk:'verified', tier:'Official · your own programme',
+     d:'Every major publishes a MAP sheet: the exact course list, credit hours and semester-by-semester sequence for that degree.',
+     use:'This is the document that decides whether C S 111 or C S 142 is your entry point, and whether your programme wants CHEM 105 or CHEM 111. Read it before registration, not after.',
+     u:CITE.bCoreReq.u, u2:CITE.bCore.u},
+    {n:'MyBYU and MyMAP', chipk:'verified', tier:'Official · your own record',
+     d:'my.byu.edu is where registration, your schedule and your progress toward graduation actually live.',
+     use:'The authority on your own meeting times. Confirm them here rather than trusting anything typed in from memory or read off a screenshot.',
+     u:CITE.bMyMap.u, u2:CITE.bRegistrar.u},
+    {n:'RateMyProfessors', chipk:'reported', tier:'Unofficial · weakest signal',
+     d:'Not affiliated with BYU, self-selected, and heavily skewed toward students who felt strongly one way or the other.',
+     use:'Read the written comments and ignore the score. Comments describing the structure of a course — how many exams, whether attendance is enforced, whether the labs are graded hard — stay useful regardless of the reviewer’s mood. The number does not.',
+     u:CITE.bRMP.u, u2:CITE.bCatalog.u}
   ];
   $('profTools').innerHTML = tools.map(t=>
     '<div class="panel" style="background:var(--surface-2);margin:0">'
@@ -3630,8 +3806,8 @@ function renderProfTools(){
     +'<div style="font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);margin:5px 0 9px">'+esc(t.tier)+'</div>'
     +'<p style="font-size:13px;color:var(--ink-2)">'+esc(t.d)+'</p>'
     +'<div class="note acc" style="margin-top:10px"><b>How to actually read it.</b> '+esc(t.use)+'</div>'
-    +'<div class="row" style="margin-top:11px"><a class="btn sm" href="'+esc(t.u)+'" target="_blank" rel="noopener">Open \u2197</a>'
-    +(t.u2?'<a class="btn sm ghost" href="'+esc(t.u2)+'" target="_blank" rel="noopener">Details \u2197</a>':'')+'</div>'
+    +'<div class="row" style="margin-top:11px"><a class="btn sm" href="'+esc(t.u)+'" target="_blank" rel="noopener">Open ↗</a>'
+    +(t.u2?'<a class="btn sm ghost" href="'+esc(t.u2)+'" target="_blank" rel="noopener">Details ↗</a>':'')+'</div>'
     +'</div>').join('');
 }
 
@@ -3671,7 +3847,7 @@ function renderPlanCtl(){
     '<div><label class="f">'+esc(label)+'</label><input type="'+type+'" '+attrs+' value="'+esc(k)+'" data-plan="'+path+'">'
     +(hint?'<div class="hint">'+hint+'</div>':'')+'</div>';
   $('planCtl').innerHTML =
-    f(p.hoursPerCredit,'Study hours per credit','number','step="0.25" min="0.5" max="6"','2.0 is the common two-hours-per-credit convention, not a verified Trine policy. Raising it raises every study total.','hoursPerCredit')
+    f(p.hoursPerCredit,'Study hours per credit','number','step="0.25" min="0.5" max="6"','2.0 is the common two-hours-per-credit convention, not a verified BYU policy. Raising it raises every study total.','hoursPerCredit')
    +f(p.sleepTarget,'Sleep target (h/night)','number','step="0.5" min="4" max="12"','Blocked out before anything else is scheduled.','sleepTarget')
    +f(p.wake,'Wake','time','','Study is never placed before this.','wake')
    +f(p.bed,'Bed','time','','Study is never placed after this.','bed')
@@ -3705,26 +3881,26 @@ function renderDining(){
   /* plan picker */
   $('planPick').innerHTML = PLANS.map(p=>{
     const on = p.id===S.dining.planId;
-    return '<button class="tile" data-plan-pick="'+p.id+'" style="text-align:left;cursor:pointer;border-color:'+(on?'var(--crimson)':'var(--line)')+';'+(on?'box-shadow:inset 0 0 0 1px var(--crimson);':'')+'">'
-      +'<div class="k" style="color:'+(on?'var(--crimson)':'var(--ink-3)')+'">'+(on?'Your plan':'Switch to')+'</div>'
+    return '<button class="tile" data-plan-pick="'+p.id+'" style="text-align:left;cursor:pointer;border-color:'+(on?'var(--brand)':'var(--line)')+';'+(on?'box-shadow:inset 0 0 0 1px var(--brand);':'')+'">'
+      +'<div class="k" style="color:'+(on?'var(--brand)':'var(--ink-3)')+'">'+(on?'Your plan':'Switch to')+'</div>'
       +'<div style="font-family:var(--display);font-size:17px;font-weight:600;letter-spacing:.02em;color:var(--ink)">'+esc(p.name)+'</div>'
       +'<div class="n" style="margin-top:5px">'+esc(p.scans)+'</div>'
       +'<div class="n">Dining Dollars <b style="font-family:var(--mono);color:var(--ink)">$'+p.dollars+'</b>/semester</div>'
-      +'<div class="n">'+(p.combo!=null?'Combo meals <b style="font-family:var(--mono);color:var(--ink)">'+p.combo+'</b>/week'+(p.comboConfirmed?' <span style="color:#4fc24f">·&nbsp;you confirmed</span>':''):'Combo meals not stated in the contract text I could read')+'</div>'
+      +'<div class="n">'+(p.combo!=null?'Combo meals <b style="font-family:var(--mono);color:var(--ink)">'+p.combo+'</b>/week'+(p.comboConfirmed?' <span style="color:#4fc24f">·&nbsp;you confirmed</span>':''):'No combo-meal allowance stated on the BYU plan pages')+'</div>'
       +'</button>';
   }).join('');
 
   const pl = o.plan;
   $('planInputs').innerHTML =
     '<div><label class="f">What you paid this semester</label><input type="number" step="1" min="0" value="'+(S.dining.priceSem==null?'':S.dining.priceSem)+'" data-dining="priceSem" placeholder="not published — enter yours"><div class="hint">Leave blank and every cost-per-meal figure stays blank too. I will not invent it.</div></div>'
-   +'<div><label class="f">Dining Dollars at start</label><input type="number" step="1" min="0" value="'+o.dollarsStart+'" data-dining="dollarsStart"><div class="hint">'+(pl.dollars>0?esc(pl.name)+' is listed at $'+pl.dollars+'/semester. '+chip('verified'):'Neither Trine plan has a dining-dollar component I could verify \u2014 leave this at zero unless yours does. '+chip('unverified'))+'</div></div>'
-   +'<div><label class="f">Dining Dollars left now</label><input type="number" step="0.01" min="0" value="'+o.dollarsLeft+'" data-dining="dollarsLeft"><div class="hint">Check your balance in myPortal or with the dining office, then paste it here.</div></div>'
-   +'<div><label class="f">Combo meals per week</label><input type="number" step="1" min="0" max="21" value="'+(S.dining.comboPerWeek==null?'':S.dining.comboPerWeek)+'" data-dining="comboPerWeek" placeholder="'+(pl.combo!=null?pl.combo:'unknown')+'"><div class="hint">'+'Trine\u2019s two plans are counted in meals per week. Nothing I could reach describes a separate combo-meal allowance, so leave this blank unless your plan has one.'+'</div></div>';
+   +'<div><label class="f">Dining Dollars at start</label><input type="number" step="1" min="0" value="'+o.dollarsStart+'" data-dining="dollarsStart"><div class="hint">'+(pl.dollars>0?esc(pl.name)+' is listed at $'+pl.dollars+'/semester. '+chip('verified'):'Neither BYU plan has a dining-dollar component I could verify \u2014 leave this at zero unless yours does. '+chip('unverified'))+'</div></div>'
+   +'<div><label class="f">Dining Dollars left now</label><input type="number" step="0.01" min="0" value="'+o.dollarsLeft+'" data-dining="dollarsLeft"><div class="hint">Check your balance in MyBYU or with the dining office, then paste it here.</div></div>'
+   +'<div><label class="f">Combo meals per week</label><input type="number" step="1" min="0" max="21" value="'+(S.dining.comboPerWeek==null?'':S.dining.comboPerWeek)+'" data-dining="comboPerWeek" placeholder="'+(pl.combo!=null?pl.combo:'unknown')+'"><div class="hint">'+'BYU\u2019s plans are counted in unlimited access or in dining dollars, not in combo meals. Nothing I could reach describes a separate combo allowance, so leave this blank unless your plan has one.'+'</div></div>';
 
   $('planSrc').innerHTML =
-    citeLine('tHousing','Every residential student must buy a 10 or 19-meal plan, and the Trine student ID is the meal card:')
-   +citeLine('tDining','Bon App\u00e9tit locations:')
-   +'<div style="margin-top:6px">'+chip('unverified')+' <b>Prices.</b> No per-plan price is published on a page I could reach, so nothing is pre-filled. Enter what you were charged and every cost-per-meal figure on this tab switches on.</div>';
+    citeLine('bMealHome','Every BYU meal plan, side by side:')
+   +citeLine('bMealInfo','What dining dollars buy and where they are accepted:')
+   +'<div style="margin-top:6px">'+chip('reported')+' <b>Prices.</b> Open Door and Dining Plus are reported at $2,730 a semester, True Blue at $500 or $800 a semester, and EZ Dining at $100, $150 or $200 a month. Those come from secondary write-ups, not from a BYU price page I could reach — confirm yours and enter what you were actually charged, and every cost-per-meal figure on this tab switches on.</div>';
 
   renderBurn(); renderValueEngine(); renderLog(); renderMap(); renderDiet(); renderFood();
 }
@@ -3774,7 +3950,7 @@ function renderValueEngine(){
 
   const notes=[];
   if(o.plan.unlimited) notes.push('<div class="note good"><b>You are on an unlimited plan.</b> The marginal swipe costs nothing. Every meal you skip at a dining hall and buy elsewhere is paid for twice — once in the plan you already bought and once at the register.</div>');
-  notes.push('<div class="note acc"><b>Dining Dollars are the perishable part.</b> They carry from fall to spring but expire at the end of the academic year, and they can be topped up in $5 increments with a $25 minimum. Running a surplus into May is a straight loss. '+chip('verified')+'</div>');
+  notes.push('<div class="note acc"><b>Dining Dollars are the perishable part.</b> BYU Dining does not publish a rollover or expiry rule on a page I could reach, so nothing about carry-over is asserted here \u2014 ask before you bank a surplus, because at most schools an unspent balance is a straight loss. '+chip('unverified')+'</div>');
   if(o.combo!=null) notes.push('<div class="note"><b>Combo meals reset Sunday at 12:00 a.m.</b> and unused ones do not carry over — so a combo not used by Saturday night is gone. At '+o.combo+' a week that is '+o.combo+' chances to eat somewhere other than a dining hall without spending Dining Dollars. '+chip(o.comboSource==='mine'?'mine':'verified')+'</div>');
   $('valueEngine').innerHTML = '<div class="grid g2">'+out.join('')+'</div>'+notes.join('');
 }
@@ -3844,13 +4020,13 @@ function renderMap(){
   });
   put(left,-1); put(right,1);
 
-  s2.appendChild(n('circle',{cx, cy, r:62, fill:'rgba(207,39,64,.16)', stroke:'var(--crimson)','stroke-width':2}));
+  s2.appendChild(n('circle',{cx, cy, r:62, fill:'rgba(207,39,64,.16)', stroke:'var(--brand)','stroke-width':2}));
   s2.appendChild(n('text',{x:cx, y:cy-9,'text-anchor':'middle','font-size':'15','font-weight':'700',
-    fill:'var(--ink)','font-family':'var(--sans)'},'Trine campus'));
+    fill:'var(--ink)','font-family':'var(--sans)'},'BYU Provo'));
   s2.appendChild(n('text',{x:cx, y:cy+7,'text-anchor':'middle','font-size':'9.5',
-    fill:'var(--ink-2)','font-family':'var(--mono)'},'1 University Ave'));
+    fill:'var(--ink-2)','font-family':'var(--mono)'},'Provo, Utah'));
   s2.appendChild(n('text',{x:cx, y:cy+22,'text-anchor':'middle','font-size':'8.5',
-    fill:'var(--crimson-lift)','font-family':'var(--mono)','letter-spacing':'.09em'},'ANGOLA, INDIANA'));
+    fill:'var(--brand-lift)','font-family':'var(--mono)','letter-spacing':'.09em'},'PROVO, UTAH'));
 
   s2.appendChild(n('text',{x:10, y:17, class:'stname'},
     'HUB DIAGRAM — SIDE AND ORDER CARRY NO GEOGRAPHIC MEANING. CLICK ANY DESTINATION FOR LIVE WALKING DIRECTIONS.'));
@@ -3935,7 +4111,7 @@ function renderPlaceList(){
 
   $('mapList').innerHTML =
     '<div style="grid-column:1/-1" class="note acc"><b>Measuring goes in the panel below.</b> '
-    + 'Rather than asking you to time a walk to all twelve of these, the next panel works out the '
+    + 'Rather than asking you to time a walk to every one of these, the next panel works out the '
     + ((D.walkPairs||[]).length) + ' route'+((D.walkPairs||[]).length===1?'':'s')
     + ' your timetable actually requires and asks only for those. The links here are for everything else.</div>'
     + Object.keys(PLACE_KIND).filter(k=>groups[k]).map(k=>{
@@ -3955,7 +4131,7 @@ function renderPlaceList(){
       +'</div>';
   }).join('')
   + '<div style="grid-column:1/-1">'
-  + citeLine('tDining','All Bon App\u00e9tit locations:') + citeLine('tBonApp','Menus:') + '</div>';
+  + citeLine('bDining','All BYU Dining locations:') + citeLine('bMealInfo','What dining dollars buy:') + '</div>';
 }
 
 /* ---------------------------------------------- walking times -------- */
@@ -4016,15 +4192,15 @@ function renderDiet(){
       + '</div>');
   }
 
-  out.push('<div class="note acc"><b>Breakfast is the meal to protect.</b> Both Trine plans are a fixed number of meals a week rather than unlimited, so a skipped breakfast is a meal you paid for and did not eat — and it is the first one students drop. Work out your cost per meal below and the arithmetic gets uncomfortable quickly. '+chip('verified')+'</div>');
+  out.push('<div class="note acc"><b>Breakfast is the meal to protect.</b> On Open Door the Cannon Commons is unlimited, so breakfast costs you nothing at the margin — and it is still the first meal students drop. On a dining-dollar plan it is the cheapest meal of the day to cover. Either way, work out your cost per meal below. '+chip('verified')+'</div>');
 
   const firstClass = [1,2,3,4,5].map(dw=>(D.byDay[dw]||[])[0]).filter(Boolean).sort((a,b)=>a.a-b.a)[0];
   if(firstClass) out.push('<div class="note"><b>Your earliest weekday class starts at '+fmt12(firstClass.a)+'.</b> A breakfast window ending by '+fmt12(firstClass.a-15)+' clears it with time to walk. Yours currently ends at '+fmt12(toMin(p.mealAt.breakfast)+p.mealMin.breakfast)+'.</div>');
 
   const lateDays=[1,2,3,4,5].filter(dw=>(D.byDay[dw]||[]).some(m=>m.b>=toMin('18:30')));
-  if(lateDays.length) out.push('<div class="note warn"><b>'+lateDays.map(dw=>DAYS[dw]).join(', ')+' run past 6:30 p.m.</b> Dining hall hours vary by day and are not published anywhere I could reach, so check them before you rely on a late dinner — and on those nights a combo meal at a retail location is exactly the case combos exist for. '+chip('verified')+' on the combo rule; '+chip('unverified')+' on the hours.'+citeLine('tDining','Check hours here:')+'</div>');
+  if(lateDays.length) out.push('<div class="note warn"><b>'+lateDays.map(dw=>DAYS[dw]).join(', ')+' run past 6:30 p.m.</b> Dining hall hours vary by day and are not published anywhere I could reach, so check them before you rely on a late dinner — and on those nights a combo meal at a retail location is exactly the case combos exist for. '+chip('verified')+' on the combo rule; '+chip('unverified')+' on the hours.'+citeLine('bDining','Check hours here:')+'</div>');
 
-  out.push('<div class="note"><b>Where to actually eat.</b> Whitney Commons is the main dining location; The Depot does grill and take-out, and Storm\u2019s A-Brewing and The Bean Counter are the two coffee shops. Hours are not published anywhere I could reach, so check them before relying on a late meal. '+chip('verified')+citeLine('tDining')+'</div>');
+  out.push('<div class="note"><b>Where to actually eat.</b> Cannon Commons in Helaman Halls is the all-you-care-to-eat hall; the Cougareat in the Wilkinson Center is the food court, and the Creamery on Ninth does a grill, ice cream and a real grocery shop. Hours vary by location and term, so check them before relying on a late meal. '+chip('verified')+citeLine('bDining')+'</div>');
 
   out.push('<div class="note"><b>Protein is the hard part in a dining hall, not calories.</b> The AMDR band above is wide — 10% to 35% of energy — and the low end is easy to hit by accident on a carbohydrate-heavy tray. If you track one number, track that one.</div>');
 
@@ -4053,13 +4229,13 @@ function renderFood(){
         +((o.avoid||[]).indexOf(a.id)>=0?' checked':'')+'> '+esc(a.n)+'</label>').join('')+'</div>'
       +'<div class="hint">'+(o.excludedCount?'<b>'+o.excludedCount+'</b> of '+o.lib.length+' items are filtered out right now'
         +((o.never||[]).length?', including '+o.never.length+' you blocked for good':'')+'.':'Nothing is filtered out.')+'</div>'
-      +'<div class="note crit" style="margin-top:12px"><b>This is a planning filter, not an allergy safety check.</b> It filters a generic reference list by the ingredients I recorded against each item. It cannot know what a specific dish at a specific hall contains, and it does not know about cross-contact. For a real allergy, Bon App\u00e9tit\u2019s own item data and a conversation with the staff at the counter are the only sources that count.</div>'
+      +'<div class="note crit" style="margin-top:12px"><b>This is a planning filter, not an allergy safety check.</b> It filters a generic reference list by the ingredients I recorded against each item. It cannot know what a specific dish at a specific hall contains, and it does not know about cross-contact. For a real allergy, BYU Dining\u2019s own item data and a conversation with the staff at the counter are the only sources that count.</div>'
     +'</div>';
 
   $('foodSrc').innerHTML =
     chip('reported')+' <b>Where these numbers come from.</b> They are reference values for standard portions, from widely published USDA-derived nutrition charts. '
-    +'<b>They are not Trine menu data.</b> A dining hall\u2019s own preparation differs — portion size, oil, sauce — sometimes by a lot. Bon Appétit publishes the actual menu for Trine; every number here is editable so you can correct it against what is really served, and corrected items get marked.'
-    + citeLine('tBonApp','The real menu:')
+    +'<b>They are not BYU Dining data.</b> A dining hall\u2019s own preparation differs — portion size, oil, sauce — sometimes by a lot. BYU Dining publishes the actual menu; every number here is editable so you can correct it against what is really served, and corrected items get marked.'
+    + citeLine('bDining','BYU Dining locations:')
     + '<div style="margin-top:6px">'+chip('verified')+' The macronutrient bands and the 0.8 g/kg protein RDA those targets are built on are the Dietary Reference Intakes. '+citeLine('amdr')+'</div>';
 
   /* meal tabs */
@@ -4093,7 +4269,7 @@ function renderHalls(){
     const on = o.hallId===h.id;
     if(!best) return '<div style="border:1px dashed var(--line);border-radius:var(--r);padding:12px;color:var(--ink-3);font-size:12.5px">'
       + esc(h.n)+' — no stations left switched on, or your filters removed everything it serves.</div>';
-    return '<div style="border:1px solid '+(on?'var(--crimson)':'var(--line)')+';border-radius:var(--r);padding:12px 14px;background:var(--surface-2)">'
+    return '<div style="border:1px solid '+(on?'var(--brand)':'var(--line)')+';border-radius:var(--r);padding:12px 14px;background:var(--surface-2)">'
       +'<div class="row spread" style="align-items:baseline"><b style="font-size:13.5px">'+(h.home?'★ ':'')+esc(h.n)+'</b>'
         + (best.hits?chip('computed','Hits target'):'<span class="pill" style="border-color:rgba(250,178,25,.4);color:var(--warn)">best it can do</span>')+'</div>'
       +'<div style="font-size:12px;color:var(--ink-3);margin-top:2px">'+esc(h.sub)+' · '+ceil.count+' items you would eat</div>'
@@ -4102,7 +4278,7 @@ function renderHalls(){
         +(ceil.densest?'<span class="pill">densest: '+esc(ceil.densest.n)+'</span>':'')+'</div>'
       + (best.gaps.length?'<div style="font-size:12px;color:var(--warn);margin-top:7px">Cannot reach: '+esc(best.gaps.join(', '))+'</div>':'')
       +'<div class="row" style="margin-top:9px">'+(on?'<span class="pill">selected</span>':'<button class="btn sm" data-hall="'+h.id+'">Use this hall</button>')
-        +'<a class="btn sm ghost" href="'+esc(mapsUrl(S.meta.dormAddr, (placeById(h.id)||{addr:'Trine University, Angola, IN 46703'}).addr))+'" target="_blank" rel="noopener">Walk ↗</a></div>'
+        +'<a class="btn sm ghost" href="'+esc(mapsUrl(S.meta.dormAddr, (placeById(h.id)||{addr:'Brigham Young University, Provo, UT 84602'}).addr))+'" target="_blank" rel="noopener">Walk ↗</a></div>'
       +'</div>';
   }).join('');
 
@@ -4115,7 +4291,7 @@ function renderHalls(){
       return '<label class="row" style="gap:5px;font-size:12.5px"><input type="checkbox" data-hallst="'+st+'"'+(on?' checked':'')+'> '
         + esc(STATIONS[st])+' <span style="color:var(--ink-3);font-family:var(--mono)">'+n+'</span></label>';
     }).join('')+'</div>'
-    +'<div class="note warn" style="margin-top:11px">'+chip('unverified')+' <b>Every hall starts with every station on because Trine does not publish a station list I could reach.</b> That is a placeholder, not a claim — the first time you eat somewhere, untick what it does not have and this stops suggesting food you would have to walk for.</div>';
+    +'<div class="note warn" style="margin-top:11px">'+chip('unverified')+' <b>Every hall starts with every station on because BYU does not publish a station list I could reach.</b> That is a placeholder, not a claim — the first time you eat somewhere, untick what it does not have and this stops suggesting food you would have to walk for.</div>';
 }
 
 function renderNever(){
@@ -4298,7 +4474,7 @@ function renderSocialRead(){
     +(freeEve.length?': '+freeEve.map(dw=>DAYSL[dw]).join(', ')+'.':'. Every Monday-to-Friday evening has class, a commitment or a study block on it.')
     +' Weeknights are when most of the unplanned social life at a residential campus actually happens.</div>');
   if(d.commitByKind && d.commitByKind.gym===0)
-    out.push('<div class="note"><b>No gym time is blocked out.</b> The ARC and Thunder Ice Arena are on campus; whether student access is included was not published anywhere I could reach, so check before assuming. Gym time counts 30% toward the social floor here either way.</div>');
+    out.push('<div class="note"><b>No gym time is blocked out.</b> BYU runs intramural sport and wellness programming through Student Wellness; whether facility access is included in your fees was not published anywhere I could reach, so check before assuming. Gym time counts 30% toward the social floor here either way — intramurals count fully.</div>');
   $('socialRead').innerHTML = out.join('');
 }
 
@@ -4323,14 +4499,14 @@ function renderCommitments(){
     : '<div class="empty">Nothing blocked out yet. Until something is here, the study planner assumes every waking hour outside class is available — which is how a semester quietly becomes nothing but coursework.</div>';
 
   $('recSportsInfo').innerHTML = [
-    {n:'Recreation at Trine', ck:'verified', cite:'tFacil',
-     d:'The Keith E. Busse/Steel Dynamics Athletic and Recreation Center — the ARC — carries an indoor 200-metre track, tennis courts and batting cages. Thunder Ice Arena adds weight and training rooms, a pro shop and 700 seats.',
-     use:'Block your gym time out here and the study planner routes around it. It counts 30% toward the social floor, which is roughly honest: you see people there, but it is not a conversation.',
-     go:'https://trinethunder.com/sports/2024/5/30/copy-of-facilities.aspx'},
-    {n:'Clubs and intramurals', ck:'unverified', cite:'tGuide',
-     d:'Trine runs student organisations and recreational sport, but I could not reach a page listing the programme, its seasons or how to sign up. Nothing is pre-loaded because of that.',
-     use:'At a school of two thousand, this is the highest-value hour on your calendar and the easiest to skip. Find out what runs, then add it as a commitment — clubs and intramurals count fully toward the social floor, unlike the gym.',
-     go:'https://www.trine.edu/campus-life/student-resource-guide.aspx'}
+    {n:'Intramural sports', ck:'verified', cite:'bRec',
+     d:'BYU runs intramural sport through Student Wellness. Leagues, seasons and sign-up windows are published there rather than anywhere I could read, so nothing is pre-loaded.',
+     use:'This is the highest-value hour on your calendar and the easiest to skip. Find out what runs, then add it as a commitment — intramurals count fully toward the social floor, unlike the gym.',
+     go:'https://studentwellness.byu.edu/'},
+    {n:'Cougar home games', ck:'reported', cite:'bFB26',
+     d:'All seven 2026 home football games are already loaded and checked against your week. The Iowa State game moved to Friday, October 9 at 8:15 p.m. — the only weeknight game on the schedule, and the one most likely to collide with something.',
+     use:'Whether student admission is included is set by Athletics and was not on a page I could reach. Check the ticket office before planning a Saturday around it.',
+     go:'https://byucougars.com/sports/football/schedule'}
   ].map(x=>'<div style="border:1px solid var(--line);border-radius:var(--r);padding:14px;background:var(--surface-2)">'
     +'<div class="row spread" style="align-items:baseline"><b style="font-size:13.5px">'+esc(x.n)+'</b>'+chip(x.ck)+'</div>'
     +'<p style="font-size:12.5px;color:var(--ink-2);margin-top:7px">'+esc(x.d)+'</p>'
@@ -4395,20 +4571,20 @@ function renderGames(){
       ? '<div class="stack">'+rows.map(gameRow).join('')+'</div>'
       : '<div class="empty">No home games loaded for '+esc(picked.map(k=>(SPORTS.find(s2=>s2.id===k)||{}).name).join(', '))
         +'. Only the football home schedule is pre-loaded — add games with the button above, or check the official schedule.'
-        +'<div class="row" style="justify-content:center;margin-top:11px"><a class="btn sm" href="https://trinethunder.com/calendar" target="_blank" rel="noopener">Official schedules ↗</a></div></div>');
+        +'<div class="row" style="justify-content:center;margin-top:11px"><a class="btn sm" href="https://byucougars.com/sports/football/schedule" target="_blank" rel="noopener">Official schedules ↗</a></div></div>');
 
   $('ticketInfo').innerHTML =
     '<div style="border:1px solid var(--line);border-radius:var(--r);padding:14px;background:var(--surface-2)">'
-    +'<div class="row spread" style="align-items:baseline"><b style="font-size:13.5px">Claim windows for 2026 football</b>'+chip('verified')+'</div>'
+    +'<div class="row spread" style="align-items:baseline"><b style="font-size:13.5px">Claiming a student ticket</b>'+chip('verified')+'</div>'
     +'<ul class="tight" style="margin-top:8px">'+CLAIM_WINDOWS.map(w=>'<li><b>'+esc(w.when)+'</b> — '+esc(w.label)+'</li>').join('')+'</ul>'
     +'<div class="note warn" style="margin-top:10px"><b>No page can claim a ticket for you.</b> You asked whether these could be reserved automatically — they cannot. Claiming runs through the university\u2019s ticketing system behind your login, and anything that tried to drive it on your behalf would be handling your credentials. What this does instead is tell you which window is open, which games clash with your week, and keep the checklist.</div>'
-    + citeLine('tThunder') +'</div>'
+    + citeLine('bAthletics') +'</div>'
     +'<div style="border:1px solid var(--line);border-radius:var(--r);padding:14px;background:var(--surface-2)">'
     +'<div class="row spread" style="align-items:baseline"><b style="font-size:13.5px">What your access covers</b>'+chip('verified')+'</div>'
     +'<ul class="tight" style="margin-top:8px">'+SPORTS.map(sp=>'<li><b>'+esc(sp.name)+'</b> — '+esc(sp.access)+'</li>').join('')+'</ul>'
-    + citeLine('tNCAA')
-    +'<div class="row" style="margin-top:10px"><a class="btn sm" href="https://trinethunder.com/" target="_blank" rel="noopener">Tickets ↗</a>'
-    +'<a class="btn sm" href="https://trinethunder.com/calendar" target="_blank" rel="noopener">All schedules ↗</a></div></div>';
+    + citeLine('bTickets')
+    +'<div class="row" style="margin-top:10px"><a class="btn sm" href="https://byucougars.com/" target="_blank" rel="noopener">Tickets ↗</a>'
+    +'<a class="btn sm" href="https://byucougars.com/sports/football/schedule" target="_blank" rel="noopener">All schedules ↗</a></div></div>';
 }
 
 function gameRow(g){
@@ -4437,14 +4613,15 @@ function gameRow(g){
    RENDER — 05 WORK
    ====================================================================== */
 const JOB_TEMPLATES = [
-  {title:'Library assistant (the LINK)', employer:'Trine University', onCampus:true, benefits:['Study during downtime','On campus','Quiet']},
-  {title:'Fitness centre desk', employer:'Trine University', onCampus:true, benefits:['On campus','Free facility access','Study during downtime']},
-  {title:'Dining services', employer:'Bon App\u00e9tit at Trine', onCampus:true, benefits:['Meal during shift','On campus','Flexible around classes']},
-  {title:'Student services office', employer:'Trine University', onCampus:true, benefits:['On campus','Resume relevant','Quiet']},
+  {title:'Library assistant (HBLL)', employer:'BYU', onCampus:true, benefits:['Study during downtime','On campus','Quiet']},
+  {title:'Dining services', employer:'BYU Dining', onCampus:true, benefits:['Meal during shift','On campus','Flexible around classes']},
+  {title:'Creamery on Ninth', employer:'BYU Dining', onCampus:true, benefits:['On campus','Staff discount','Short shifts']},
+  {title:'Wilkinson Center desk or office', employer:'BYU', onCampus:true, benefits:['On campus','Study during downtime','Central']},
+  {title:'Custodial or facilities', employer:'BYU', onCampus:true, benefits:['On campus','Early shifts','Consistent hours']},
   {title:'Lab or research assistant', employer:'Academic department', onCampus:true, benefits:['Resume relevant','Faculty contact','On campus']},
-  {title:'Thunder Ice Arena staff', employer:'Trine University', onCampus:true, benefits:['On campus','Short shifts','Social']},
-  {title:'Off-campus food service', employer:'Angola', onCampus:false, benefits:['Tips','Free drinks']},
-  {title:'Off-campus retail', employer:'Angola', onCampus:false, benefits:['Staff discount']}
+  {title:'TA or grader', employer:'Academic department', onCampus:true, benefits:['Resume relevant','Reinforces the course','Flexible']},
+  {title:'Off-campus food service', employer:'Provo', onCampus:false, benefits:['Tips','Free drinks']},
+  {title:'Off-campus retail', employer:'Provo', onCampus:false, benefits:['Staff discount']}
 ];
 const JOB_BENEFITS = ['Meal during shift','On campus','Flexible around classes','Study during downtime','Resume relevant',
                       'Faculty contact','Tips','Staff discount','Free facility access','Paid training','Social','Short shifts'];
@@ -4459,21 +4636,21 @@ function renderWork(){
   ]);
 
   $('wageTiles').innerHTML = [
-    tile('Student minimum', '—', '', 'Trine publishes none I could reach', 'warn'),
-    tile('All Trine roles', money(WAGE.avg), '/hr', 'Every job at Trine, not student ones'),
+    tile('BYU starting floor', money(WAGE.min), '/hr', 'BYU states $9\u2013$20 depending on the role', 'acc'),
+    tile('Reported median', money(WAGE.avg), '/hr', 'Aggregator figure for BYU student roles'),
     tile('Your spare time', rnd(d.freeWeek,1), 'h/wk', 'Above the social floor — a job comes out of this', d.freeWeek<10?'warn':'good')
   ].join('');
   $('wageSrc').innerHTML =
-    '<div style="margin-bottom:9px">'+chip('unverified')+' No Trine-specific minimum for student employment was published on a page I could reach, so there is no floor to score against \u2014 enter the rate you are actually offered.'+citeLine('tWorkStudy')+'</div>'
-   +'<div style="margin-bottom:9px">'+chip('reported')+' The $'+WAGE.avg+' median and the $'+WAGE.avgLo+'–$'+WAGE.avgHi+' band are a salary aggregator\u2019s figures for <b>all</b> Trine University jobs in Angola as of August 2026 — staff and faculty included, not student roles. A very loose ceiling, not a student rate.'+citeLine('wageZip')+'</div>'
-   +'<div>'+chip('reported')+' Trine publishes no typical student-hours figure I could reach, so set your own ceiling on the Life tab and jobs are scored against that.'+citeLine('tGuide')+'</div>';
+    '<div style="margin-bottom:9px">'+chip('verified')+' BYU states that student starting pay runs $'+WAGE.min+' to $'+WAGE.avgHi+' an hour depending on the job and your qualifications, so $'+WAGE.min+' is the floor an offer is scored against here.'+citeLine('bWhyWork')+'</div>'
+   +'<div style="margin-bottom:9px">'+chip('reported')+' The $'+WAGE.avg+' median and the $'+WAGE.avgLo+'–$15.14 band are a salary aggregator\u2019s reported figures for BYU student roles as of August 2026, not a BYU publication — a sanity check on an offer, not a guarantee.'+citeLine('wageZip')+'</div>'
+   +'<div>'+chip('reported')+' BYU publishes no typical student-hours figure I could reach, so set your own ceiling on the Life tab and jobs are scored against that.'+citeLine('bPayScale')+'</div>';
 
   const W=S.jobW;
   const wctl=(k,label,hint)=>'<div><label class="f">'+esc(label)+' — weight '+W[k]+'</label>'
     +'<input type="range" min="0" max="5" step="1" value="'+W[k]+'" data-jobw="'+k+'" style="padding:0">'
     +'<div class="hint">'+hint+'</div></div>';
   $('jobWeights').innerHTML =
-    wctl('pay','Pay per hour','Scored against the local band: 0 at $10/hr and 1.0 at $'+WAGE.avgHi+'. Neither end is a Trine figure.')
+    wctl('pay','Pay per hour','Scored against the local band: 0 at $10/hr and 1.0 at $'+WAGE.avgHi+'. Neither end is a BYU figure.')
    +wctl('flex','Flexibility','Your 1–5 rating of how easily shifts move around exams and illness.')
    +wctl('ben','Benefits','Counted from the boxes you tick on each job. Five or more scores full marks.')
    +wctl('exp','Student experience','Your 1–5 rating from talking to people who work there.')
@@ -4481,12 +4658,15 @@ function renderWork(){
 
   renderJobList(); renderJobChart(); renderJobRead();
   $('jobSources').innerHTML = [
-    {n:'Federal Work Study', ck:'verified', cite:'tWorkStudy',
-     d:'Trine states that Federal Work-Study lets undergraduates with financial need earn between $250 and $2,000 a year. Positions are hourly, the schedule is agreed with the department, and students are paid bi-weekly. Check whether work-study was in your aid package before planning around it.',
-     go:'https://www.trine.edu/admission-aid/tuition-aid/types-of-aid/work-study.aspx'},
-    {n:'Student Resource Guide', ck:'verified', cite:'tGuide',
-     d:'Trine\u2019s own guide to campus services. On-campus roles are described as sitting in the library, the fitness centre, the dining hall and the student services office \u2014 the four starting points loaded as templates above.',
-     go:'https://www.trine.edu/campus-life/student-resource-guide.aspx'}
+    {n:'Student job listings', ck:'verified', cite:'bStudentJobs',
+     d:'studentjobs.byu.edu is where on-campus openings are posted — everything from custodial and dining through clerical, lab and computing roles.',
+     go:'https://studentjobs.byu.edu/'},
+    {n:'Why work on campus', ck:'verified', cite:'bWhyWork',
+     d:'BYU states that student starting pay runs $9.00 to $20.00 an hour depending on the job and your qualifications, with higher ranges for positions that need specific experience or academic standing. There is a published hourly pay scale behind it.',
+     go:'https://finserve.byu.edu/why-work-on-campus'},
+    {n:'Student hourly pay scale', ck:'verified', cite:'bPayScale',
+     d:'Human Resources publishes the pay scale and job codes the campus rates are set from. Worth reading before you accept the first number an office offers you.',
+     go:'https://hrs.byu.edu/hourly-pay-scale'}
   ].map(x=>'<div style="border:1px solid var(--line);border-radius:var(--r);padding:14px;background:var(--surface-2)">'
     +'<div class="row spread" style="align-items:baseline"><b style="font-size:13.5px">'+esc(x.n)+'</b>'+chip(x.ck)+'</div>'
     +'<p style="font-size:12.5px;color:var(--ink-2);margin-top:7px">'+esc(x.d)+'</p>'
@@ -4507,7 +4687,7 @@ function renderJobList(){
             +(j.employer?'<span class="pill">'+esc(j.employer)+'</span>':'')
             +(j.onCampus?'<span class="pill" style="border-color:rgba(57,135,229,.4)">on campus</span>':'')
             +(j.have?'<span class="pill" style="border-color:rgba(12,163,12,.4);color:#4fc24f">you have this</span>':'')
-            +(i===0&&!j.blocked?'<span class="pill" style="border-color:var(--crimson);color:var(--crimson-lift)">best fit</span>':'')
+            +(i===0&&!j.blocked?'<span class="pill" style="border-color:var(--brand);color:var(--brand-lift)">best fit</span>':'')
           +'</div>'
           +'<div style="font-size:12.5px;color:var(--ink-2);margin-top:5px">'
             + money(+j.pay||0)+'/hr · '+rnd(j.hoursWeek,1)+'h a week · '+(j.days||[]).map(x=>DAYS[x]).join(' ')+' '+esc(fmtRange(toMin(j.start),toMin(j.end)))
@@ -4580,7 +4760,7 @@ function renderDeals(){
   feed('lFeed',[
     {k:'Feeds the General tab', v:'<b>'+money0(dl.total)+'</b> recovered shows in the money tile'},
     {k:'Reads from Dining',     v:'Off-campus food deals are only worth taking when a swipe is not the cheaper option'},
-    {k:'Reads from Courses',    v:'The engineering software group is flagged because Trine is an engineering school first'},
+    {k:'Reads from Courses',    v:'The software group is flagged because you have a C S or engineering course on your card'},
     {k:'Verification split',    v:'<b>'+money0(dl.totalVerified)+'</b> from quoted figures · <b>'+money0(dl.totalEst)+'</b> estimated or yours'}
   ]);
 
@@ -4628,7 +4808,7 @@ function dealRow(r){
         +(r.vEst?'<span class="pill" style="border-color:rgba(250,178,25,.4);color:var(--warn)">value estimated</span>':'')
         +(r.overridden?'<span class="pill" style="border-color:rgba(57,135,229,.4)">your figure</span>':'')
         +(c?'<a class="pill" href="'+esc(c.u)+'" target="_blank" rel="noopener" style="border:1px solid var(--line)">'+esc(c.o)+' ↗</a>':'')
-        +(r.go?'<a class="pill" href="'+esc(r.go)+'" target="_blank" rel="noopener" style="border-color:var(--crimson);color:var(--crimson-lift)">Go redeem ↗</a>':'')
+        +(r.go?'<a class="pill" href="'+esc(r.go)+'" target="_blank" rel="noopener" style="border-color:var(--brand);color:var(--brand-lift)">Go redeem ↗</a>':'')
       +'</div>'
       +'<div class="srcline">'+esc(r.vb)+'</div>'
     +'</div>'
@@ -4709,7 +4889,7 @@ function renderAssignments(){
         +'<td><input type="checkbox" data-asgdone="'+x.id+'"'+(x.done?' checked':'')+' aria-label="mark done"></td>'
         +'<td style="text-align:right"><button class="btn sm ghost" data-delasg="'+x.id+'">×</button></td></tr>';
       }).join('')+'</tbody></table>'
-    : '<div class="empty">No assignments yet. Add them here, or use the Moodle import on the Data tab.</div>';
+    : '<div class="empty">No assignments yet. Add them here, or use the Canvas import on the Data tab.</div>';
 }
 
 function renderStrain(){
@@ -4723,7 +4903,7 @@ function renderStrain(){
     +'<li><b>deadlines</b> = 0.12 per item due that week + 0.012 per point of graded weight due. From the assignment table above.</li>'
     +'<li><b>recovery</b> = (your average energy that week − 3) × 0.09. Zero for any week you did not check in.</li>'
     +'</ul></div>'
-    +'<div class="note crit" style="margin-top:10px"><b>What this is not.</b> It is an arithmetic index over hours and deadlines, and nothing more. It cannot see how you are actually doing, and it is not a screening tool for anything. If you are struggling, CAPS is free to you and the details are two panels down.</div>';
+    +'<div class="note crit" style="margin-top:10px"><b>What this is not.</b> It is an arithmetic index over hours and deadlines, and nothing more. It cannot see how you are actually doing, and it is not a screening tool for anything. If you are struggling, CAPS runs walk-in crisis hours and the details are two panels down.</div>';
 }
 
 function renderCheckin(){
@@ -4749,31 +4929,36 @@ function renderCheckin(){
 
 function renderSupport(){
   const items=[
-    {n:'Counseling Services', chipk:'verified', cite:'tCounsel',
-     body:'Three licensed mental health clinicians providing solutions-focused, short-term counselling. Trine states the service is free and confidential, for Main Campus students in Angola and the Brooks College of Health Professions in Fort Wayne.',
-     facts:[['Cost','Free'],['Confidential','Yes'],['Where','Main campus']],
-     go:'https://www.trine.edu/campus-life/support-and-wellness/counseling.aspx',
-     caveat:'Short-term and solutions-focused is what the source says, so ask at the first appointment what happens if you need longer than that.'},
-    {n:'Academic Success Center', chipk:'verified', cite:'tASC',
-     body:'A range of free services: academic coaching, tutoring, and one-to-one assistance.',
-     facts:[['Cost','Free'],['What','Coaching, tutoring, 1:1']],
-     go:'https://www.trine.edu/academics/success/student-success/academic-support-services.aspx',
-     caveat:'Hours were not on a page I could reach. Ask at the LINK, then enter the real hours as a commitment on the Life tab so the study planner works around them.'},
-    {n:'The Writing Center', chipk:'verified', cite:'tAcadRes',
-     body:'Help with writing, and with using computers for research or composing a paper. First floor of the LINK, inside the Rick L. and Vicki L. James University Center.',
-     facts:[['Where','LINK, first floor'],['Also here','Free coffee \u2014 Cup of Joe']],
-     go:'https://www.trine.edu/academics/success/index.aspx',
-     caveat:'The LINK also carries study areas and meeting rooms, which makes it the obvious place to spend the study blocks this planner generates.'},
-    {n:'Campus Health Center', chipk:'verified', cite:'tHealth',
-     body:'Run with Cameron Health. A licensed Nurse Practitioner and a Certified Medical Assistant. Services are confidential.',
-     facts:[['Where','Quest Hall, 1107 W. Maumee St'],['Hours','Mon\u2013Fri, 9 a.m.\u20134 p.m.']],
-     go:'https://www.trine.edu/campus-life/support-and-wellness/health-center.aspx',
-     caveat:'Whether visits carry a charge was not stated in the source I could reach. Ask before assuming either way.'},
-    {n:'The ARC and Thunder Ice Arena', chipk:'verified', cite:'tFacil',
-     body:'The Keith E. Busse/Steel Dynamics Athletic and Recreation Center carries an indoor 200-metre track, tennis courts and batting cages. Thunder Ice Arena adds weight and training rooms.',
-     facts:[['Where','Main campus / W. Maumee St']],
-     go:'https://trinethunder.com/sports/2024/5/30/copy-of-facilities.aspx',
-     caveat:'Student access terms were not published anywhere I could reach \u2014 check before assuming it is included. Gym time counts 30% toward the social floor on the Life tab either way.'}
+    {n:'Counseling and Psychological Services', chipk:'verified', cite:'bCaps',
+     body:'CAPS is on the top floor of the Wilkinson Center, 1500 WSC. Walk-in crisis hours run Monday to Friday, 8:00 a.m. to 4:15 p.m., subject to counsellor availability.',
+     facts:[['Where','1500 Wilkinson Student Center'],['Walk-in','Mon–Fri, 8:00–4:15'],['Phone','801-422-3035']],
+     go:'https://caps.byu.edu/',
+     caveat:'No fee was stated on the pages I could reach. Ask at the first appointment rather than assuming it is free or that it is not.'},
+    {n:'Research and Writing Center', chipk:'verified', cite:'bTutor',
+     body:'Free help with writing and research at any stage of a paper — from working out what the assignment is asking to tightening a final draft.',
+     facts:[['Cost','Free'],['Best used','Early, on the outline']],
+     go:'https://rwc.byu.edu/',
+     caveat:'Hours were not on a page I could reach. Look them up once, then enter them as a commitment on the Life tab so the study planner works around them.'},
+    {n:'Harold B. Lee Library', chipk:'verified', cite:'bLibrary',
+     body:'The main library, in the centre of campus just south of the Administration Building. Study space at every noise level, plus subject librarians for your specific field.',
+     facts:[['Where','1130 HBLL, centre of campus'],['Underused','Subject librarians']],
+     go:'https://lib.byu.edu/',
+     caveat:'The subject librarian is the part almost nobody uses and the part that saves the most time on a research paper.'},
+    {n:'Student Health Center', chipk:'verified', cite:'bHealth',
+     body:'General clinic and urgent care at 1750 N Wymount Terrace Dr, with Saturday urgent care during Fall and Winter.',
+     facts:[['Where','1750 N Wymount Terrace Dr'],['Hours','Mon–Fri 8:00 a.m.–5:30 p.m.'],['Saturday','Urgent care 8:00–11:30, Fall/Winter'],['Phone','801-422-5156']],
+     go:'https://health.byu.edu/',
+     caveat:'What a visit costs depends on your health plan and was not stated on the pages I could reach. Ask before assuming either way.'},
+    {n:'University Accessibility Center', chipk:'verified', cite:'bAccess',
+     body:'Formal accommodations for disability, chronic illness and mental health conditions.',
+     facts:[['Cost','Free'],['Timing','Register early in the term']],
+     go:'https://uac.byu.edu/',
+     caveat:'Accommodations are not applied retroactively. Registering in week two is worth far more than registering the week of a final.'},
+    {n:'Student Wellness and intramural sports', chipk:'verified', cite:'bRec',
+     body:'Intramural sport and wellness programming — the cheapest reliable way to keep the social floor on the Life tab above zero.',
+     facts:[['Where','Main campus']],
+     go:'https://studentwellness.byu.edu/',
+     caveat:'Whether facility access is included in your fees was not published anywhere I could reach. Gym time counts 30% toward the social floor here either way — intramurals count fully.'}
   ];
   $('supportList').innerHTML = items.map(i=>
     '<div class="panel" style="background:var(--surface-2);margin:0">'
@@ -4781,7 +4966,7 @@ function renderSupport(){
     +'<p style="font-size:13px;color:var(--ink-2);margin-top:8px">'+esc(i.body)+'</p>'
     +'<dl class="kv" style="margin-top:10px">'+i.facts.map(f=>'<dt>'+esc(f[0])+'</dt><dd>'+esc(f[1])+'</dd>').join('')+'</dl>'
     +(i.caveat?'<div class="note warn" style="margin-top:10px">'+esc(i.caveat)+'</div>':'')
-    +'<div class="row" style="margin-top:11px"><a class="btn sm" href="'+esc(i.go)+'" target="_blank" rel="noopener">Open \u2197</a></div>'
+    +'<div class="row" style="margin-top:11px"><a class="btn sm" href="'+esc(i.go)+'" target="_blank" rel="noopener">Open ↗</a></div>'
     + citeLine(i.cite)
     +'</div>').join('');
 }
@@ -4796,13 +4981,13 @@ function renderAnnouncements(){
       +(x.body?'<div style="font-size:12.5px;color:var(--ink-2);margin-top:4px">'+esc(x.body)+'</div>':'')
       +'<div class="u" style="margin-top:4px">'+esc(x.date||'')+(x.src?' · '+esc(x.src):'')+'</div></div>'
       +'<button class="btn sm ghost" data-delann="'+x.id+'">×</button></div>').join('')+'</div>'
-    : '<div class="empty">Nothing logged. Paste Moodle announcements on the Data tab, or add one by hand.</div>';
+    : '<div class="empty">Nothing logged. Paste Canvas announcements on the Data tab, or add one by hand.</div>';
 
   const feeds=[
-    {n:'Trine calendar of events', d:'The university\u2019s public events calendar.', u:CITE.tCalEvents.u, ck:'verified'},
-    {n:'Trine Thunder athletics', d:'Schedules for every sport. Trine competes in the MIAA as an NCAA Division III affiliate \u2014 men\u2019s basketball took the D-III national title in 2024, softball in 2025.', u:CITE.tThunder.u, ck:'verified'},
-    {n:'Academic calendar', d:'The authority on every date this planner has hard-coded. If one of mine disagrees with this, this one is right.', u:CITE.tCal.u, ck:'verified'},
-    {n:'myPortal', d:'Schedules, account information, financial aid.', u:CITE.tPortal.u, ck:'verified'}
+    {n:'BYU academic calendar', d:'The authority on every date this planner has hard-coded. If one of mine disagrees with this, this one is right.', u:CITE.bCal26.u, ck:'verified'},
+    {n:'BYU Cougars athletics', d:'Schedules for every sport. BYU competes in the Big 12; football is at LaVell Edwards Stadium and basketball at the Marriott Center.', u:CITE.bAthletics.u, ck:'verified'},
+    {n:'MyBYU', d:'Registration, your schedule and your progress toward graduation.', u:CITE.bMyMap.u, ck:'verified'},
+    {n:'Canvas', d:'Assignments, due dates and the calendar feed the importer on this tab reads.', u:CITE.bCanvas.u, ck:'verified'}
   ];
   $('eventSources').innerHTML = feeds.map(f=>
     '<div style="border:1px solid var(--line);border-radius:var(--r);padding:13px;background:var(--surface-2)">'
@@ -4848,7 +5033,7 @@ function renderRecs(){
   if(ci.length>=3){
     const avg=ci.reduce((s,c)=>s+(+c.energy||3),0)/ci.length;
     if(avg<=2.4) rec('crit','Your energy has been low for a week',
-      'Average '+rnd(avg,1)+'/5 across your last '+ci.length+' check-ins. That is the pattern the recovery term is meant to catch. Trine\u2019s Counseling Services are free and confidential \u2014 three licensed clinicians, details on the Academics tab.',
+      'Average '+rnd(avg,1)+'/5 across your last '+ci.length+' check-ins. That is the pattern the recovery term is meant to catch. BYU\u2019s Counseling Services are free and confidential \u2014 three licensed clinicians, details on the Academics tab.',
       'check-in history');
     const sl=ci.filter(c=>c.sleep!=null);
     if(sl.length>=3){
@@ -4861,7 +5046,7 @@ function renderRecs(){
   }
   if(d.deals.left>50)
     rec('good','About '+money0(d.deals.left)+' of value is still on the table',
-      'The on-campus group \u2014 free coffee in the LINK, the Academic Success Center, the Writing Center, Counseling \u2014 is the highest-confidence part of the list and costs nothing but the walk.',
+      'The on-campus group \u2014 the Research and Writing Center, the HBLL\u2019s subject librarians, CAPS, the Accessibility Center \u2014 is the highest-confidence part of the list and costs nothing but the walk.',
       'deals checklist');
 
   if(!out.length) rec('good','Nothing to recommend','Every check came back clean. Come back after a few more days of data.','all tabs');
@@ -4872,23 +5057,23 @@ function renderRecs(){
    RENDER — 06 DATA & SOURCES
    ====================================================================== */
 const SRC_KINDS=[
-  {id:'canvas-ics', n:'Moodle calendar feed (.ics)', hosts:['trine.edu','apps.trine.edu','moodle.trine.edu'],
-   how:'In Moodle open <b>Calendar</b>, click <b>Export calendar</b>, choose what to export, and copy the URL. It carries a private authtoken, so treat it like a password.', cite:'moodleIcal'},
-  {id:'canvas', n:'Moodle course page', hosts:['trine.edu','apps.trine.edu','moodle.trine.edu'],
-   how:'Copy the address of the course page or its grade report.', cite:'tMoodle'},
-  {id:'onegoiu', n:'myPortal page', hosts:['myportal.trine.edu','trine.edu'], how:'Copy the address of the myPortal page you keep coming back to.', cite:'tPortal'},
-  {id:'sis', n:'Class schedule', hosts:['myportal.trine.edu','trine.edu'],
-   how:'myPortal shows your schedule. Use it to confirm your meeting times.', cite:'tPortal'},
-  {id:'gradedist', n:'Course catalog entry', hosts:['trine.smartcatalogiq.com','trine.edu'],
-   how:'Find the course in the catalog and copy its URL so you can come back to it.', cite:'tCatalog'},
-  {id:'menu', n:'Dining menu', hosts:['trine.catertrax.com','trine.edu','cafebonappetit.com'],
-   how:'Open the Bon App\u00e9tit menu for Trine and copy the address.', cite:'tBonApp'},
-  {id:'events', n:'Events / athletics calendar', hosts:['trine.edu','trinethunder.com'], how:'Copy any calendar or schedule page.', cite:'tCalEvents'},
+  {id:'canvas-ics', n:'Canvas calendar feed (.ics)', hosts:['instructure.com','byu.instructure.com','byucanvas.byu.edu'],
+   how:'In Canvas open <b>Calendar</b>, click <b>Calendar Feed</b> in the right sidebar, and copy the URL. It contains a private token, so treat it like a password.', cite:'canvasIcal'},
+  {id:'canvas', n:'Canvas course page', hosts:['instructure.com','byu.instructure.com'],
+   how:'Copy the address of the course home page or the Assignments page.', cite:'bCanvas'},
+  {id:'onegoiu', n:'MyBYU page', hosts:['my.byu.edu','byu.edu'], how:'Copy the address of the MyBYU page you keep coming back to.', cite:'bMyMap'},
+  {id:'sis', n:'Class schedule', hosts:['my.byu.edu','byu.edu'],
+   how:'MyBYU shows your registered schedule. Use it to confirm your meeting times.', cite:'bMyMap'},
+  {id:'gradedist', n:'Course catalog entry', hosts:['catalog.byu.edu','byu.edu'],
+   how:'Find the course on catalog.byu.edu and copy its URL so you can come back to it.', cite:'bCatalog'},
+  {id:'menu', n:'Dining menu', hosts:['dining.byu.edu','byu.edu'],
+   how:'Open the BYU Dining page for the location you use and copy the address.', cite:'bDining'},
+  {id:'events', n:'Events / athletics calendar', hosts:['byu.edu','byucougars.com','calendar.byu.edu'], how:'Copy any calendar or schedule page.', cite:'bAthletics'},
   {id:'other', n:'Something else', hosts:[], how:'Any URL you want to keep next to your planner.', cite:null}
 ];
 const PASTE_KINDS=[
   {id:'auto', n:'Work it out from the content'},
-  {id:'canvas', n:'Moodle export from the bookmarklet'},
+  {id:'canvas', n:'Canvas export from the bookmarklet'},
   {id:'ics', n:'Calendar feed text (.ics)'},
   {id:'assignments', n:'Assignments — one per line'},
   {id:'announcements', n:'Announcements — one per line'}
@@ -4949,7 +5134,7 @@ function classifyUrl(url, kindId){
     else out.msg.push('Host '+u.hostname+' is recognised for this source type.');
   }
   if(kindId==='canvas-ics' && !/\.ics(\?|$)/i.test(u.pathname+u.search))
-    out.msg.push('This does not end in .ics — a Moodle calendar feed URL normally does. Check you copied the feed link and not the calendar page.');
+    out.msg.push('This does not end in .ics — a Canvas calendar feed URL normally does. Check you copied the feed link and not the calendar page.');
   if(/\/feeds\/calendars\//.test(u.pathname))
     out.msg.push('This looks like a calendar feed and may contain a private token. Do not share it.');
   return out;
@@ -4980,7 +5165,7 @@ async function testSource(s){
   parts.push(cls.known ? 'Host: recognised.' : 'Host: not recognised for this type.');
   if(pr.state==='answered'){ s.status='ok'; parts.push('Reachability: something answered. Note this is an opaque check — it cannot confirm you are authorised or that the content is what you expect.'); }
   else if(pr.state==='blocked'){ s.status='unknown'; parts.push('Reachability: could not be tested. '+pr.why); }
-  else if(pr.state==='timeout'){ s.status='bad'; parts.push('Reachability: timed out. '+pr.why+' Private Moodle feeds commonly fail here while working perfectly in your browser — open it with the button and judge for yourself.'); }
+  else if(pr.state==='timeout'){ s.status='bad'; parts.push('Reachability: timed out. '+pr.why+' Private Canvas feeds commonly fail here while working perfectly in your browser — open it with the button and judge for yourself.'); }
   else { s.status='bad'; parts.push('Reachability: failed. '+pr.why+' A cross-origin block looks identical to a dead link from inside a page, so open it manually before deciding it is broken.'); }
   s.note=parts.concat(cls.msg).join(' ');
   s.checkedAt=new Date().toLocaleString();
@@ -4994,51 +5179,58 @@ async function testSource(s){
    from this page cannot. It reads three documented endpoints and nothing
    else, writes nothing back, and puts the result on your clipboard. */
 function canvasBookmarkletSource(){
-  /* Moodle, not Canvas. This calls the same web service Moodle's own
-     course-overview block calls, so it works on Moodle 4.x where the
-     dashboard is rendered client-side and there is no course link in the
-     server HTML to scrape. Two DOM scrapes remain as fallbacks. Grades
-     still come from the rendered grade report, which is the only place
-     Moodle exposes them without an institution-issued token. */
-  return '(async()=>{var root=(window.M&&M.cfg&&M.cfg.wwwroot)||location.origin;var sk=(window.M&&M.cfg&&M.cfg.sesskey)||\'\';if(!sk){var a=document.querySelector(\'a[href*=\\\"sesskey=\\\"]\');if(a){var mm=a.href.match(/sesskey=([A-Za-z0-9]+)/);if(mm)sk=mm[1]}}if(!sk){var hi=document.querySelector(\'input[name=\\\"sesskey\\\"]\');if(hi)sk=hi.value}var P=function(h){return new DOMParser().parseFromString(h,\'text/html\')};var T=function(e){return e?e.textContent.replace(/\\s+/g,\' \').trim():\'\'};var num=function(t){var m=String(t).replace(/,/g,\'\').match(/-?\\d+(\\.\\d+)?/);return m?parseFloat(m[0]):null};var courses=[],how=\'\';var push=function(id,nm,cd,seen){if(id===\'1\'||seen[id])return;seen[id]=1;courses.push({id:id,name:nm,code:cd||\'\'})};try{if(sk){var svc=root+\'/lib/ajax/service.php?sesskey=\'+encodeURIComponent(sk)+\'&info=core_course_get_enrolled_courses_by_timeline_classification\';var body=JSON.stringify([{index:0,methodname:\'core_course_get_enrolled_courses_by_timeline_classification\',args:{offset:0,limit:0,classification:\'all\',sort:\'fullname\'}}]);try{var r=await fetch(svc,{method:\'POST\',credentials:\'same-origin\',headers:{\'Content-Type\':\'application/json\'},body:body});if(r.ok){var j=await r.json();if(j&&j[0]&&!j[0].error&&j[0].data&&j[0].data.courses){var sn={};j[0].data.courses.forEach(function(c){push(String(c.id),c.fullname||c.shortname||(\'Course \'+c.id),c.shortname,sn)});if(courses.length)how=\'Moodle web service\'}}}catch(e){}}if(!courses.length){var pages=[\'/my/courses.php\',\'/my/\',\'/course/index.php\'];for(var pi=0;pi<pages.length;pi++){var rr=await fetch(root+pages[pi],{credentials:\'same-origin\'});if(!rr.ok)continue;var d=P(await rr.text()),sn2={};Array.prototype.forEach.call(d.querySelectorAll(\'a[href*=\\\"course/view.php?id=\\\"]\'),function(a){var m=a.getAttribute(\'href\').match(/id=(\\d+)/);if(m)push(m[1],T(a)||(\'Course \'+m[1]),\'\',sn2)});if(courses.length){how=\'page scrape of \'+pages[pi];break}}}if(!courses.length){var sn3={};Array.prototype.forEach.call(document.querySelectorAll(\'a[href*=\\\"course/view.php?id=\\\"]\'),function(a){var m=a.getAttribute(\'href\').match(/id=(\\d+)/);if(m)push(m[1],T(a)||(\'Course \'+m[1]),\'\',sn3)});if(courses.length)how=\'links on the page you are on\'}if(!courses.length)throw new Error(\'Found no enrolled courses. sesskey was \'+(sk?\'found\':\'NOT found\')+\'. Open Moodle, sign in, go to Dashboard or My courses, then click this again.\');var out={source:\'moodle\',host:location.host,at:new Date().toISOString(),discovery:how,courses:[]};var empty=0;for(var i2=0;i2<courses.length;i2++){var c=courses[i2],items=[];var g=await fetch(root+\'/grade/report/user/index.php?id=\'+c.id,{credentials:\'same-origin\'});if(g.ok){var gd=P(await g.text());var tbl=gd.querySelector(\'table.user-grade\')||gd.querySelector(\'table.generaltable\');if(tbl){Array.prototype.forEach.call(tbl.querySelectorAll(\'tr\'),function(tr){var th=tr.querySelector(\'th\');if(!th)return;var name=T(th);if(!name||/^grade item$/i.test(name))return;var tds=tr.querySelectorAll(\'td\');if(!tds.length)return;var cl=Array.prototype.map.call(tds,function(td){return{c:(td.className||\'\'),t:T(td)}});var gr=cl.filter(function(x){return /column-grade/.test(x.c)})[0];var rg=cl.filter(function(x){return /column-range/.test(x.c)})[0];var wt=cl.filter(function(x){return /column-weight/.test(x.c)})[0];var max=null;if(rg&&rg.t){var p=rg.t.split(/[–—-]/);if(p.length>1)max=num(p[p.length-1])}items.push({name:name,score:gr?num(gr.t):null,points:max,weight:wt?num(wt.t):null,total:/course total/i.test(name)})})}}if(!items.length)empty++;out.courses.push({id:c.id,name:c.name,code:c.code||c.name,items:items})}var t=JSON.stringify(out);var msg=\'Thunder Command: read \'+out.courses.length+\' course(s) via \'+how+\'.\'+(empty?\'\\n\'+empty+\' had no readable grade table - nothing posted yet, or a theme this cannot read. They still import as courses.\':\'\');try{await navigator.clipboard.writeText(t);alert(msg+\'\\n\\nCopied. Paste it into Data & Sources.\')}catch(e){var w=window.open(\'\',\'_blank\');w.document.write(\'<textarea style=\\\"width:99%;height:90vh\\\">\'+t.replace(/</g,\'&lt;\')+\'</textarea>\');alert(msg+\'\\n\\nClipboard blocked - copy the text in the new tab instead.\')}}catch(e){alert(\'Thunder Command: \'+e.message)}})()';
+  return "(async()=>{" +
+    "var J=async function(u){var r=await fetch(u,{credentials:'same-origin',headers:{Accept:'application/json'}});" +
+      "if(!r.ok)throw new Error(u.split('?')[0]+' -> '+r.status);" +
+      "return JSON.parse((await r.text()).replace(/^while\\(1\\);/,''))};" +
+    "try{" +
+      "var cs=await J('/api/v1/courses?enrollment_state=active&per_page=100');" +
+      "var out={source:'canvas',host:location.host,at:new Date().toISOString(),courses:[]};" +
+      "for(var i=0;i<cs.length;i++){var c=cs[i],gs=[];" +
+        "try{gs=await J('/api/v1/courses/'+c.id+'/assignment_groups?include[]=assignments&include[]=submission&per_page=100')}catch(e){continue}" +
+        "out.courses.push({id:c.id,name:c.name,code:c.course_code,groups:gs.map(function(g){" +
+          "return{name:g.name,weight:g.group_weight,assignments:(g.assignments||[]).map(function(a){" +
+            "return{name:a.name,due:a.due_at,points:a.points_possible," +
+              "score:a.submission?a.submission.score:null," +
+              "submitted:a.submission?!!a.submission.submitted_at:false}})}})})}" +
+      "var t=JSON.stringify(out);" +
+      "try{await navigator.clipboard.writeText(t);alert('Cougar Command: copied '+out.courses.length+' courses. Paste it into Data & Sources.')}" +
+      "catch(e){var w=window.open('','_blank');w.document.write('<textarea style=\"width:99%;height:90vh\">'+t.replace(/</g,'&lt;')+'</textarea>');alert('Clipboard blocked - copy the text in the new tab instead.')}" +
+    "}catch(e){alert('Cougar Command: '+e.message+'\\n\\nOpen Canvas and sign in first, then click this on a Canvas page.')}})()";
 }
-
 function renderBookmarklet(){
   const href = 'javascript:' + encodeURIComponent(canvasBookmarkletSource());
   $('bookmarkletBox').innerHTML =
     '<div class="row" style="gap:14px;align-items:center;flex-wrap:wrap">'
       +'<a class="btn primary" draggable="true" href="'+href.replace(/"/g,'&quot;')+'" '
-      +'onclick="return false" style="cursor:grab;font-size:14px;padding:11px 20px">\u21f1 Send Moodle \u2192 Thunder</a>'
-      +'<span class="hint" style="margin:0;max-width:52ch">Drag that onto your bookmarks bar. Clicking it here does nothing on purpose \u2014 it only works on a Moodle page.</span>'
+      +'onclick="return false" style="cursor:grab;font-size:14px;padding:11px 20px">⇱ Send Canvas → Cougar</a>'
+      +'<span class="hint" style="margin:0;max-width:52ch">Drag that onto your bookmarks bar. Clicking it here does nothing on purpose — it only works on a Canvas page.</span>'
     +'</div>'
     +'<div class="grid g2" style="margin-top:16px">'
       +'<div><div class="sect-lbl">How to use it</div><ol class="tight" style="padding-left:19px">'
-        +'<li>Show your bookmarks bar, then drag the gold button onto it.</li>'
-        +'<li>Open Trine\u2019s Moodle and sign in.</li>'
-        +'<li>Click the bookmark. It reads your course list, then each course\u2019s grade report.</li>'
+        +'<li>Show your bookmarks bar, then drag the highlighted button onto it.</li>'
+        +'<li>Open <b>byu.instructure.com</b> and sign in.</li>'
+        +'<li>Click the bookmark. It reads your active courses and their assignment groups.</li>'
         +'<li>Come back here, paste into the box below, and press Import.</li>'
       +'</ol>'
-      +'<div class="note good" style="margin-top:10px"><b>What you get in one click.</b> Every course you are enrolled in, every graded item in it, and your score, the maximum and the weight wherever Moodle shows a weight column.</div></div>'
+      +'<div class="note good" style="margin-top:10px"><b>What you get in one click.</b> Every active course, every assignment group <em>with its weight</em>, every assignment with its due date and points, and your score on each one. That is the grade table and the deadline table filled in together.</div></div>'
       +'<div><div class="sect-lbl">What it does and does not do</div>'
       +'<ul class="tight">'
-        +'<li>Runs only on the Moodle page you click it on, using the session you are already signed in to. It never sees your password.</li>'
-        +'<li><b>Read-only.</b> It fetches pages, it submits nothing.</li>'
-        +'<li>Nothing is sent anywhere. The data goes to your clipboard, then into this page\u2019s local storage.</li>'
-        +'<li><b>It reads the rendered page, not an API.</b> Moodle has no student-facing JSON endpoint callable without a token, so this parses the grade report table. That is more fragile than an API \u2014 themes and versions move the markup. If a course comes back with no items, the report is laid out differently than expected; use the calendar feed or the paste box rather than trusting a blank.</li>'
-        +'<li>Weights only appear if your instructor uses a weighted setup and Moodle is showing the weight column.</li>'
+        +'<li>Runs only on the Canvas page you click it on, using the session you are already signed in to. It never sees your password.</li>'
+        +'<li><b>Read-only.</b> Three GET requests, no writes, nothing submitted.</li>'
+        +'<li>Nothing is sent anywhere. The data goes to your clipboard and then into this page\u2019s local storage.</li>'
+        +'<li>Caps at 100 courses and 100 assignments per group. Past that, Canvas paginates and this takes the first page.</li>'
+        +'<li>Weights only exist if your instructor uses weighted assignment groups. If a course comes in with 0% weights, that course is scored on raw points and you should leave the weights blank.</li>'
       +'</ul>'
-      + citeLine('moodleGrades','Report this reads:') + citeLine('tMoodle')
+      + citeLine('canvasAG','Endpoint and fields:') + citeLine('canvasCourses')
       +'</div>'
     +'</div>'
     +'<div class="divider"></div>'
-    +'<div class="note acc"><b>The steadier route is the calendar feed.</b> Moodle exports an iCal feed of your deadlines \u2014 Calendar, then Export calendar, then copy the URL \u2014 and the paste box below reads .ics directly. It carries dates rather than grades, but it will not break when a theme changes.'
-    + citeLine('moodleIcal','How to export it:')+'</div>'
-    +'<div class="note warn" style="margin-top:10px"><b>On reading a screen recording instead.</b> It cannot work, and I would rather say so than ship something that half-works: no OCR engine fits in a single HTML file, video frames of a grade table decode with errors that stay invisible until your GPA is wrong, and it is strictly worse than reading the page you are already signed in to.</div>';
+    +'<div class="note warn"><b>On reading a screen recording instead.</b> You asked whether that could work. Half of it can, and the split is worth knowing. Reading a <em>schedule</em> off a picture is now built — the screenshot scanner below runs a real OCR engine in the browser — because a timetable is a coarse grid where a misread is visible at a glance and every row is confirmed by hand before it is saved. Reading a <em>grade table</em> that way is a different proposition: OCR turns 78.9 into 78.3 silently, and you would not notice until your GPA was wrong. So grades still come from the bookmarklet above, which returns exact numbers from the API rather than guesses from pixels.</div>';
 }
 
-
 /* ======================================================================
-   SHARED SCHEDULE MINER — used by the myPortal importer and the screenshot
+   SHARED SCHEDULE MINER — used by the MyBYU importer and the screenshot
    scanner alike. Both hand it text (typed, copied, or OCR'd) and get back
    candidate MEETINGS: a course code, a type, days, a start/end time, and
    the raw fragment it came from. Nothing here is trusted on its own —
@@ -5083,13 +5275,27 @@ function mineDays(str){
   });
   return [...found].sort((a,b)=>a-b);
 }
-const TIME_RANGE_RE = /(\d{1,2})(?::(\d{2}))?\s?([ap]\.?m\.?)?\s*[-–—to]{1,3}\s*(\d{1,2})(?::(\d{2}))?\s?([ap]\.?m\.?)?/i;
+/* BYU registration screens write "10:00a - 10:50a": a bare a/p, no "m".
+   The (?![a-z]) stops the bare form swallowing the first letter of a word. */
+const MERIDIEM = '(?:[ap]\\.?m\\.?|[ap](?![a-z]))';
+const TIME_RANGE_RE = new RegExp('\\b(\\d{1,2})(?::(\\d{2}))?\\s?('+MERIDIEM+')?\\s*[-–—to]{1,3}\\s*(\\d{1,2})(?::(\\d{2}))?\\s?('+MERIDIEM+')?','gi');
+/* Scans for the first candidate that resolves. A BYU row leads with its
+   section number ("C S 142 - 002"), which looks like a range and is not
+   one, so taking only the first regex hit loses the real time. */
 function mineTimeRange(str){
-  const m = str.match(TIME_RANGE_RE);
-  if(!m) return null;
+  TIME_RANGE_RE.lastIndex = 0;
+  let m;
+  while((m = TIME_RANGE_RE.exec(str))){
+    const hit = timeRangeFrom(m);
+    if(hit) return hit;
+  }
+  return null;
+}
+function timeRangeFrom(m){
   let [,h1,m1,ap1,h2,m2,ap2] = m;
-  ap2 = (ap2||'').toLowerCase().replace(/\./g,'');
-  ap1 = (ap1||'').toLowerCase().replace(/\./g,'');
+  const meridiem = x => { x=(x||'').toLowerCase().replace(/\./g,''); return x==='a'?'am':x==='p'?'pm':x; };
+  ap2 = meridiem(ap2);
+  ap1 = meridiem(ap1);
   if(!ap1 && ap2) ap1 = ap2;               /* "9-10:30am" shares the meridiem */
   if(!ap1 && !ap2) return null;             /* no am/pm anywhere: too ambiguous to guess */
   const to24 = (h,ap)=>{ h=+h; if(ap==='pm' && h!==12) h+=12; if(ap==='am' && h===12) h=0; return h; };
@@ -5098,10 +5304,13 @@ function mineTimeRange(str){
   if(!(b>a) || b-a>360) return null;        /* a class over 6h is more likely a bad parse than real */
   return {a, b};
 }
-/* A course code, generously: 2-5 letters, optional dash, optional single
-   trailing subject letter, then a 3-5 digit number. Matches "CS 24000",
-   "MATH 211", "BUS-X101". */
-const COURSE_CODE_RE = /\b(?!(?:LEC|LAB|DIS|REC|SEM|STD|SEC|SECTION|CLASS|ROOM|BLDG|BUILDING|HALL|FLOOR)\b)([A-Z]{2,5})[-\s]?([A-Z]\s?)?(\d{3,5}[A-Z]?)\b/;
+/* A BYU course code: a 1-5 letter subject, optionally a second 1-4 letter
+   token because BYU subjects contain spaces, then a mandatory separator and
+   a 3-digit number with an optional trailing letter. Matches "C S 142",
+   "REL A 275", "A HTG 100", "MATH 112", "PHSCS 121", "MUSIC 160R".
+   The separator is mandatory on purpose: without it a room like "JFSB B037"
+   parses as a course. */
+const COURSE_CODE_RE = /\b(?!(?:LEC|LAB|DIS|REC|SEM|STD|SEC|SECTION|CLASS|ROOM|BLDG|BUILDING|HALL|FLOOR|MW|MWF|TTH|MTWTHF|AM|PM)\b)([A-Z]{1,5})(?:\s([A-Z]{1,4}))?[\s-]+(\d{3}[A-Z]?)\b/;
 const MEETING_TYPE_RE = /\b(LEC|LECTURE|LAB|LABORATORY|DIS|DISC|DISCUSSION|REC|RECITATION|SEM|SEMINAR|STD|STUDIO)\b/i;
 const TYPE_NORMALISE = {LECTURE:'LEC',DIS:'DIS',DISC:'DIS',DISCUSSION:'DIS',REC:'REC',RECITATION:'REC',
   LABORATORY:'LAB',SEM:'SEM',SEMINAR:'SEM',STD:'STD',STUDIO:'STD'};
@@ -5113,14 +5322,21 @@ function mineScheduleText(text, srcTag){
   for(let i=0;i<lines.length;i++){
     const cm = lines[i].match(COURSE_CODE_RE);
     if(!cm) continue;
-    const rawCode = (cm[1]+'-'+(cm[2]||'').trim()+' '+cm[3]).replace(/-\s+/,'-').replace(/\s+/g,' ').trim()
-      .replace(/^([A-Z]{2,5})- (\d)/,'$1 $2');            /* no subject letter: "MATH- 211" -> "MATH 211" */
+    const rawCode = (cm[1]+' '+(cm[2]||'')+' '+cm[3]).replace(/\s+/g,' ').trim();
     const code = canonicalizeCode(rawCode);
     /* days/time can be on this line or the next couple — registration
        screens routinely wrap one meeting across 2-3 short lines */
-    const window2 = [lines[i], lines[i+1]||'', lines[i+2]||''].join(' ');
-    const days = mineDays(window2);
-    const tr = mineTimeRange(window2);
+    /* Registration screens sometimes wrap one meeting across 2-3 short
+       lines, so a window is read when it is needed. BYU puts a whole
+       section on one line, and reading ahead there drags the NEXT course's
+       days and room into this row \u2014 so the line alone wins whenever it
+       already carries both a day set and a time. */
+    const self = lines[i];
+    const selfDays = mineDays(self), selfTr = mineTimeRange(self);
+    const window2 = (selfDays.length && selfTr) ? self
+                  : [lines[i], lines[i+1]||'', lines[i+2]||''].join(' ');
+    const days = (selfDays.length && selfTr) ? selfDays : mineDays(window2);
+    const tr   = (selfDays.length && selfTr) ? selfTr   : mineTimeRange(window2);
     const typeM = window2.match(MEETING_TYPE_RE);
     out.push({
       id: uid(), code, type: normType(typeM && typeM[1]),
@@ -5155,13 +5371,20 @@ function canonicalizeCode(code){
    already on the map, checked against the same text window a meeting was
    mined from. Deliberately not fuzzy — a wrong guess is worse than none. */
 const BLDG_KEYWORDS = {
-  fawick:'FAWICK', best:'BEST HALL', juc:'JAMES', link:'LINK',
-  whitney:'WHITNEY', depot:'DEPOT', storms:'A-BREWING', bean:'BEAN COUNTER',
-  arc:'ARC', ice:'THUNDER ICE', health:'QUEST', asc:'SUCCESS CENTER'
+  hbll:'LEE LIBRARY', wilk:'WILKINSON', jfsb:'SMITH BUILDING', tmcb:'TALMAGE',
+  marb:'MARTIN BUILDING', jkb:'KNIGHT BUILDING', cannon:'CANNON', cougareat:'COUGAREAT',
+  creamery:'CREAMERY', marriott:'MARRIOTT CENTER', les:'LAVELL EDWARDS',
+  caps:'COUNSELING', health:'HEALTH CENTER', uac:'ACCESSIBILITY'
 };
+/* A BYU room reads as an abbreviation plus a number \u2014 "TMCB 1170",
+   "JFSB B037" \u2014 so the abbreviations are matched on a word boundary,
+   separately from the long names above. Only unambiguous ones are listed:
+   a two-letter abbreviation would fire on ordinary prose. */
+const BLDG_ABBREV = {tmcb:'TMCB', jfsb:'JFSB', jkb:'JKB', marb:'MARB', hbll:'HBLL', wilk:'WSC'};
 function mineBuilding(text){
   const t = String(text||'').toUpperCase();
   for(const id in BLDG_KEYWORDS){ if(t.includes(BLDG_KEYWORDS[id])) return id; }
+  for(const id in BLDG_ABBREV){ if(new RegExp('\\b'+BLDG_ABBREV[id]+'\\b').test(t)) return id; }
   return '';
 }
 
@@ -5231,7 +5454,7 @@ function commitMeetingCandidates(mountId){
     + ' Every one is marked unconfirmed \u2014 check it on the Courses tab.', 'good');
 }
 
-/* Runs the shared miner over whatever is in the myPortal paste box. */
+/* Runs the shared miner over whatever is in the MyBYU paste box. */
 function scanStellicText(){
   const raw = $('stellicPaste').value.trim();
   if(!raw){ $('stellicMsg').innerHTML='<span style="color:#e2645f">Paste something first.</span>'; return; }
@@ -5247,10 +5470,10 @@ function scanStellicText(){
   renderMeetingCandidates('stellicResults', rows, {emptyMsg:'Nothing recognisable in that text.'});
 }
 
-/* ------------------------------------------------------ myPortal import ---
-   Trine documents no student-facing API for myPortal, so this does not
+/* ------------------------------------------------------ MyBYU import ---
+   BYU documents no student-facing API for MyBYU, so this does not
    pretend to call one. The bookmarklet copies the visible text of the
-   myPortal tab you are on (or just your selection, if you made one) and
+   MyBYU tab you are on (or just your selection, if you made one) and
    hands it to the shared miner, exactly as if you had copied it yourself. */
 function stellicBookmarkletSource(){
   return "(()=>{" +
@@ -5260,13 +5483,13 @@ function stellicBookmarkletSource(){
       "var out={source:'stellic-text',host:location.host,at:new Date().toISOString(),text:text};" +
       "var t=JSON.stringify(out);" +
       "navigator.clipboard.writeText(t).then(function(){" +
-        "alert('Crimson Command: copied the visible text of this page. Paste it into Data & Sources.');" +
+        "alert('Cougar Command: copied the visible text of this page. Paste it into Data & Sources.');" +
       "}).catch(function(){" +
         "var w=window.open('','_blank');" +
         "w.document.write('<textarea style=\"width:99%;height:90vh\">'+t.replace(/</g,'&lt;')+'</textarea>');" +
         "alert('Clipboard blocked - copy the text in the new tab instead.');" +
       "});" +
-    "}catch(e){alert('Crimson Command: '+e.message);}" +
+    "}catch(e){alert('Cougar Command: '+e.message);}" +
   "})()";
 }
 function renderStellicBookmarklet(){
@@ -5275,22 +5498,22 @@ function renderStellicBookmarklet(){
   box.innerHTML =
     '<div class="row" style="gap:14px;align-items:center;flex-wrap:wrap">'
       +'<a class="btn primary" draggable="true" href="'+href.replace(/"/g,'&quot;')+'" '
-      +'onclick="return false" style="cursor:grab;font-size:14px;padding:11px 20px">⇱ Copy from myPortal</a>'
-      +'<span class="hint" style="margin:0;max-width:52ch">Drag onto your bookmarks bar. On the myPortal tab showing your schedule, optionally select just that area first, then click it.</span>'
+      +'onclick="return false" style="cursor:grab;font-size:14px;padding:11px 20px">⇱ Copy from MyBYU</a>'
+      +'<span class="hint" style="margin:0;max-width:52ch">Drag onto your bookmarks bar. On the MyBYU tab showing your schedule, optionally select just that area first, then click it.</span>'
     +'</div>'
     +'<div class="grid g2" style="margin-top:16px">'
       +'<div><div class="sect-lbl">How to use it</div><ol class="tight" style="padding-left:19px">'
-        +'<li>Open <b>myportal.trine.edu</b> and sign in.</li>'
-        +'<li>Go to <b>Schedule Term</b> — the tab that shows your sections and meeting times.</li>'
+        +'<li>Open <b>my.byu.edu</b> and sign in.</li>'
+        +'<li>Open your <b>class schedule</b> — the page listing your sections with their days, times and rooms.</li>'
         +'<li>Optional: click-drag to select just the schedule area. A cleaner selection means fewer rows to fix.</li>'
         +'<li>Click the bookmarklet, then paste below and press Scan text.</li>'
       +'</ol></div>'
       +'<div><div class="sect-lbl">What it actually does</div><ul class="tight">'
-        +'<li><b>This is not an API call.</b> Trine documents no student API for myPortal, so there is nothing to call on your behalf. This reads the page you are already looking at.</li>'
-        +'<li>Read-only. It never types, clicks, or submits anything on the myPortal page.</li>'
+        +'<li><b>This is not an API call.</b> BYU documents no student API for MyBYU, so there is nothing to call on your behalf. This reads the page you are already looking at.</li>'
+        +'<li>Read-only. It never types, clicks, or submits anything on the MyBYU page.</li>'
         +'<li>Because it is reading rendered text rather than structured data, the miner below is a best-effort regex pass \u2014 every row it finds is editable and nothing is added until you press the commit button.</li>'
       +'</ul>'
-      + citeLine('stellicIU') + citeLine('stellicReg','Schedule Term / registration rollout:')
+      + citeLine('stellicIU') + citeLine('stellicReg','Where the course itself is defined:')
       +'</div>'
     +'</div>';
 }
@@ -5301,7 +5524,7 @@ function renderStellicBookmarklet(){
    stays a single HTML document). The image never leaves the browser: OCR
    runs client-side, nothing is uploaded. Grid calibration (day headers +
    hour axis) turns word positions into real meetings; when calibration
-   fails, it falls back to the same text miner the myPortal box uses.
+   fails, it falls back to the same text miner the MyBYU box uses.
    ====================================================================== */
 let __tesseractLoad = null;
 function loadTesseractLib(){
@@ -5324,7 +5547,7 @@ function initShotPicker(){
   const drop = $('shotDrop'), file = $('shotFile');
   if(!drop || !file) return;
   drop.addEventListener('click', ()=> file.click());
-  drop.addEventListener('dragover', e=>{ e.preventDefault(); drop.style.borderColor='var(--crimson)'; });
+  drop.addEventListener('dragover', e=>{ e.preventDefault(); drop.style.borderColor='var(--brand)'; });
   drop.addEventListener('dragleave', ()=>{ drop.style.borderColor=''; });
   drop.addEventListener('drop', e=>{
     e.preventDefault(); drop.style.borderColor='';
@@ -5491,7 +5714,7 @@ function parsePaste(){
   let kind=$('pasteKind').value;
   if(!raw){ $('parsePreview').className='empty'; $('parsePreview').textContent='Nothing to parse — the box is empty.'; $('btnCommit').disabled=true; parsed=null; return; }
   if(kind==='auto'){
-    if(/"source"\s*:\s*"(canvas|moodle)"/.test(raw)) kind='canvas';
+    if(/"source"\s*:\s*"canvas"/.test(raw)) kind='canvas';
     else if(/BEGIN:VCALENDAR/i.test(raw)) kind='ics';
     else if(/\|/.test(raw)) kind='assignments';
     else kind='announcements';
@@ -5500,18 +5723,7 @@ function parsePaste(){
   if(kind==='canvas'){
     let o=null;
     try{ o=JSON.parse(raw); }catch(e){ warn.push('That is not valid JSON — copy the whole clipboard contents, including the outer braces.'); }
-    if(o && o.source!=='canvas' && o.source!=='moodle') warn.push('This JSON did not come from the bookmarklet, so the fields may not line up.');
-    /* Moodle arrives as flat grade items rather than Canvas assignment
-       groups; normalise it into the same shape before the loop below. */
-    if(o && o.source==='moodle' && Array.isArray(o.courses)){
-      /* Moodle's user report is flat: one row per graded item, each with its
-         own weight. Map each item to its own group so the weight and the
-         score both land in the grade table. */
-      o.courses = o.courses.map(c=>({...c, groups:(c.items||[])
-        .filter(it=>!it.total)
-        .map(it=>({name:it.name, weight:(it.weight!=null?it.weight:0),
-                   assignments:[{name:it.name, due:null, points:it.points, score:it.score}]}))}));
-    }
+    if(o && o.source!=='canvas') warn.push('This JSON did not come from the bookmarklet, so the fields may not line up.');
     if(o && Array.isArray(o.courses)){
       o.courses.forEach(c=>{
         const code = matchCourse(c.code||'') || matchCourse(c.name||'') || (c.code||c.name||'').trim();
@@ -5578,7 +5790,7 @@ function parsePaste(){
   pv.innerHTML = (warn.length? '<div class="note warn" style="margin-bottom:10px">'+warn.slice(0,4).map(esc).join('<br>')+'</div>' : '')
     + (items.length
       ? '<div class="row" style="margin-bottom:9px"><span class="pill">'+items.length+' item'+(items.length===1?'':'s')+'</span>'
-        +'<span class="pill">as '+esc(kind==='canvas'?'Moodle export':(kind==='ics'?'assignments (from calendar)':kind))+'</span>'
+        +'<span class="pill">as '+esc(kind==='canvas'?'Canvas export':(kind==='ics'?'assignments (from calendar)':kind))+'</span>'
         +(kind==='canvas'?'<span class="pill">'+items.filter(i=>i.type==='weight').length+' weights</span>'
             +'<span class="pill">'+items.filter(i=>i.score!=null).length+' scored</span>':'')
         +'<span class="pill">'+items.filter(i=>i.code&&S.courses.some(c=>c.code===i.code)).length+' matched to your courses</span></div>'
@@ -5603,8 +5815,8 @@ function matchCourse(text){
     const bare=c.code.toUpperCase().replace(/[^A-Z0-9]/g,'');
     if(t.replace(/[^A-Z0-9]/g,'').includes(bare)) return c.code;
   }
-  const m=t.match(/\b([A-Z]{2,5})[-\s]?([A-Z])?\s?(\d{3,5})\b/);
-  return m ? (m[1]+'-'+(m[2]||'')+' '+m[3]).replace('- ',' ') : '';
+  const m=t.match(COURSE_CODE_RE);
+  return m ? canonicalizeCode((m[1]+' '+(m[2]||'')+' '+m[3]).replace(/\s+/g,' ').trim()) : '';
 }
 
 function renderStorage(){
@@ -5628,18 +5840,16 @@ function renderCitations(){
   }).join('');
 
   $('gaps').innerHTML='<ul class="tight" style="color:var(--ink-2)">'
-   +'<li><b>No courses ship with this build.</b> No Trine course descriptions, credit hours or prerequisites were researched, so the catalog behind the Courses tab is empty and every course you add starts blank. That is deliberate: a description I could not cite would be worse than none.</li>'
-   +'<li><b>Credit-hour and grading conventions.</b> The 2.0 study-hours-per-credit default and the 4.0 grade scale with 97/93/90 cutoffs are common conventions, <em>not</em> verified Trine policy. Check the catalog and change them if yours differ.</li>'
-   +'<li><b>Fall 2026 finals dates.</b> Classes begin August 24, Thanksgiving break runs November 25\u201327 and classes end December 19 \u2014 all from Trine\u2019s calendar. The finals window itself I could not read, so the December 14 start is an assumption and the burn-down and strain curves inherit it.</li>'
-   +'<li><b>Meal plan prices.</b> Trine requires a 10 or 19-meal plan from Bon App\u00e9tit and the student ID is the meal card. No price is published on a page I could reach, so nothing is pre-filled.</li>'
-   +'<li><b>Dining hall stations.</b> Whitney Commons, The Depot and the two coffee shops are verified as locations. Which stations each runs is not, so every one starts with everything switched on \u2014 untick what is not there.</li>'
-   +'<li><b>Food nutrition values.</b> Reference values for standard portions from published USDA-derived charts, not Bon App\u00e9tit\u2019s data. Every value is editable and the real menu is linked. The allergy filter is a planning aid and knows nothing about cross-contact.</li>'
-   +'<li><b>Athletics schedules and ticket policy.</b> No Trine home schedule was reachable, so none is pre-loaded, and Division III admission practice varies by school \u2014 I did not verify Trine\u2019s. Ask Athletics.</li>'
-   +'<li><b>Student wages.</b> No Trine minimum for student employment was published anywhere I could reach. The $13.73\u2013$23.17 band is an aggregator figure covering <em>all</em> Trine jobs including staff and faculty, so it is not a student rate.</li>'
-   +'<li><b>How the Moodle importer finds your courses.</b> It calls the same web service Moodle’s own dashboard calls, authenticated by your signed-in session and the page’s sesskey — not a scrape. That matters because Moodle 4 builds the dashboard in the browser, so the older approach of reading the page HTML found nothing at all. If the service is unavailable it falls back to reading the page, and the alert tells you which route it used.</li>'
-   +'<li><b>Grades still come from rendered HTML.</b> Moodle exposes no student-facing grade JSON without an institution-issued token, so the grade report itself is parsed. Themes and versions move that markup: if a course imports with no items, believe the blank rather than assuming a zero. Courses with nothing posted yet still import as courses.</li>'
-   +'<li><b>Job and instructor ratings.</b> User input by design. At a school of this size there is no public dataset for either, and inventing one was not an option.</li>'
-   +'<li><b>Walking times.</b> Not fetched \u2014 routing services are unreachable from the environment this was built in. The page works out which routes your timetable needs and hands you the Google Maps link for each.</li>'
+   +'<li><b>The course catalog is a sample, not the whole catalog.</b> Sixteen BYU courses ship with credit hours and descriptions taken from catalog.byu.edu and from published MAP sheets. BYU publishes no downloadable section export I could reach, so there is no term-by-term schedule of classes embedded here — use the live search on the Courses tab, which hands your query straight to catalog.byu.edu.</li>'
+   +'<li><b>Credit-hour and grading conventions.</b> The 2.0 study-hours-per-credit default and the 4.0 grade scale with 97/93/90 cutoffs are common conventions, <em>not</em> verified BYU policy. Check your syllabus and the catalog, and change them if yours differ.</li>'
+   +'<li><b>Fall 2026 dates.</b> Classes begin September 2, the last day of instruction is December 10, December 11 is Exam Preparation Day and finals run December 12–17, from BYU’s 2026 academic calendar. If the calendar and this page ever disagree, the calendar is right.</li>'
+   +'<li><b>Meal plan prices.</b> Open Door and Dining Plus at $2,730 a semester, True Blue at $500 or $800, and EZ Dining at $100/$150/$200 a month all come from secondary write-ups rather than a BYU price page I could reach. The plan <em>structures</em> are from BYU Dining. Enter what you were actually charged.</li>'
+   +'<li><b>Dining hall stations.</b> Cannon Commons, the Cougareat and the Creamery on Ninth are verified as locations, and Cannon Commons is verified as six-station all-you-care-to-eat. Exactly which stations run on a given day is not, so every hall starts with everything switched on — untick what is not there.</li>'
+   +'<li><b>Food nutrition values.</b> Reference values for standard portions from published USDA-derived charts, not BYU Dining’s own item data. Every value is editable. The allergy filter is a planning aid and knows nothing about cross-contact in a real kitchen.</li>'
+   +'<li><b>Athletics.</b> All seven 2026 home football games are loaded from the published Big 12 schedule. Whether student admission is included, and how tickets are claimed, is set by Athletics and was not on a page I could reach — ask the ticket office.</li>'
+   +'<li><b>Student wages.</b> BYU states student starting pay runs $9–$20/hr. The $13.46–$15.14 band and $14.21 median are a salary aggregator’s reported figures, not a BYU publication — a sanity check on an offer, not a guarantee.</li>'
+   +'<li><b>Job and instructor ratings.</b> User input by design. BYU publishes no grade-distribution database I could reach, and inventing one was not an option.</li>'
+   +'<li><b>Walking times.</b> Not fetched — routing services are unreachable from the environment this was built in. The page works out which routes your timetable needs and hands you the Google Maps link for each. Buildings without a verified street address are marked and fall back to a name search.</li>'
    +'</ul>';
 
 }
@@ -5778,7 +5988,7 @@ document.addEventListener('change', e=>{
     if(a){ a.done=t.checked; save(); renderAll(); } return;
   }
   if(t.dataset.hallst!==undefined){
-    const h=S.dining.hall||'whitney';
+    const h=S.dining.hall||'cannon';
     S.dining.halls[h]=S.dining.halls[h]||{};
     S.dining.halls[h][t.dataset.hallst]=t.checked;
     save(); derive(); renderFood(); return;
@@ -5922,13 +6132,13 @@ document.addEventListener('click', e=>{
       toast('Plan rebuilt. The Schedule tab already shows it.','good'); break;
     case 'btnAddCourse': addCourseDialog(); break;
     case 'btnLiveCourseSearch': {
-      const q = ($('bldgSearch2')||{}).value.trim() || 'Bloomington';
-      window.open('https://www.google.com/search?q='+encodeURIComponent('site:trine.smartcatalogiq.com OR site:trine.edu \"'+q+'\" Trine University course'), '_blank', 'noopener');
+      const q = ($('bldgSearch2')||{}).value.trim() || 'Provo';
+      window.open('https://www.google.com/search?q='+encodeURIComponent('site:catalog.byu.edu OR site:byu.edu \"'+q+'\" BYU course'), '_blank', 'noopener');
       break; }
     case 'btnBldgSearch': {
       const q = ($('bldgFreeSearch')||{}).value.trim();
       if(!q){ toast('Type a building name first.','warn'); break; }
-      window.open(mapsUrl(S.meta.dormAddr, q+', Trine University, Angola, IN'), '_blank', 'noopener');
+      window.open(mapsUrl(S.meta.dormAddr, q+', Brigham Young University, Provo, UT'), '_blank', 'noopener');
       break; }
     case 'btnSchedAll':
       S.ui.layers={class:true,study:true,meal:true,commit:true,work:true,game:true};
@@ -6062,7 +6272,7 @@ function addCommitDialog(){
     +'<div style="grid-column:1/-1" id="ckDaysWrap"><label class="f">Days</label>'+dayPicker('ckDay',[])+'</div>'
     +'<div><label class="f">Start</label><input type="time" id="ckS" value="17:30"></div>'
     +'<div><label class="f">End</label><input type="time" id="ckE" value="19:00"></div>'
-    +'<div style="grid-column:1/-1"><label class="f">Where / note</label><input id="ckNote" placeholder="The ARC, Thunder Ice Arena, a club room…"></div>'
+    +'<div style="grid-column:1/-1"><label class="f">Where / note</label><input id="ckNote" placeholder="Intramurals, the HBLL, a club room…"></div>'
     +'</div>'
     +'<div class="note acc" style="margin-top:11px">The study planner treats this exactly like a lecture: it will not schedule over it. How much it counts toward your social floor depends on the kind you pick.</div>',
     [{label:'Cancel'},{label:'Block it out',primary:true,onClick:()=>{
@@ -6117,7 +6327,7 @@ function addGameDialog(){
     +'<div><label class="f">Block out (min)</label><input type="number" id="ggM" min="30" max="480" step="15" value="180"><div class="hint">Travel, queueing and the game itself, not just the clock.</div></div>'
     +'</div>'
     +'<div class="note warn" style="margin-top:11px">Only the football home schedule is pre-loaded, and even that is from secondary sources. Copy anything else from the official schedule rather than from memory.'
-    +'<div class="row" style="margin-top:9px"><a class="btn sm" href="https://trinethunder.com/calendar" target="_blank" rel="noopener">Official schedules ↗</a></div></div>',
+    +'<div class="row" style="margin-top:9px"><a class="btn sm" href="https://byucougars.com/sports/football/schedule" target="_blank" rel="noopener">Official schedules ↗</a></div></div>',
     [{label:'Cancel'},{label:'Add game',primary:true,onClick:()=>{
       const opp=$('ggO').value.trim(); if(!opp){ toast('Who are they playing?','bad'); return true; }
       const sp=$('ggS').value;
@@ -6195,8 +6405,8 @@ function editFoodDialog(fid){
   const isNew = !f;
   const cur = f || {n:'', st:'entree', portion:'1 serving', kcal:'', p:'', c:'', f:'', has:[], diet:['omni','vegetarian','pescatarian','vegan']};
   modal(isNew?'Add a food':'Edit '+cur.n,
-    (isNew?'':'<div class="note warn" style="margin-bottom:12px"><b>Correct this against the real menu, not against memory.</b> Bon Appétit publishes what is actually served at Trine. Saving an edit marks the item as yours; ticking the box below marks it as checked against the published menu.'
-      +'<div class="row" style="margin-top:9px"><a class="btn sm" href="https://trine.catertrax.com/" target="_blank" rel="noopener">Open the Bon Appétit menu ↗</a></div></div>')
+    (isNew?'':'<div class="note warn" style="margin-bottom:12px"><b>Correct this against the real menu, not against memory.</b> BYU Dining publishes what is actually served. Saving an edit marks the item as yours; ticking the box below marks it as checked against the published menu.'
+      +'<div class="row" style="margin-top:9px"><a class="btn sm" href="https://dining.byu.edu/" target="_blank" rel="noopener">Open BYU Dining ↗</a></div></div>')
     +'<div class="grid g2">'
     +'<div><label class="f">Name</label><input id="fdN" value="'+esc(cur.n)+'"'+(isNew?'':' disabled')+'></div>'
     +'<div><label class="f">Station</label><select id="fdSt"'+(isNew?'':' disabled')+'>'
@@ -6443,7 +6653,7 @@ function importDialog(){
   $('foodProteinOnly').addEventListener('change', renderFoodList);
   if(!had){
     save();
-    setTimeout(()=>toast('Empty planner ready. Add your courses on the Courses tab, or import them from Moodle or myPortal on the Data tab.','good'), 700);
+    setTimeout(()=>toast('Empty planner ready. Add your courses on the Courses tab, or import them from Canvas or MyBYU on the Data tab.','good'), 700);
   }
   window.addEventListener('resize', ()=>{ clearTimeout(window.__wt); window.__wt=setTimeout(()=>{ derive(); renderSchedule(); },250); });
 })();
